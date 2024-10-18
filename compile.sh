@@ -13,7 +13,7 @@ docker exec -it $CONTAINER_NAME make all -C /root/Toolchain
 docker exec -it $CONTAINER_NAME make all -C /root
 
 echo "Proceso completado para el contenedor $CONTAINER_NAME"
-# dockear stop $CONTAINER_NAME
+# docker stop $CONTAINER_NAME
 sudo chown $USER:$USER Image/x64BareBonesImage.qcow2
 chmod 664 Image/x64BareBonesImage.qcow2
 ./run.sh
