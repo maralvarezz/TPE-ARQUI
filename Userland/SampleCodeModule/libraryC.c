@@ -20,7 +20,11 @@ char * numToStr(int n){
 //Arreglar repeticion de codigo
 void printTime(char * vec){
     //Las horas estan desfazadas por 3 --> arreglar
-    int h = getHours();
+    int h = getHours() ;
+    if(h<=3){
+        h+=24;
+    }
+    h-=3;
     int m = getMinutes();
     int s = getSeconds();
 
