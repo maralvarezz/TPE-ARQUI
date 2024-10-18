@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <string.h>
+#include "videoDriver.h"
 #include <lib.h>
 #include <moduleLoader.h>
 #include <naiveConsole.h>
