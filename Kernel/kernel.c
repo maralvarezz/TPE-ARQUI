@@ -99,6 +99,23 @@ int main()
 	ncPrint((char*)sampleDataModuleAddress);
 	ncNewline();
 
+		while (1) {
+		for (int r = 0; r < 1000; r += 25) {
+			for (int k = 0; k < 1000; k += 25) {
+				int color = ((r / 25) + (k / 25)) % 2 == 0 ? 0x00B6E8E4 : 0x00CDF4F1;
+				for (int i = 0; i < 25; i++) {
+					for (int j = 0; j < 25; j++) {
+						putPixel(color, i + k, j + r);
+					}
+				}
+			}
+		}
+	}
+
+
+	//B6E8E4 celeste mas oscuro
+	//CDF4F1 celeste mas clarito
+
 	ncPrint("[Finished]");
 	return 0;
 }
