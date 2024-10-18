@@ -11,10 +11,10 @@ int main() {
 	printTime(v);
 	//corrige donde se ve en consola
 	v+=12;
-	/*while(1){
+	while(1){
 		keyboard(v);
 		v++;
-	}*/
+	}
 	if (var1 == 0 && var2 == 0)
 		return 0xDEADC0DE;
 
