@@ -48,21 +48,25 @@ void printTime(char * vec){
     printT(vec,  s);
 }
 
+void print(char * string, int length){
+    syscall_write(1,string, length); //mando 1 porque es la salida estandar
+};
 
-void keyboard(char * vec){
-    //me va a devolver el codigo de scaneo
-    int code = getKey();
 
-    *vec++ = keyboard_handler(code);
-    *vec++ = 0x3F;
-
-    /*
-    //vector que mapea el teclado
-char key [128] =
-{0,  27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b','\t','q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',0,'a', 's', 'd', 'f', 'g', 'h', 'j','k','l',';', '\'', '`',0, '\\', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/',0,'*',0,' ',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'-',0,0,0,'+',0,0,0,0,0,0,0,0,0,0,0};
-    if(code < 128 && key[code] != 0){
-        *vec++ = key[code];
-        *vec++ = 0x3F;
-    }*/
+void strlen(char * string){
+    int i = 0;
+    while(string[i] != '\0'){
+        i++;
+    }
+    return i;
 }
+
+void scanf(char * string, char * buffer, int bufferLength){
+    print(string, strlen(string));
+    int resp=syscall_read(0, buffer, bufferLength); //mando 0 porque es la entrada estandar
+    if(resp==0){
+        print("Error al leer", 12);
+    }
+}
+
 

@@ -1,5 +1,6 @@
-#include "videoDriver.h"
+disn#include "videoDriver.h"
 
+#define NEWLINE = 16
 
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -43,8 +44,12 @@ typedef struct vbe_mode_info_structure * VBEInfoPtr;
 
 VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
 
+typedef struct cursor{
+	uint16_t x = 0;
+	uint16_t y = 0;
+} cursor;
 
-uint16_t curX = 0, curY = 0;
+uint8_t escalaPixel=1;
 
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
     uint8_t * framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
@@ -56,13 +61,51 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 
 void driver_clear(){
     //limpia la pantalla
-    for(uint32_t i = 0; i <= (VBEInfoPtr-> width * VBEInfoPtr->height); i++){
+    for(uint16_t i = 0; i <= (VBEInfoPtr -> width * VBEInfoPtr->height); i++){
 		VBEInfoPtr->framebuffer[i] = 0;
 	}
+
     //se van los cursores arriba 
-    curX = 0;
-    curY = 0;
+    cursor -> x = 0;
+    cursor -> y = 0;
+}
+
+void driver_read(char * buffer, uint64_t count){
+	for(uint64_t i = 0; i < count; i++){
+		buffer[i] = keyboard_handler();
+	}
+}
+
+void driver_write(char * buffer, uint64_t count){
+	for(uint64_t i = 0; i < count; i++){
+		if(buffer[i] == '\n'){
+			driver_newLine(); //salto de linea
+		}else if(buffer[i] == '\b'){
+			driver_backspace(); //borra el caracter anterior
+		}
+		else if(buffer[i] == '\0'){
+			return; 
+		}
+		else if(buffer[i] == '\t'){
+			driver_tab(); 
+		}
+		else{
+			drawChar(buffer[i]); //si no es ninguno de los casos especiales 
+		}
+	}
+}
+
+void driver_newLine(){
+	cursor -> x = 0;
+	cursor -> y += NEWLINE;
 }
 
 
-
+void driver_backspace(){
+	if(curX == 0){
+		//hacer sonido
+	}
+	else{
+		drawChar(' ');
+	}
+}

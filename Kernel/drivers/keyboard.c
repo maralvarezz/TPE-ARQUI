@@ -31,6 +31,7 @@ static const char vecMin[] = {
 
 static const char mapLetras[][] = {vecMin,vecMay};
 
+//esta funcion no deberia ser visible 
 char getKeyboard(){
     if(isLetter(teclaPressed)){
         if((shift + bloqMayus)%2==1){
@@ -43,8 +44,8 @@ char getKeyboard(){
 }
 
 //nos entra la tecla que se oprimió
-char keyboard_handler(uint8_t keyPressed) {
-    teclaPressed = keyPressed;
+char keyboard_handler() {
+    teclaPressed = getKey();
     //shift oprimido
     if (tecla == 0x2A || tecla == 0x36){
         shift = 1;

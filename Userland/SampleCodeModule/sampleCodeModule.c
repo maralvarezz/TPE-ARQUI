@@ -12,8 +12,8 @@ int main() {
 	//corrige donde se ve en consola
 	v+=16;
 	while(1){
-		keyboard(v);
-		v++;
+		*v++ = keyboard_handler();
+		*v++ = 0x3F;
 	}
 	if (var1 == 0 && var2 == 0)
 		return 0xDEADC0DE;
