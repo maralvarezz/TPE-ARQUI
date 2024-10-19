@@ -43,7 +43,7 @@ char getKeyboard(){
 }
 
 //nos entra la tecla que se oprimió
-void keyboard_handler(uint8_t keyPressed) {
+char keyboard_handler(uint8_t keyPressed) {
     teclaPressed = keyPressed;
     //shift oprimido
     if (tecla == 0x2A || tecla == 0x36){
@@ -57,6 +57,7 @@ void keyboard_handler(uint8_t keyPressed) {
     if (teclaPressed == 0x3A) {
         bloqMayus = (bloqMayus+1)%2; //si esta en 1 lo pongo en 0 y viceversa
     } 
+    return getKeyboard();
 }
 
 //nos dice si la tecla es una letra

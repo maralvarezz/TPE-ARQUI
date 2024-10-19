@@ -10,7 +10,7 @@ int main() {
 
 	printTime(v);
 	//corrige donde se ve en consola
-	v+=12;
+	v+=16;
 	while(1){
 		keyboard(v);
 		v++;
