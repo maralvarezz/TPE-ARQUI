@@ -1,10 +1,12 @@
 include Makefile.inc
 
 KERNEL=kernel.bin
-SOURCES=$(wildcard .c)
-SOURCES_INTERRUPT=$(wildcard interrupt/.c)
-SOURCES_DRIVERS=$(wildcard drivers/.c)
-SOURCES_ASM=$(wildcard asm/.asm)
+SOURCES=$(wildcard *.c)
+SOURCES_INTERRUPT=$(wildcard interrupt/*.c)
+SOURCES_DRIVERS=$(wildcard drivers/*.c)
+SOURCES_ASM=$(wildcard asm/*.asm)
+
+
 
 OBJECTS=$(SOURCES:.c=.o)
 OBJECTS_INTERRUPT=$(SOURCES_INTERRUPT:.c=.o)
@@ -19,17 +21,17 @@ ALL_OBJECTS= $(LOADEROBJECT) $(OBJECTS) $(OBJECTS_ASM) $(OBJECTS_INTERRUPT) $(OB
 
 all: $(KERNEL)
 $(KERNEL): $(STATICLIBS) $(ALL_OBJECTS)
-    $(LD) $(LDFLAGS) -T kernel.ld -o $@ $^
+	$(LD) $(LDFLAGS) -T kernel.ld -o $@ $^
 
 %.o: %.c
-    $(GCC) $(GCCFLAGS) -I./include -I./interruptions -c $< -o $@
+	$(GCC) $(GCCFLAGS) -I./include -I./interruptions -c $< -o $@
 %.o : %.asm
-    $(ASM) $(ASMFLAGS) $< -o $@
+	$(ASM) $(ASMFLAGS) $< -o $@
 
 $(LOADEROBJECT):
-    $(ASM) $(ASMFLAGS) $(LOADERSRC) -o $(LOADEROBJECT)
+	$(ASM) $(ASMFLAGS) $(LOADERSRC) -o $(LOADEROBJECT)
 
 clean:
-    rm -rf $(ALL_OBJECTS) *.bin
+	rm -rf $(ALL_OBJECTS) *.bin
 
 .PHONY: all clean
