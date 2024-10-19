@@ -1,10 +1,11 @@
-#include "libraryC.h"
+#include "./include/libraryC.h"
 #include <stdio.h>
 
 extern int getHours();
 extern int getMinutes();
 extern int getSeconds();
 extern int getKey();
+
 
 char * numToStr(int n){
     char res[3] = {0};
@@ -17,7 +18,7 @@ char * numToStr(int n){
     return aux;
 }
 
-void print(char * vec, int time){
+static void printT(char * vec, int time){
     char * s = numToStr(time);
 
     for(int i = 0; s[i] != '\0' ; i++){
@@ -36,15 +37,15 @@ void printTime(char * vec){
     int m = getMinutes();
     int s = getSeconds();
 
-    print(vec,  h);
+    printT(vec,  h);
     vec+=4;
     *vec++ = ':';
     *vec++ = 0x3F;
-     print(vec,  m);
+    printT(vec,  m);
     vec+=4;
     *vec++ = ':';
     *vec++ = 0x3F;
-     print(vec,  s);
+    printT(vec,  s);
 }
 
 
@@ -64,3 +65,4 @@ char key [128] =
         *vec++ = 0x3F;
     }*/
 }
+
