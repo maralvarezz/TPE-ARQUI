@@ -1,5 +1,7 @@
 
 
+global backupRegs
+
 extern keyboard.c
 
 %macro pushReg 0
@@ -37,3 +39,16 @@ extern keyboard.c
 	pop rbx
 	pop rax
 %endmacro
+
+interrupcion_teclado:
+    pushReg
+    xor rax, rax //limpio rax
+    in al, 0x60 //leo el scancode
+    cmp al, 0x2A //veo si es la tecla shift
+    mov byte [rsi], 1 //puedo usar acá rsi??
+
+
+
+section .bss 
+
+    backupRegs resq 17 //basicamente lo que hacemos con esto es mantener los registros que se usan en la interrupcion para que no se pierdan
