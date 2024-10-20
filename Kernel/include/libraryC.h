@@ -4,5 +4,5 @@
 
 
 void printTime(char * vec);
-char * numToStr(int n);
+char * numToStr(uint64_t n, int c)
 void keyboard(char * vec);

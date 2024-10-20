@@ -66,7 +66,7 @@ SECTION .text
 
 %macro backupRegs 1
     pushState
-    //guardamos los registros en el orden en el que quiero para luego mostrarlos en pantalla
+    ;guardamos los registros en el orden en el que quiero para luego mostrarlos en pantalla
     mov [exceptionRegs + 0], rax
     mov [exceptionRegs + 8], rbx
     mov [exceptionRegs + 16], rcx
@@ -82,16 +82,16 @@ SECTION .text
     mov [exceptionRegs + 96], r13
     mov [exceptionRegs + 104], r14
     mov [exceptionRegs + 112], r15
-
+	
     mov rax, rsp
-    add rax, 160 //nos ponemos antes de que suceda el error 
+    add rax, 160 ;nos ponemos antes de que suceda el error 
     mov [exceptionRegs + 120], rax
     mov rax, [rsp+120] ;Obtenemos el valor de RIP en el momento en el que sucede la excepción tomando el valor de la interrupción que se encuentra en la pila.
 	mov [exceptionRegs+128], rax
-	mov rax, [rsp+128] ; Obtenemos el valor de RFLAGS también de esta manera, ya que son pusheadas cuando ocurre una interrupción
+	mov rax, [rsp+128] ;Obtenemos el valor de RFLAGS también de esta manera, ya que son pusheadas cuando ocurre una interrupción
 	mov [exceptionRegs+136], rax
 
-    mov rdi, %1 ; pasaje de parametro
+    mov rdi, %1 ;pasaje de parametro
 	call exceptionDispatcher
 
 	popState
@@ -150,19 +150,9 @@ interrupcion_teclado:
 	popState
 	iretq
 
-interrupt_syscall:
-    pushState
-    mov rbp, rsp
-    mov rcx, r10  //como en el modo usuario el cuarto parametro se pasa por r10, lo guardamos en rcx para que reciba el valor adecuado
-    mov r9, rax   
-    call sysCaller
-    mov rsp, rbp
-    popState
-    iretq
-
 _hlt:
-	sti
-	hlt
+	sti //permite que se reciban interrupciones mientras el procesador esta en hlt
+	hlt //
 	ret
 
 _cli:
@@ -197,10 +187,29 @@ _irq04Handler:
 _irq05Handler:
 	irqHandlerMaster 5
 
+syscallHandler:
+	pushState
+	mov rbp,rsp
+
+	push r9 ;guardo r9 porque sysCaller lo puede modificar
+	mov r9, r8
+	mov r8, r10
+	mov rcx, rdx
+	mov rdx, rsi
+	mov rsi, rdi
+	mov rdi, rax ;acomodo los argumentos para que sysCaller los pueda tomar
+	call sysCaller
+	pop r9
+	mov al, 20h
+	out 20h, al
+	mov rsp, rbp
+	popState
+	iretq
+
 
 ;Zero Division Exception
 exception_zero_division:
-    exceptionHandler 0
+    exceptionHandler 0	
 
 exception_op_code:
     exceptionHandler 6

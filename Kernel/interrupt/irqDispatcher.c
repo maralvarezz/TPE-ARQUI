@@ -1,5 +1,6 @@
 #include <time.h>
 #include <stdint.h>
+#include <keyboard.h>
 
 static void int_20();
 
@@ -15,3 +16,5 @@ void irqDispatcher(uint64_t irq) {
 void int_20() {
 	timer_handler();
 }
+
+//dejo el archivo por si acaso

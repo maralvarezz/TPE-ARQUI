@@ -100,7 +100,7 @@ int main()
 	ncPrint((char*)sampleDataModuleAddress);
 	ncNewline();
 
-		while (1) {
+	while (1) {
 		for (int r = 0; r < 1000; r += 25) {
 			for (int k = 0; k < 1000; k += 25) {
 				int color = ((r / 25) + (k / 25)) % 2 == 0 ? 0x00B6E8E4 : 0x00CDF4F1;

@@ -5,19 +5,18 @@ extern int getMinutes();
 extern int getSeconds();
 extern int getKey();
 
-char * numToStr(int n){
-    char res[3] = {0};
-    for(int i = 0 ; i < 2; i++){
-        res[1-i] = n % 10 + '0';
+char * numToStr(uint64_t n, int c){
+    char res[c+1] = {0};
+    for(int i = 0 ; i < c; i++){
+        res[c-i] = n % 10 + '0';
         n = n / 10;
     }
-    res[2] = '\0';
     char * aux = res;
     return aux;
 }
 
 static void printT(char * vec, int time){
-    char * s = numToStr(time);
+    char * s = numToStr(time, 2);
     for(int i = 0; s[i] != '\0' ; i++){
         *vec++ = s[i];
         *vec++ = 0x3F;
