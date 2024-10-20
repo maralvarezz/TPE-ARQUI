@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "syscalls.h"
+#include "keyboard.h"
 
 
 void printTime(char * vec);

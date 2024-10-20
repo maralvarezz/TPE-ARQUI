@@ -120,8 +120,8 @@ static void scrolleo(){
 
 	for(int i=0; i<screen->height-NEWLINE*escalaPixel; i++){
 		for(int j=0; j<screen->width; j++){
-			pixel = (ColorT *)getPixelPtr(i,j);
-			pixelAfter = (ColorT *)getPixelPtr(i+NEWLINE*escalaPixel,j);
+			pixel = (ColorT *)getPixel(i,j);
+			pixelAfter = (ColorT *)getPixel(i+NEWLINE*escalaPixel,j);
 			*pixel = *pixelAfter;
 		}
 	}
