@@ -10,6 +10,8 @@
 
 #include <idtLoader.h>
 
+void interrupt_syscall(void);
+
 void _irq00Handler(void);
 void _irq01Handler(void);
 void _irq02Handler(void);
@@ -17,7 +19,8 @@ void _irq03Handler(void);
 void _irq04Handler(void);
 void _irq05Handler(void);
 
-void _exception0Handler(void);
+void exception_zero_division(void);
+void exception_invalid_opcode(void);
 
 void _cli(void);
 

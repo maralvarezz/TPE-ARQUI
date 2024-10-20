@@ -1,12 +1,34 @@
-global backupRegs
-global interrupt_syscall
+GLOBAL _cli
+GLOBAL _sti
+GLOBAL picMasterMask
+GLOBAL picSlaveMask
+GLOBAL haltcpu
+GLOBAL _hlt
 
-extern keyboard_handler
-extern sysCaller
-extern exceptionsCaller
+GLOBAL _irq00Handler
+GLOBAL _irq01Handler
+GLOBAL _irq02Handler
+GLOBAL _irq03Handler
+GLOBAL _irq04Handler
+GLOBAL _irq05Handler
+
+GLOBAL exception_zero_division
+
+GLOBAL backupRegs
+GLOBAL interrupt_syscall
+
+EXTERN irqDispatcher
+EXTERN exceptionDispatcher
 
 
-%macro pushReg 0
+EXTERN keyboard_handler
+EXTERN sysCaller
+EXTERN exceptionsCaller
+
+SECTION .text
+
+
+%macro pushState 0
 	push rax
 	push rbx
 	push rcx
@@ -24,7 +46,7 @@ extern exceptionsCaller
 	push r15
 %endmacro
 
-%macro popReg 0
+%macro popState 0
 	pop r15
 	pop r14
 	pop r13
@@ -42,9 +64,72 @@ extern exceptionsCaller
 	pop rax
 %endmacro
 
+%macro backupRegs 1
+    pushState
+    //guardamos los registros en el orden en el que quiero para luego mostrarlos en pantalla
+    mov [exceptionRegs + 0], rax
+    mov [exceptionRegs + 8], rbx
+    mov [exceptionRegs + 16], rcx
+    mov [exceptionRegs + 24], rdx
+    mov [exceptionRegs + 32], rsi
+    mov [exceptionRegs + 40], rdi
+    mov [exceptionRegs + 48], rbp
+    mov [exceptionRegs + 56], r8
+    mov [exceptionRegs + 64], r9
+    mov [exceptionRegs + 72], r10
+    mov [exceptionRegs + 80], r11
+    mov [exceptionRegs + 88], r12
+    mov [exceptionRegs + 96], r13
+    mov [exceptionRegs + 104], r14
+    mov [exceptionRegs + 112], r15
+
+    mov rax, rsp
+    add rax, 160 //nos ponemos antes de que suceda el error 
+    mov [exceptionRegs + 120], rax
+    mov rax, [rsp+120] ;Obtenemos el valor de RIP en el momento en el que sucede la excepción tomando el valor de la interrupción que se encuentra en la pila.
+	mov [exceptionRegs+128], rax
+	mov rax, [rsp+128] ; Obtenemos el valor de RFLAGS también de esta manera, ya que son pusheadas cuando ocurre una interrupción
+	mov [exceptionRegs+136], rax
+
+    mov rdi, %1 ; pasaje de parametro
+	call exceptionDispatcher
+
+	popState
+	iretq
+%endmacro
+
+%macro irqHandlerMaster 1
+	pushState
+
+	mov rdi, %1 ; pasaje de parametro
+	call irqDispatcher
+
+	; signal pic EOI (End of Interrupt)
+	mov al, 20h
+	out 20h, al
+
+	popState
+	iretq
+%endmacro
+
+picMasterMask:
+	push rbp
+    mov rbp, rsp
+    mov ax, di
+    out	21h,al
+    pop rbp
+    retn
+
+picSlaveMask:
+	push    rbp
+    mov     rbp, rsp
+    mov     ax, di  ; ax = mascara de 16 bits
+    out	0A1h,al
+    pop     rbp
+    retn
 
 interrupcion_teclado:
-    pushReg
+    pushState
     xor rax, rax //limpio rax
     in al, 0x60 //leo el scancode
     cmp al, 0x2A //veo si es la tecla shift
@@ -62,23 +147,70 @@ interrupcion_teclado:
 	call keyboard_handler
 	mov al, 0x20
 	out 0x20, al
-	popReg
+	popState
 	iretq
 
-interrupt
-
-
 interrupt_syscall:
-    pushReg
+    pushState
     mov rbp, rsp
     mov rcx, r10  //como en el modo usuario el cuarto parametro se pasa por r10, lo guardamos en rcx para que reciba el valor adecuado
     mov r9, rax   
     call sysCaller
     mov rsp, rbp
-    popReg
+    popState
     iretq
 
+_hlt:
+	sti
+	hlt
+	ret
 
-section .bss
+_cli:
+	cli
+	ret
+
+_sti:
+	sti
+	ret
+
+;8254 Timer (Timer Tick)
+_irq00Handler:
+	irqHandlerMaster 0
+
+;Keyboard
+_irq01Handler:
+	irqHandlerMaster 1
+
+;Cascade pic never called
+_irq02Handler:
+	irqHandlerMaster 2
+
+;Serial Port 2 and 4
+_irq03Handler:
+	irqHandlerMaster 3
+
+;Serial Port 1 and 3
+_irq04Handler:
+	irqHandlerMaster 4
+
+;USB
+_irq05Handler:
+	irqHandlerMaster 5
+
+
+;Zero Division Exception
+exception_zero_division:
+    exceptionHandler 0
+
+exception_op_code:
+    exceptionHandler 6
+
+haltcpu:
+	cli
+	hlt
+	ret
+
+SECTION .bss
+	aux resq 1 //variable auxiliar para guardar el valor de r10
 	shiftFlag resb 1 //variable que se usa para saber si se presiono shift
-    backupRegs resq 17 //basicamente lo que hacemos con esto es mantener los registros que se usan en la interrupcion para que no se pierdan
+    exceptionRegs resq 17 
