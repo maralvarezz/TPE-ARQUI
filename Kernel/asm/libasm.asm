@@ -3,6 +3,7 @@ global getHours
 global getMinutes
 global getSeconds
 global getKey
+global hlt_aux
 
 section .text
 
@@ -29,7 +30,6 @@ cpuVendor:
 	mov rsp, rbp
 	pop rbp
 	ret
-
 
 
 getHours:
@@ -73,7 +73,6 @@ getSeconds:
     out 70h, al
     in al, 71h
     sti
-
     ret
 
 getKey:

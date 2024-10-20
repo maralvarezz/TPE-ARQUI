@@ -60,12 +60,12 @@ void command_registers(){
 
 //Excepcion de dividir por cero
 void command_divzero(){
-    sys_divzero();
+    divzero();
 }
 
 //Excepcion de codigo de operacion invalido
 void command_invalidopcode(){
-    sys_invalidopcode();
+    invalidopcode();
 }
 
 void command_snakes(){

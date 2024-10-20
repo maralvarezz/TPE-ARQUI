@@ -58,6 +58,7 @@ uint64_t strlen(char * string){
 void scanf(char * string, char * buffer, int bufferLength){
     print(string, strlen(string));
     int resp=sys_read(0, buffer, bufferLength); //mando 0 porque es la entrada estandar
+    //no imprime back
     if(resp==0){
         print("Error al leer", 12);
     }
