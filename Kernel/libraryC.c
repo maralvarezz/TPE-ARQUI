@@ -1,11 +1,9 @@
 #include "./include/libraryC.h"
-#include <stdio.h>
 
 extern int getHours();
 extern int getMinutes();
 extern int getSeconds();
 extern int getKey();
-
 
 char * numToStr(int n){
     char res[3] = {0};
@@ -20,7 +18,6 @@ char * numToStr(int n){
 
 static void printT(char * vec, int time){
     char * s = numToStr(time);
-
     for(int i = 0; s[i] != '\0' ; i++){
         *vec++ = s[i];
         *vec++ = 0x3F;
@@ -28,7 +25,6 @@ static void printT(char * vec, int time){
 }
 
 void printTime(char * vec){
-    //Las horas estan desfazadas por 3 --> arreglar
     int h = getHours() ;
     if(h<=3){
         h+=24;
@@ -49,12 +45,11 @@ void printTime(char * vec){
 }
 
 void print(char * string, int length){
-    syscall_write(1,string, length); //mando 1 porque es la salida estandar
+    sys_write(1,string, length); //mando 1 porque es la salida estandar
 };
 
-
-void strlen(char * string){
-    int i = 0;
+uint64_t strlen(char * string){
+    uint64_t i = 0;
     while(string[i] != '\0'){
         i++;
     }
@@ -63,10 +58,14 @@ void strlen(char * string){
 
 void scanf(char * string, char * buffer, int bufferLength){
     print(string, strlen(string));
-    int resp=syscall_read(0, buffer, bufferLength); //mando 0 porque es la entrada estandar
+    int resp=sys_read(0, buffer, bufferLength); //mando 0 porque es la entrada estandar
     if(resp==0){
         print("Error al leer", 12);
     }
+}
+
+char getChar(){
+    return sys_read(0, keyboard_handler(), 1);
 }
 
 

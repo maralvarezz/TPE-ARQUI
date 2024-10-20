@@ -1,15 +1,19 @@
-#include <stdio.h>
+#include "../include/syscalls.h"
 
 #define WRITE 0
 #define READ 1
+#define CLEAR 2
 
 uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax){
     swith(rax){
         case WRITE:
-            return syscall_write();
+            return sys_write();
 
         case READ:
-            return syscall_read();
+            return sys_read();
+
+        case CLEAR:
+            return sys_clear();
     }
 }
 
@@ -22,7 +26,7 @@ uint64_t sys_read(uint64_t fd, char * buffer, uint64_t count){
     return 0;
 }
 
-uint64_t sys_write(uint64_t fd, uint64_t buffer, uint64_t count){
+uint64_t sys_write(uint64_t fd, char * buffer, uint64_t count){
     if(fd == 1){
         driver_write(buffer, count);
         return 1

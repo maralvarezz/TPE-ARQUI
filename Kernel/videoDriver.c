@@ -1,6 +1,7 @@
-disn#include "videoDriver.h"
+#include "videoDriver.h"
+#include "./include/keyboard.h"
 
-#define NEWLINE = 16
+#define NEWLINE 16
 
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -42,18 +43,36 @@ struct vbe_mode_info_structure {
 
 typedef struct vbe_mode_info_structure * VBEInfoPtr;
 
-VBEInfoPtr VBE_mode_info = (VBEInfoPtr) 0x0000000000005C00;
+VBEInfoPtr screen = (VBEInfoPtr) 0x0000000000005C00;
 
 typedef struct cursor{
-	uint16_t x = 0;
-	uint16_t y = 0;
-} cursor;
+	uint16_t x;
+	uint16_t y;
+} cursorT;
+cursorT cursor ={0,0};
+
+typedef struct color{
+    uint8_t red;
+    uint8_t green;
+    uint8_t blue;
+}ColorT;
+ColorT color = {0,0,0};
+
 
 uint8_t escalaPixel=1;
 
+static uint32_t* getPixel(uint16_t y, uint16_t x);
+static void scrolleo();
+
+
+
+static void drawChar(char c, int x, int y){
+	
+}
+
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
-    uint8_t * framebuffer = (uint8_t *) VBE_mode_info->framebuffer;
-    uint64_t offset = (x * ((VBE_mode_info->bpp)/8)) + (y * VBE_mode_info->pitch);
+    uint8_t * framebuffer = (uint8_t *)screen->framebuffer;
+    uint64_t offset = (x * ((screen->bpp)/8)) + (y * screen->pitch);
     framebuffer[offset]     =  (hexColor) & 0xFF;
     framebuffer[offset+1]   =  (hexColor >> 8) & 0xFF; 
     framebuffer[offset+2]   =  (hexColor >> 16) & 0xFF;
@@ -61,13 +80,13 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 
 void driver_clear(){
     //limpia la pantalla
-    for(uint16_t i = 0; i <= (VBEInfoPtr -> width * VBEInfoPtr->height); i++){
-		VBEInfoPtr->framebuffer[i] = 0;
+	for(uint16_t i = 0; i <= (screen -> width * screen->height); i++){
+		((uint8_t *)screen->framebuffer)[i] = 0;
 	}
 
-    //se van los cursores arriba 
-    cursor -> x = 0;
-    cursor -> y = 0;
+    //se va el cursor arriba
+	cursor.x = 0;
+	cursor.y = 0;
 }
 
 void driver_read(char * buffer, uint64_t count){
@@ -95,17 +114,48 @@ void driver_write(char * buffer, uint64_t count){
 	}
 }
 
+static void scrolleo(){
+	ColorT*  pixel;
+	ColorT*  pixelAfter;
+
+	for(int i=0; i<screen->height-NEWLINE*escalaPixel; i++){
+		for(int j=0; j<screen->width; j++){
+			pixel = (ColorT *)getPixelPtr(i,j);
+			pixelAfter = (ColorT *)getPixelPtr(i+NEWLINE*escalaPixel,j);
+			*pixel = *pixelAfter;
+		}
+	}
+}
+
+
 void driver_newLine(){
-	cursor -> x = 0;
-	cursor -> y += NEWLINE;
+	cursor.x = 0;
+	if(cursor.y + NEWLINE*escalaPixel > screen->height){
+		//lo que hacemos acá es que todo el código que teníamos se mueve una linea hacia 
+		//arriba, se borra la primer linea y se pone el cursor en la ultima linea
+		scrolleo();
+	}
+	else{
+		cursor.y += NEWLINE*escalaPixel;
+	}
 }
 
 
 void driver_backspace(){
-	if(curX == 0){
-		//hacer sonido
+	if(cursor.x == 0){
+		driver_sound();
+		return;
 	}
 	else{
+		cursor.x -= 8*escalaPixel;
 		drawChar(' ');
 	}
+}
+
+//te paso una coordenada de la pantalla en (x,y) y te devuelvo la direccion de la pantalla que representa ese pixel
+static uint32_t* getPixel(uint16_t y, uint16_t x) {
+    uint8_t pixelwidth = screen->bpp/8;     //la cantidad de bytes hasta el siguiente pixel a la derecha
+    uint16_t pixelHeight = screen-> pitch;  //cantidad de bytes hasta el siguiente pixel abajo
+    uintptr_t pixelPtr = (uintptr_t)(screen->framebuffer) + (x * pixelwidth) + (y * pixelHeight);
+    return (uint32_t*)pixelPtr;
 }

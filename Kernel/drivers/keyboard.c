@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <stdint.h>
+#include "../../include/keyboard.h"
+
 
 char teclaPressed = 0;
 int bloqMayus = 0;
