@@ -4,7 +4,7 @@ KERNEL=kernel.bin
 SOURCES=$(wildcard *.c)
 SOURCES_INTERRUPT=$(wildcard interrupt/*.c)
 SOURCES_DRIVERS=$(wildcard drivers/*.c)
-SOURCES_ASM=$(wildcard asm/*.asm)
+SOURCES_ASM=$(wildcard asm_kernel/*.asm)
 
 
 
