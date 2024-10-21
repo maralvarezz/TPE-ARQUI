@@ -20,7 +20,7 @@ void _irq04Handler(void);
 void _irq05Handler(void);
 
 void exception_zero_division(void);
-void exception_invalid_opcode(void);
+void exception_op_code(void);
 
 void _cli(void);
 

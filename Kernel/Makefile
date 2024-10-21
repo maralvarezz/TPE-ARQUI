@@ -25,8 +25,8 @@ $(KERNEL): $(STATICLIBS) $(ALL_OBJECTS)
 
 %.o: %.c
 	$(GCC) $(GCCFLAGS) -I./include -I./interruptions -c $< -o $@
-%.o : %.asm
-	$(ASM) $(ASMFLAGS) $< -o $@
+%.o: %.asm
+	$(ASM) $(ASMFLAGS) -o $@ $<
 
 $(LOADEROBJECT):
 	$(ASM) $(ASMFLAGS) $(LOADERSRC) -o $(LOADEROBJECT)
