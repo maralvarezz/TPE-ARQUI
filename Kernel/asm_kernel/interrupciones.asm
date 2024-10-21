@@ -151,8 +151,8 @@ interrupcion_teclado:
 	iretq
 
 _hlt:
-	sti //permite que se reciban interrupciones mientras el procesador esta en hlt
-	hlt //
+	sti ;permite que se reciban interrupciones mientras el procesador esta en hlt
+	hlt 
 	ret
 
 _cli:

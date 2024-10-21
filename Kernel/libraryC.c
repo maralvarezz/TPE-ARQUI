@@ -1,16 +1,13 @@
 #include "./include/libraryC.h"
 
-extern int getHours();
-extern int getMinutes();
-extern int getSeconds();
-extern int getKey();
-
-char * numToStr(uint64_t n, int c){
-    char res[c+1] = {0};
-    for(int i = 0 ; i < c; i++){
+char * numToStr(uint64_t n, uint64_t c){
+    uint64_t i = 0;
+    char res[c+1];
+    for(i = 0 ; i < c; i++){
         res[c-i] = n % 10 + '0';
         n = n / 10;
     }
+    res[i] = '\0';
     char * aux = res;
     return aux;
 }
@@ -65,7 +62,9 @@ void scanf(char * string, char * buffer, int bufferLength){
 }
 
 char getChar(){
-    return sys_read(0, keyboard_handler(), 1);
+    char buffer[2]={0};
+    buffer[0]=keyboard_handler();
+    return sys_read(0, buffer, 1);
 }
 
 

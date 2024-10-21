@@ -53,7 +53,15 @@ uint64_t sys_registers(){
     //preguntar
 }
 
-uint64_t sys_time(){
+uint64_t sys_seconds(){
+    
+}
+
+uint64_t sys_minutes(){
+    
+}
+
+uint64_t sys_hours(){
     
 }
 
@@ -68,5 +76,4 @@ uint64_t sys_sound(uint64_t freq, uint64_t time){
     }
     make_sound(freq);
     wait_time(time);
-
 }

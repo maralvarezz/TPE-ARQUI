@@ -1,7 +1,8 @@
 #include "videoDriver.h"
 #include "./include/keyboard.h"
 
-#define NEWLINE 16
+#define WIDTH 16
+
 
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -61,13 +62,48 @@ ColorT color = {0,0,0};
 
 uint8_t escalaPixel=1;
 
+//función para pasar el color a hexadecimal
+uint32_t ColorToHexa(ColorT color) {
+    uint32_t hexValue = 0;
+    hexValue |= (color.red << 16);
+    hexValue |= (color.green << 8);
+    hexValue |= color.blue;
+    return hexValue;
+}
+
 static uint32_t* getPixel(uint16_t y, uint16_t x);
 static void scrolleo();
 
 
+//font_bitmap es el un arreglo que tiene arreglos de los mapas de caracteres de cada letra
+static void drawChar(char c, cursorT cursor,ColorT fuenteColor, ColorT fondoColor){
+	//es una mascara para chequear cada uno de los bits del mapa de bits
+	int mask[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
+	char * charBitMap = font_bitmap+16*(c-32); // c es el ASCII del caracter a imprimir, en esa direccion se encuentra el primer byte del caracter
+	checkInsideScreen();
+	for (cy = 0; cy < 16; cy++) {
+        for (cx = 0; cx < 8; cx++) {
+            for (int i = 0; i < escalaPixel; i++) {
+                for (int j = 0; j < escalaPixel; j++) {
+                    putPixel(charBitMap[cy] & mask[cx] ? colorToHexa(fuenteColor) : colorToHexa(fondoColor),
+					cursor.x + (8 - cx) * pixelScale + i, cursor.y + cy * pixelScale + j );
+                }
+            }
+        }
+    }
+}
 
-static void drawChar(char c, int x, int y){
-	
+//función para chequear que el cursor no se pase de la pantalla
+static void checkInsideScreen(){
+	if(cursor.x >= screen->width){
+		cursor.x = 0;
+		if(cursor.y + 16*escalaPixel > screen->height){
+			scrolleo();
+		}
+		else{
+			cursor.y += 16*escalaPixel;
+		}
+	}
 }
 
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
@@ -83,7 +119,6 @@ void driver_clear(){
 	for(uint16_t i = 0; i <= (screen -> width * screen->height); i++){
 		((uint8_t *)screen->framebuffer)[i] = 0;
 	}
-
     //se va el cursor arriba
 	cursor.x = 0;
 	cursor.y = 0;
@@ -98,7 +133,7 @@ void driver_read(char * buffer, uint64_t count){
 void driver_write(char * buffer, uint64_t count){
 	for(uint64_t i = 0; i < count; i++){
 		if(buffer[i] == '\n'){
-			driver_newLine(); //salto de linea
+			driver_WIDTH(); //salto de linea
 		}else if(buffer[i] == '\b'){
 			driver_backspace(); //borra el caracter anterior
 		}
@@ -118,25 +153,25 @@ static void scrolleo(){
 	ColorT*  pixel;
 	ColorT*  pixelAfter;
 
-	for(int i=0; i<screen->height-NEWLINE*escalaPixel; i++){
+	for(int i=0; i<screen->height-WIDTH*escalaPixel; i++){
 		for(int j=0; j<screen->width; j++){
 			pixel = (ColorT *)getPixel(i,j);
-			pixelAfter = (ColorT *)getPixel(i+NEWLINE*escalaPixel,j);
+			pixelAfter = (ColorT *)getPixel(i+WIDTH*escalaPixel,j);
 			*pixel = *pixelAfter;
 		}
 	}
 }
 
 
-void driver_newLine(){
+void driver_WIDTH(){
 	cursor.x = 0;
-	if(cursor.y + NEWLINE*escalaPixel > screen->height){
+	if(cursor.y + WIDTH*escalaPixel > screen->height){
 		//lo que hacemos acá es que todo el código que teníamos se mueve una linea hacia 
 		//arriba, se borra la primer linea y se pone el cursor en la ultima linea
 		scrolleo();
 	}
 	else{
-		cursor.y += NEWLINE*escalaPixel;
+		cursor.y += WIDTH*escalaPixel;
 	}
 }
 
