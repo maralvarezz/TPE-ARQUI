@@ -7,3 +7,5 @@ void driver_read(char * buffer, uint64_t count);
 void driver_write(char * buffer, uint64_t count);
 void driver_newLine();
 void driver_backspace();
+void driver_width();
+void driver_sound();

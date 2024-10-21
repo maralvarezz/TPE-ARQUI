@@ -1,4 +1,6 @@
-#include "../../include/keyboard.h"
+#include "../include/keyboard.h"
+
+extern char getKey();
 
 
 char teclaPressed = 0;
@@ -29,25 +31,25 @@ static const char vecMin[] = {
 };
 
 
-static const char mapLetras[][] = {vecMin,vecMay};
+static const char * mapLetras[] = {vecMin,vecMay};
 
 //esta funcion no deberia ser visible 
 char getKeyboard(){
     if(isLetter(teclaPressed)){
         if((shift + bloqMayus)%2==1){
-            return mapLetras[1][teclaPressed];
+            return mapLetras[1][(int)teclaPressed];
         }else{
-        return mapLetras[0][teclaPressed];
+        return mapLetras[0][(int)teclaPressed];
     }
     }
-    return mapLetras[shift][teclaPressed];
+    return mapLetras[shift][(int)teclaPressed];
 }
 
 //nos entra la tecla que se oprimió
 char keyboard_handler() {
     teclaPressed = getKey();
     //shift oprimido
-    if (tecla == 0x2A || tecla == 0x36){
+    if (teclaPressed == 0x2A || teclaPressed == 0x36){
         shift = 1;
     }
     //shift no oprimido

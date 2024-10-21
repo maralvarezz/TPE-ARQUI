@@ -1,4 +1,4 @@
-#include "../inlcude/libraryC.h"
+#include "../include/exceptions.h"
 
 
 #define ZERO_EXCEPTION_ID 0
@@ -6,7 +6,7 @@
 #define REGISTERS 18
 
 static void zero_division();
-static void opcode:exception();
+static void opcode_exception();
 
 extern const uint64_t regsBackUp[REGISTERS];
 static char * regs[REGISTERS] = {
@@ -25,20 +25,20 @@ void print_registers() { //fijarnos como imprimir
 	for (int i = 0; i < 18; i++) {
 		print(regs[i], 3);
 		print(": ", 2);
-		print(numToStr(regsBackUp[i]), 18);
-		putchar('\n');
+		print(numToStr(regsBackUp[i], 18),18);
+		print("\n",1);
 	}
 }
 
 static void zero_division() {
 	print("ZERO DIVISION EXCEPTION\n", 22);
 	print_registers();
-	putchar('\n');
+	print("\n",1);
 }
 
 static void opcode_exception() {
 	print("OPCODE EXCEPTION\n", 17);
 	print_registers();
-	putchar('\n');
+	print("\n",1);
 }
 

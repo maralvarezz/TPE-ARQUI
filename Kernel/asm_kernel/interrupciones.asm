@@ -13,6 +13,7 @@ GLOBAL _irq04Handler
 GLOBAL _irq05Handler
 
 GLOBAL exception_zero_division
+GLOBAL exception_op_code
 
 GLOBAL backupRegs
 GLOBAL interrupt_syscall
