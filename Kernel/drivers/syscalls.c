@@ -14,7 +14,8 @@
 extern int getSeconds();
 extern int getMinutes();
 extern int getHours();
-
+extern void sound(int freq);
+extern void stopSound();
 
 
 uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax) {
@@ -60,10 +61,11 @@ uint64_t sys_clear(){
     driver_clear();
     return 1;
 }
-
+/*
 uint64_t sys_registers(){
     //preguntar
 }
+*/
 
 uint64_t sys_seconds(){
     return getSeconds();

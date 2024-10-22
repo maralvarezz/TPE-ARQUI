@@ -6,8 +6,8 @@ extern uint64_t getHours();
 extern uint64_t getMinutes();
 extern uint64_t getSeconds();
 extern uint64_t getKey();
-void sound(int freq);
-void stopSound();
+extern void sound(int freq);
+extern void stopSound();
 
 
 void printTime(char * vec);
