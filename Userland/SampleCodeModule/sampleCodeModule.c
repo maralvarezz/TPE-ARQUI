@@ -1,4 +1,5 @@
 /* sampleCodeModule.c */
+/*
 #include "libraryC.h"
 char * v = (char*)0xB8000 + 80 * 2;
 
@@ -20,3 +21,4 @@ int main() {
 
 	return 0xDEADBEEF;
 }
+*/

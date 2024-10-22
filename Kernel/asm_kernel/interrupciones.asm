@@ -16,7 +16,9 @@ GLOBAL exception_zero_division
 GLOBAL exception_op_code
 
 GLOBAL backupRegs
-GLOBAL interrupt_syscall
+GLOBAL syscallHandler
+
+GLOBAL exceptionRegs
 
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
@@ -131,18 +133,17 @@ picSlaveMask:
 
 interrupcion_teclado:
     pushState
-    xor rax, rax //limpio rax
-    in al, 0x60 //leo el scancode
-    cmp al, 0x2A //veo si es la tecla shift
+	xor rax, rax ; limpio rax
+    in al, 0x60 ;leo el scancode
+    cmp al, 0x2A ;veo si es la tecla shift
     jne .shift
-    mov byte [shiftFlag], 1 //pongo la flag del shift en 1
+    mov byte [shiftFlag], 1 ;pongo la flag del shift en 1
 
 .shift:
-	cmp al, 0xAA //veo si se solto la tecla shift
-	jne.handle_keyboard 
-	mov byte [shiftFlag], 0 //pongo la flag del shift en 0
-
-//aca vamos a tener que completar con lo que querramos que haga si se presiona el shift
+	cmp al, 0xAA ;veo si se solto la tecla shift
+	jne .handle_keyboard 
+	mov byte [shiftFlag], 0 ;pongo la flag del shift en 0;
+	;aca vamos a tener que completar con lo que querramos que haga si se presiona el shift
 
 .handle_keyboard:
 	call keyboard_handler
@@ -210,10 +211,10 @@ syscallHandler:
 
 ;Zero Division Exception
 exception_zero_division:
-    exceptionHandler 0	
+    backupRegs 0	
 
 exception_op_code:
-    exceptionHandler 6
+    backupRegs 6
 
 haltcpu:
 	cli
@@ -221,6 +222,6 @@ haltcpu:
 	ret
 
 SECTION .bss
-	aux resq 1 //variable auxiliar para guardar el valor de r10
-	shiftFlag resb 1 //variable que se usa para saber si se presiono shift
+	aux resq 1 ;variable auxiliar para guardar el valor de r10
+	shiftFlag resb 1 ;variable que se usa para saber si se presiono shift
     exceptionRegs resq 17 
