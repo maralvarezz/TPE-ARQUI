@@ -135,16 +135,7 @@ interrupcion_teclado:
     pushState
 	xor rax, rax ; limpio rax
     in al, 0x60 ;leo el scancode
-    cmp al, 0x2A ;veo si es la tecla shift
-    jne .shift
-    mov byte [shiftFlag], 1 ;pongo la flag del shift en 1
-
-.shift:
-	cmp al, 0xAA ;veo si se solto la tecla shift
-	jne .handle_keyboard 
-	mov byte [shiftFlag], 0 ;pongo la flag del shift en 0;
-	;aca vamos a tener que completar con lo que querramos que haga si se presiona el shift
-
+	mov rdi, rax ;guardo el scancode en rdi
 .handle_keyboard:
 	call keyboard_handler
 	mov al, 0x20
@@ -192,7 +183,6 @@ _irq05Handler:
 syscallHandler:
 	pushState
 	mov rbp,rsp
-
 	push r9 ;guardo r9 porque sysCaller lo puede modificar
 	mov r9, r8
 	mov r8, r10

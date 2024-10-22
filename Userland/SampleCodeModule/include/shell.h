@@ -1,4 +1,7 @@
+#include "libraryUser.h"
+
 extern void invalidopcode();
+
 extern void divzero();
 
 void command_help();

@@ -2,11 +2,11 @@ section .text
 GLOBAL invalidopcode
 GLOBAL divzero
 
-invalidopcode:
+exc_invalidopcode:
     db 0x0F, 0x0B
     ret
 
-divzero:
+exc_divzero:
     mov rax, 0
     div rax
     ret

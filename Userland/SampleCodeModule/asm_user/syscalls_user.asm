@@ -2,7 +2,10 @@ global sys_write
 global sys_read
 global sys_clear
 global sys_time
-
+global sys_sound
+global sys_seconds
+global sys_minutes
+global sys_hours
 
 section .text
 

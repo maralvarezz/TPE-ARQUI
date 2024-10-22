@@ -1,5 +1,4 @@
 #include "shell.h"
-#include "../../Kernel/include/libraryC.h"
 #include <stdint.h>
 
 #define USER_MAX 32 
@@ -29,7 +28,15 @@ void command_help(){
 //Imprime el tiempo en pantalla
 void command_time(){
     print("Su hora actual es: ", 19);
-    //printTime(); //ver como llamarlo
+    int segundos=gettingSeconds();
+    int minutos=gettingMinutes();
+    int horas=gettingHours();
+    printInt(horas);
+    print(":",1);
+    printInt(minutos);
+    print(":",1);
+    printInt(segundos);
+    print("\n",1);
 }
 
 //Limpia la terminal

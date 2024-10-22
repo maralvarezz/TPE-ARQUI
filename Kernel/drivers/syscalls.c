@@ -86,6 +86,8 @@ uint64_t sys_sound(uint64_t freq, uint64_t time){
     if(freq<=0 || time<=0){
         return 0;
     }
-    //make_sound(freq);
+    sound(freq);
     wait_time(time);
+    stopSound();
+    return 1;
 }
