@@ -195,7 +195,7 @@ char * getCommand(int i){
     for(int j = i, k = 0; (command[j] != ' ') && (command[j] != '\0'); j++, k++){
         res[k] = command[j];
     }
-    return res;
+    return res;//corregir
 }
 
 void putLine(){

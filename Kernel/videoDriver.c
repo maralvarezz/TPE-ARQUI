@@ -1,4 +1,4 @@
-#include "videoDriver.h"
+#include "./include/videoDriver.h"
 
 
 #define WIDTH 10
@@ -9,9 +9,13 @@ uint64_t flagCursor=1;
 uint16_t cursorX = 0;
 uint16_t cursorY = 0;
 
+const uint16_t WIDTH_FONT = 9;
+const uint16_t HEIGHT_FONT = 16;
+
 
 ColorT WHITE = {255,255,255};
 ColorT BLACK = {0,0,0};
+
 ColorT color = {0,0,0};
 
 struct vbe_mode_info_structure {
@@ -94,18 +98,43 @@ void driver_putCursor(){
 
 }
 
+//-----------------------------------------------------------------------------------
+// Obtener el ancho real de un carácter según el factor de escala actual
+uint16_t getRealCharWidth() {
+    return WIDTH_FONT * escalaPixel;
+}
+
+// Obtener el alto real de un carácter según el factor de escala actual
+uint16_t getRealCharHeight() {
+    return HEIGHT_FONT * escalaPixel;
+}
+//HAY Q SACAR ESTO---------------------------------------------------------------------
+
 
 //función para chequear que el cursor no se pase de la pantalla
 static void checkInsideScreen(){
 	if(cursorX >= screen->width){
 		cursorX = 0;
+		if(cursorY + HEIGHT*escalaPixel > screen->height){ 
+			scrolleo();
+		}
+		else{
+			cursorY += HEIGHT*escalaPixel;
+		}
 	}
-	if(cursorY + HEIGHT*escalaPixel > screen->height){ 
-		scrolleo();
-	}
-	else{
-		cursorY += HEIGHT*escalaPixel;
-	}
+
+	/*
+	if (cursorX >= screen->width) {
+        cursorX = 0;
+        if (cursorY + getRealCharHeight() > screen->height) {
+            cursorY -= getRealCharHeight();
+            scrolleo();
+        } else {
+            cursorY += getRealCharHeight();
+        }
+    }*/
+
+
 }
 
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
@@ -129,10 +158,11 @@ void driver_clear(){
 void driver_read(char * buffer, uint64_t count){
 	for(uint64_t i = 0; i < count; i++){
 		buffer[i] = keyboard_handler();
+		drawChar(buffer[i],WHITE,BLACK);
 	}
 }
 
-void driver_print(char * buffer, uint64_t count){
+void driver_print(char * buffer, uint64_t count){ 
 	for(uint64_t i = 0; i < count; i++){
 		if(buffer[i] == '\n'){
 			driver_lineBelow(); //salto de linea
@@ -152,11 +182,11 @@ static void scrolleo(){
 	ColorT*  pixel;
 	ColorT*  pixelAfter;
 
-	for(int i=0; i<screen->height-WIDTH*escalaPixel; i++){
+	for(int i=0; i<screen->height-HEIGHT*escalaPixel; i++){ //cambie WIDTH por HEIGht
 		for(int j=0; j<screen->width; j++){
-			pixel = (ColorT *)getPixel(i,j); // en vez de castear a colorT, deberiamos hacer una funcion, HexaToColorT
+			pixel = (ColorT *)getPixel(i,j); 
 			pixelAfter = (ColorT *)getPixel(i+WIDTH*escalaPixel,j);
-			*pixel = *pixelAfter; // en ningun momento vuelve a pintar
+			*pixel = *pixelAfter; 
 		}
 	}
 }
@@ -169,7 +199,7 @@ void driver_lineBelow(){
 		scrolleo();
 	}
 	else{
-		cursorY += WIDTH*escalaPixel;
+		cursorY += HEIGHT*escalaPixel;
 	}
 }
 
@@ -179,8 +209,9 @@ void driver_backspace(){
 		return;
 	}
 	else{
-		cursorX -= 8*escalaPixel;
+		cursorX -= WIDTH*escalaPixel;
 		drawChar(' ',WHITE,BLACK);
+		cursorX -= WIDTH*escalaPixel;
 	}
 }
 // uso el colorT como si fuera un pixel
@@ -196,11 +227,12 @@ static void setPixel(uint16_t y, uint16_t x, ColorT clr){
 	if (x >= screen->width || y >= screen->height)
         return;
     ColorT* pixel = (ColorT*) getPixel(x, y);
-    *pixel = color;
+    *pixel = clr;
 }
 
 //font_bitmap es el un arreglo que tiene arreglos de los mapas de caracteres de cada letra
 static void drawChar(char c, ColorT fuenteColor, ColorT fondoColor){
+	
 	//es una mascara para chequear cada uno de los bits del mapa de bits
 	int mask[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
 	const uint8_t * charBitMap = font_bitmap+16*(c-32); // c es el ASCII del caracter a imprimir, en esa direccion se encuentra el primer byte del caracter
@@ -210,13 +242,15 @@ static void drawChar(char c, ColorT fuenteColor, ColorT fondoColor){
         for (cx = 0; cx < 8; cx++) {
             for (int i = 0; i < escalaPixel; i++) {
                 for (int j = 0; j < escalaPixel; j++) {
-                    setPixel(cursorY + cy * escalaPixel + j,cursorX + (8 - cx) * escalaPixel + i,
+                    setPixel(cursorX + (8 - cx) * escalaPixel + i ,cursorY + cy * escalaPixel + j,
 					charBitMap[cy] & mask[cx] ? fuenteColor : fondoColor );
                 }
             }
         }
     }
 	cursorX += WIDTH*escalaPixel;	
+	
+	
 }
 
 //función para pasar el color a hexadecimal

@@ -4,7 +4,7 @@
 
 
 int main() {
-    printChar('m');
+    //printChar('m');
     //terminal();
     return 0;
 }

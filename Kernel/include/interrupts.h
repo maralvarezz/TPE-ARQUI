@@ -8,9 +8,10 @@
 #ifndef INTERRUPS_H_
 #define INTERRUPS_H_
 
-#include <idtLoader.h>
+#include "idtLoader.h"
 
 void syscallHandler(void);
+
 
 void interrupcion_teclado(void);
 

@@ -1,9 +1,4 @@
-#include <string.h>
-#include "videoDriver.h"
-#include <lib.h>
-#include <moduleLoader.h>
-#include <naiveConsole.h>
-#include "idtLoader.h"
+#include"./include/kernel.h"
 
 
 extern uint8_t text;
@@ -55,24 +50,13 @@ int main()
 	load_idt();
 
 	((EntryPoint)sampleCodeModuleAddress)();
-	/*
-	while (1) {
-		for (int r = 0; r < 1000; r += 25) {
-			for (int k = 0; k < 1000; k += 25) {
-				int color = ((r / 25) + (k / 25)) % 2 == 0 ? 0x00B6E8E4 : 0x00CDF4F1;
-				for (int i = 0; i < 25; i++) {
-					for (int j = 0; j < 25; j++) {
-						putPixel(color, i + k, j + r);
-					}
-				}
-			}
-		}
-	}
-	*/
-
-	while(1){
-		_hlt();
-	}
+	char buffer[20];
+	driver_print("hola\n",5);
+	//driver_read(buffer,20);
+	driver_print("ho\bla",5);
+	buffer[0]=keyboard_handler();
+	driver_print(buffer,1);
+	//driver_print(buffer,20);
 
 	//B6E8E4 celeste mas oscuro
 	//CDF4F1 celeste mas clarito
