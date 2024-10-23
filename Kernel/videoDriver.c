@@ -4,17 +4,14 @@
 #define WIDTH 10
 #define HEIGHT 15
 
-uint64_t flagCursor=0;
+uint64_t flagCursor=1;
 
-typedef struct cursor{
-	uint16_t x;
-	uint16_t y;
-} cursorT;
-cursorT cursor ={0,0};
+uint16_t cursorX = 0;
+uint16_t cursorY = 0;
 
 
 ColorT WHITE = {255,255,255};
-ColorT BLACK={0,0,0};
+ColorT BLACK = {0,0,0};
 ColorT color = {0,0,0};
 
 struct vbe_mode_info_structure {
@@ -89,7 +86,7 @@ void driver_putCursor(){
 				for (int i = 0; i < escalaPixel; i++) {
 					for (int j = 0; j < escalaPixel; j++) {
 						putPixel(charBitMap[cy] & mask[cx] ? colorToHexa(caracterColor) : colorToHexa(fondoColor),
-						cursor.x + (8 - cx) * escalaPixel + i, cursor.y + cy * escalaPixel + j );
+						cursorX + (8 - cx) * escalaPixel + i, cursorY + cy * escalaPixel + j );
 					}
 				}
 			}
@@ -100,14 +97,14 @@ void driver_putCursor(){
 
 //función para chequear que el cursor no se pase de la pantalla
 static void checkInsideScreen(){
-	if(cursor.x >= screen->width){
-		cursor.x = 0;
-		if(cursor.y + 16*escalaPixel > screen->height){
-			scrolleo();
-		}
-		else{
-			cursor.y += 16*escalaPixel;
-		}
+	if(cursorX >= screen->width){
+		cursorX = 0;
+	}
+	if(cursorY + HEIGHT*escalaPixel > screen->height){ 
+		scrolleo();
+	}
+	else{
+		cursorY += HEIGHT*escalaPixel;
 	}
 }
 
@@ -125,8 +122,8 @@ void driver_clear(){
 		((uint8_t *)(uintptr_t)screen->framebuffer)[i] = 0;
 	}
     //se va el cursor arriba
-	cursor.x = 0;
-	cursor.y = 0;
+	cursorX = 0;
+	cursorY = 0;
 }
 
 void driver_read(char * buffer, uint64_t count){
@@ -157,36 +154,36 @@ static void scrolleo(){
 
 	for(int i=0; i<screen->height-WIDTH*escalaPixel; i++){
 		for(int j=0; j<screen->width; j++){
-			pixel = (ColorT *)getPixel(i,j);
+			pixel = (ColorT *)getPixel(i,j); // en vez de castear a colorT, deberiamos hacer una funcion, HexaToColorT
 			pixelAfter = (ColorT *)getPixel(i+WIDTH*escalaPixel,j);
-			*pixel = *pixelAfter;
+			*pixel = *pixelAfter; // en ningun momento vuelve a pintar
 		}
 	}
 }
 
 void driver_lineBelow(){
-	cursor.x = 0;
-	if(cursor.y + HEIGHT*escalaPixel > screen->height){
+	cursorX = 0;
+	if(cursorY + HEIGHT*escalaPixel > screen->height){
 		//lo que hacemos acá es que todo el código que teníamos se mueve una linea hacia 
 		//arriba, se borra la primer linea y se pone el cursor en la ultima linea
 		scrolleo();
 	}
 	else{
-		cursor.y += WIDTH*escalaPixel;
+		cursorY += WIDTH*escalaPixel;
 	}
 }
 
 // borra el caracter anterior
 void driver_backspace(){
-	if(cursor.x == 0){
+	if(cursorX == 0){
 		return;
 	}
 	else{
-		cursor.x -= 8*escalaPixel;
+		cursorX -= 8*escalaPixel;
 		drawChar(' ',WHITE,BLACK);
 	}
 }
-
+// uso el colorT como si fuera un pixel
 //te paso una coordenada de la pantalla en (x,y) y te devuelvo la direccion de la pantalla que representa ese pixel
 static uint32_t* getPixel(uint16_t y, uint16_t x) {
     uint8_t pixelwidth = screen->bpp/8;     //la cantidad de bytes hasta el siguiente pixel a la derecha
@@ -195,8 +192,15 @@ static uint32_t* getPixel(uint16_t y, uint16_t x) {
     return (uint32_t*)pixelPtr;
 }
 
+static void setPixel(uint16_t y, uint16_t x, ColorT clr){
+	if (x >= screen->width || y >= screen->height)
+        return;
+    ColorT* pixel = (ColorT*) getPixel(x, y);
+    *pixel = color;
+}
+
 //font_bitmap es el un arreglo que tiene arreglos de los mapas de caracteres de cada letra
-static void drawChar(char c,ColorT fuenteColor, ColorT fondoColor){
+static void drawChar(char c, ColorT fuenteColor, ColorT fondoColor){
 	//es una mascara para chequear cada uno de los bits del mapa de bits
 	int mask[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
 	const uint8_t * charBitMap = font_bitmap+16*(c-32); // c es el ASCII del caracter a imprimir, en esa direccion se encuentra el primer byte del caracter
@@ -206,12 +210,13 @@ static void drawChar(char c,ColorT fuenteColor, ColorT fondoColor){
         for (cx = 0; cx < 8; cx++) {
             for (int i = 0; i < escalaPixel; i++) {
                 for (int j = 0; j < escalaPixel; j++) {
-                    putPixel(charBitMap[cy] & mask[cx] ? colorToHexa(fuenteColor) : colorToHexa(fondoColor),
-					cursor.x + (8 - cx) * escalaPixel + i, cursor.y + cy * escalaPixel + j );
+                    setPixel(cursorY + cy * escalaPixel + j,cursorX + (8 - cx) * escalaPixel + i,
+					charBitMap[cy] & mask[cx] ? fuenteColor : fondoColor );
                 }
             }
         }
     }
+	cursorX += WIDTH*escalaPixel;	
 }
 
 //función para pasar el color a hexadecimal

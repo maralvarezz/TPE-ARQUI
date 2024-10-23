@@ -115,7 +115,8 @@ void entry(){
 }
 
 void terminal(){
-   while(on){
+    entry();
+    while(on){
         printString("Ingrese un comando: ", 21);
         printCursor();
         readLine();

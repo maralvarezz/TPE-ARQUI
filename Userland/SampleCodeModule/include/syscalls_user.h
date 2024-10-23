@@ -1,13 +1,13 @@
 #include <stdint.h>
 
-uint64_t sys_write(uint64_t fd, char * buffer, uint64_t count);
-uint64_t sys_read(uint64_t fd, char * buffer, uint64_t count);
-uint64_t sys_clear();
-uint64_t sys_exit();
-uint64_t sys_wait(uint64_t time);
-uint64_t sys_sound(uint64_t freq, uint64_t time);
-uint64_t sys_seconds();
-uint64_t sys_minutes();
-uint64_t sys_hours();
-uint64_t sys_cursor();
+extern uint64_t sys_write(uint64_t fd, char * buffer, uint64_t count);
+extern uint64_t sys_read(uint64_t fd, char * buffer, uint64_t count);
+extern uint64_t sys_clear();
+extern uint64_t sys_exit();
+extern uint64_t sys_wait(uint64_t time);
+extern uint64_t sys_sound(uint64_t freq, uint64_t time);
+extern uint64_t sys_seconds();
+extern uint64_t sys_minutes();
+extern uint64_t sys_hours();
+extern uint64_t sys_cursor();
 
