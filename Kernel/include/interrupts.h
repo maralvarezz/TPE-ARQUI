@@ -12,6 +12,8 @@
 
 void syscallHandler(void);
 
+void interrupcion_teclado(void);
+
 void _irq00Handler(void);
 void _irq01Handler(void);
 void _irq02Handler(void);

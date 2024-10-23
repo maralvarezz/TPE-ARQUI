@@ -6,7 +6,7 @@
 #define BUFFER 300
 #define TOTAL_COMMANDS 10
 
-char on = 1;
+int on = 1;
 char command[COMMAND_MAX] = {0};
 
 char * commandList[] = {"-help", "-time", "-clear", "-modifyuser", "-registers", "-divzero", "-invalidopcode", "-snakes", "-username", "-exit"};
@@ -115,9 +115,9 @@ void entry(){
 }
 
 void terminal(){
-    
-    while(on){
-        putCursor();
+   while(on){
+        printString("Ingrese un comando: ", 21);
+        printCursor();
         readLine();
         putLine();
     }
@@ -199,7 +199,6 @@ char * getCommand(int i){
 
 void putLine(){
     printUserDef();
-
 }
 
 

@@ -17,7 +17,7 @@ GLOBAL exception_op_code
 
 GLOBAL backupRegs
 GLOBAL syscallHandler
-
+GLOBAL interrupcion_teclado
 GLOBAL exceptionRegs
 
 EXTERN irqDispatcher
