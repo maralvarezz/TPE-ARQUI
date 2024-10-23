@@ -53,7 +53,7 @@ int main()
 	char buffer[20];
 	sys_sound(1000,10);
 	driver_print("hola\n",5);
-	//driver_read(buffer,20);
+	driver_read(buffer,20);
 	driver_print("ho\bla\n",6);
 	for(int j=0;j<1;j++){
 		for(int i=0;i<49;i++){
@@ -66,7 +66,7 @@ int main()
 	driver_print("holaholaholaholaholaholaholaholaholaholaholahola",50);
 	
 
-	//driver_print(buffer,20);
+	driver_print(buffer,20);
 
 	//B6E8E4 celeste mas oscuro
 	//CDF4F1 celeste mas clarito

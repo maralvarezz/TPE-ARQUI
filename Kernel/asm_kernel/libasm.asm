@@ -78,13 +78,14 @@ getSeconds:
     ret
 
 getKey:
-    cli
-.ciclo:
-    in al, 0x64
-    and al, 0x01
-    je .ciclo
-    in al, 0x60
-    sti
+    push rbp
+    mov rbp, rsp
+
+    xor rax, rax
+    in al, 60h
+
+    mov rsp, rbp
+    pop rbp
     ret
 
 sound:
