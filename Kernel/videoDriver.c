@@ -2,7 +2,7 @@
 
 
 #define WIDTH 10
-#define HEIGHT 15
+#define HEIGHT 16
 
 uint64_t flagCursor=1;
 
@@ -147,9 +147,12 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
 
 void driver_clear(){
     //limpia la pantalla
-	for(uint16_t i = 0; i <= (screen -> width * screen->height); i++){
-		((uint8_t *)(uintptr_t)screen->framebuffer)[i] = 0;
+	ColorT clr=BLACK;
+	ColorT* pixel = (ColorT*) ((uint64_t)screen->framebuffer);
+	for(uint32_t i = 0; i <= (uint32_t)(screen -> width * screen->height); i++){
+		((uint32_t *)(uintptr_t)screen->framebuffer)[i] = 0;
 	}
+
     //se va el cursor arriba
 	cursorX = 0;
 	cursorY = 0;
@@ -185,7 +188,7 @@ static void scrolleo(){
 	for(int i=0; i<screen->height-HEIGHT*escalaPixel; i++){ //cambie WIDTH por HEIGht
 		for(int j=0; j<screen->width; j++){
 			pixel = (ColorT *)getPixel(i,j); 
-			pixelAfter = (ColorT *)getPixel(i+WIDTH*escalaPixel,j);
+			pixelAfter = (ColorT *)getPixel(i+HEIGHT*escalaPixel,j);
 			*pixel = *pixelAfter; 
 		}
 	}

@@ -135,7 +135,7 @@ interrupcion_teclado:
     pushState
 	xor rax, rax ; limpio rax
     in al, 0x60 ;leo el scancode
-	mov rdi, rax ;guardo el scancode en rdi
+	mov rdi, rax ;guardo el scancode en rdi ; POR AHORA NO HACEMOS NADA MAS
 .handle_keyboard:
 	call keyboard_handler
 	mov al, 0x20
