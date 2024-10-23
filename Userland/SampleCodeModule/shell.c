@@ -115,7 +115,9 @@ void entry(){
 }
 
 void terminal(){
+    
     while(on){
+        putCursor();
         readLine();
         putLine();
     }
