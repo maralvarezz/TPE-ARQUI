@@ -1,4 +1,4 @@
-#include<stdint.h>
+#include <stdint.h>
 #include"videoDriver.h"
 #include "time.h"
 
@@ -12,4 +12,5 @@ uint64_t sys_wait(uint64_t time);
 uint64_t sys_seconds();
 uint64_t sys_minutes();
 uint64_t sys_hours();
+uint64_t sys_cursor();
 

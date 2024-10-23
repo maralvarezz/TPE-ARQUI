@@ -1,11 +1,16 @@
-#include <stdint.h>
 #include "fuente.h"
+#include "../include/keyboard.h"
+typedef struct color{
+    uint8_t red;
+    uint8_t green;
+    uint8_t blue;
+}ColorT;
 
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
 void driver_clear();
 void driver_read(char * buffer, uint64_t count);
-void driver_write(char * buffer, uint64_t count);
-void driver_newLine();
+void driver_lineBelow();
 void driver_backspace();
-void driver_width();
-void driver_sound();
+uint32_t colorToHexa(ColorT color);
+void driver_putCursor();
+void driver_print(char * buffer, uint64_t count);

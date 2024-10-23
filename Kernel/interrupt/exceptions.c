@@ -22,6 +22,7 @@ void exceptionDispatcher(int exception) {
 		opcode_exception();
 }
 
+//esto no va acá pero lo dejo hasta que le preguntemos a Fede
 void print_registers() { //fijarnos como imprimir
 	for (int i = 0; i < 18; i++) {
 		print(regs[i], 3);

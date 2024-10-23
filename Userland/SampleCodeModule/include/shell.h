@@ -10,7 +10,7 @@ void command_time();
 
 void command_clear();
 
-void command_changeuser();
+void command_modifyuser();
 
 void command_registers();
 
@@ -25,5 +25,21 @@ void command_username();
 void command_exit();
 
 void entry();
+
+void printUserDef();
+
+void terminal();
+
+void noCommand();
+
+void readLine();
+
+void checkCommand(char*  c);
+
+void check(int i);
+
+char * getCommand(int i);
+
+void putLine();
 
 void printUserDef();

@@ -1,5 +1,3 @@
-#include <time.h>
-#include <stdint.h>
 #include "../include/syscalls.h"
 
 #define READ 0
@@ -10,20 +8,21 @@
 #define SECONDS 5
 #define MINUTES 6
 #define HOURS 7
+#define CURSOR 8
 
 extern int getSeconds();
 extern int getMinutes();
 extern int getHours();
 extern void sound(int freq);
-extern void stopSound();
+extern void stop_sound();
 
 
 uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax) {
 	switch (rax) {
+        case READ:
+			return sys_read(rdi, (char *)rsi, rdx);
 		case WRITE:
 			return sys_write(rdi, (char *)rsi, rdx);
-		case READ:
-			return sys_read(rdi, (char *)rsi, rdx);
 		case CLEAR:
 			return sys_clear();
         case WAIT:
@@ -36,6 +35,8 @@ uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint6
             return sys_minutes();
         case HOURS:
             return sys_hours();
+        case CURSOR:
+            return sys_cursor();
         default:
             return 0;
 	}
@@ -51,10 +52,15 @@ uint64_t sys_read(uint64_t fd, char * buffer, uint64_t count){
 
 uint64_t sys_write(uint64_t fd, char * buffer, uint64_t count){
     if(fd == 1){
-        driver_write(buffer, count);
+        driver_print(buffer, count);
         return 1;
     }
     return 0;
+}
+
+uint64_t sys_cursor(){
+    driver_putCursor();
+    return 1;
 }
 
 uint64_t sys_clear(){
@@ -90,6 +96,6 @@ uint64_t sys_sound(uint64_t freq, uint64_t time){
     }
     sound(freq);
     wait_time(time);
-    stopSound();
+    stop_sound();
     return 1;
 }

@@ -1,5 +1,7 @@
-#include <stdio.h>
-#include "libraryUser.h"
+#include <stdint.h>
+#include "./include/libraryUser.h"
+#include "./include/syscalls_user.h"
+#include "./include/exceptions_user.h"
 
 
 void playNota(uint64_t freq, uint64_t time){
@@ -17,7 +19,8 @@ void printString(char * string, int length){
 }
 
 void printChar(char c){
-    sys_write(1,(char*)c, 1);
+    char * c1 = &c;
+    sys_write(1,c1, 1);
 }
 
 char getChar(){
@@ -30,8 +33,8 @@ void clearAll(){
     sys_clear();
 }
 
-void sleep(){
-    sys_wait();
+void sleep(uint64_t time){
+    sys_wait(time);
 }
 
 int strcmp(char * str1, char * str2){
@@ -54,6 +57,11 @@ int strlen(char * str){
         i++;
     }
     return i;
+}
+
+void printCursor(){
+    sys_cursor();
+    return;
 }
 
 void invokeOpCode(){

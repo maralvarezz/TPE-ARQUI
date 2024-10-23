@@ -6,6 +6,7 @@ global sys_sound
 global sys_seconds
 global sys_minutes
 global sys_hours
+global sys_cursor
 
 section .text
 
@@ -46,5 +47,10 @@ sys_minutes:
 
 sys_hours:
     mov rax, 0x07
+    int 0x80
+    ret
+
+sys_cursor:
+    mov rax, 0x08
     int 0x80
     ret

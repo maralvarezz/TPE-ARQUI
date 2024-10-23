@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include <stdint.h>
 
-typedef struct {
+typedef struct Nota{
     int frec;
     int time;
 } NotaT;
@@ -9,7 +10,7 @@ void printChar(char c);
 void printString(char * string, int length);
 void printInt(int num);
 char getChar();
-void sleep();
+void sleep(uint64_t time);
 int strlen(char * str);
 int strcmp(char * str1, char * str2);
 void clearAll();
@@ -20,3 +21,4 @@ void playMusic(NotaT * music, int duration);
 int gettingSeconds();
 int gettingMinutes();
 int gettingHours();
+void printCursor();

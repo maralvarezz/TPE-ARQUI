@@ -1,8 +1,21 @@
 #include "videoDriver.h"
-#include "./include/keyboard.h"
 
-#define WIDTH 8
-#define HEIGHT 16
+
+#define WIDTH 10
+#define HEIGHT 15
+
+uint64_t flagCursor=0;
+
+typedef struct cursor{
+	uint16_t x;
+	uint16_t y;
+} cursorT;
+cursorT cursor ={0,0};
+
+
+ColorT WHITE = {255,255,255};
+ColorT BLACK={0,0,0};
+ColorT color = {0,0,0};
 
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -46,59 +59,44 @@ typedef struct vbe_mode_info_structure * VBEInfoPtr;
 
 VBEInfoPtr screen = (VBEInfoPtr) 0x0000000000005C00;
 
-typedef struct cursor{
-	uint16_t x;
-	uint16_t y;
-} cursorT;
-cursorT cursor ={0,0};
-
-typedef struct color{
-    uint8_t red;
-    uint8_t green;
-    uint8_t blue;
-}ColorT;
-ColorT WHITE = {255,255,255};
-ColorT BLACK={0,0,0};
-
-ColorT color = {0,0,0};
-
-
-
 uint8_t escalaPixel=1;
-
-//función para pasar el color a hexadecimal
-uint32_t colorToHexa(ColorT color) {
-    uint32_t hexValue = 0;
-    hexValue |= (color.red << 16);
-    hexValue |= (color.green << 8);
-    hexValue |= color.blue;
-    return hexValue;
-}
 
 static uint32_t* getPixel(uint16_t y, uint16_t x);
 static void scrolleo();
 static void checkInsideScreen();
+static void drawChar(char c, ColorT fuenteColor, ColorT fondoColor);
 
-//font_bitmap es el un arreglo que tiene arreglos de los mapas de caracteres de cada letra
-static void drawChar(char c, cursorT cursor2,ColorT fuenteColor, ColorT fondoColor){
-	//es una mascara para chequear cada uno de los bits del mapa de bits
-	int mask[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
-	const uint8_t * charBitMap = font_bitmap+16*(c-32); // c es el ASCII del caracter a imprimir, en esa direccion se encuentra el primer byte del caracter
-	checkInsideScreen();
-	int cy,cx;
-	for (cy = 0; cy < 16; cy++) {
-        for (cx = 0; cx < 8; cx++) {
-            for (int i = 0; i < escalaPixel; i++) {
-                for (int j = 0; j < escalaPixel; j++) {
-                    putPixel(charBitMap[cy] & mask[cx] ? colorToHexa(fuenteColor) : colorToHexa(fondoColor),
-					cursor2.x + (8 - cx) * escalaPixel + i, cursor2.y + cy * escalaPixel + j );
-                }
-            }
-        }
-    }
+void driver_putCursor(){
+		//es una mascara para chequear si el color es 
+		int mask[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
+		ColorT caracterColor = flagCursor ? WHITE : BLACK;
+		ColorT fondoColor = flagCursor ? WHITE : BLACK;
+		const  uint8_t *charBitMap;
+		if(flagCursor){
+			charBitMap = font_bitmap+16*(219-32); // 219 es el ASCII del cursor
+			flagCursor = 0;
+		}
+		else{
+			charBitMap = font_bitmap+16*(32-32); // 32 es el ASCII del espacio
+			flagCursor = 1;
+		}
+		//hacemos el chequeo para que no se pase de la pantalla
+		checkInsideScreen();
+		int cy,cx;
+		//iteramos sobre el mapa de bits del cursor
+		for (cy = 0; cy < 16; cy++) {
+			for (cx = 0; cx < 8; cx++) {
+				for (int i = 0; i < escalaPixel; i++) {
+					for (int j = 0; j < escalaPixel; j++) {
+						putPixel(charBitMap[cy] & mask[cx] ? colorToHexa(caracterColor) : colorToHexa(fondoColor),
+						cursor.x + (8 - cx) * escalaPixel + i, cursor.y + cy * escalaPixel + j );
+					}
+				}
+			}
+		}
 
-	
 }
+
 
 //función para chequear que el cursor no se pase de la pantalla
 static void checkInsideScreen(){
@@ -113,8 +111,8 @@ static void checkInsideScreen(){
 	}
 }
 
-void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
-    uint8_t * framebuffer = (uint8_t *)screen->framebuffer;
+void putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
+    uint8_t * framebuffer = (uint8_t *)(uintptr_t)screen->framebuffer;
     uint64_t offset = (x * ((screen->bpp)/8)) + (y * screen->pitch);
     framebuffer[offset]     =  (hexColor) & 0xFF;
     framebuffer[offset+1]   =  (hexColor >> 8) & 0xFF; 
@@ -124,7 +122,7 @@ void putPixel(uint32_t hexColor, uint64_t x, uint64_t y) {
 void driver_clear(){
     //limpia la pantalla
 	for(uint16_t i = 0; i <= (screen -> width * screen->height); i++){
-		((uint8_t *)screen->framebuffer)[i] = 0;
+		((uint8_t *)(uintptr_t)screen->framebuffer)[i] = 0;
 	}
     //se va el cursor arriba
 	cursor.x = 0;
@@ -137,10 +135,10 @@ void driver_read(char * buffer, uint64_t count){
 	}
 }
 
-void driver_write(char * buffer, uint64_t count){
+void driver_print(char * buffer, uint64_t count){
 	for(uint64_t i = 0; i < count; i++){
 		if(buffer[i] == '\n'){
-			driver_width(); //salto de linea
+			driver_lineBelow(); //salto de linea
 		}else if(buffer[i] == '\b'){
 			driver_backspace(); //borra el caracter anterior
 		}
@@ -148,7 +146,7 @@ void driver_write(char * buffer, uint64_t count){
 			return; 
 		}
 		else{
-			drawChar(buffer[i],cursor,WHITE,BLACK); //si no es ninguno de los casos especiales 
+			drawChar(buffer[i],WHITE,BLACK); //si no es ninguno de los casos especiales 
 		}
 	}
 }
@@ -166,9 +164,9 @@ static void scrolleo(){
 	}
 }
 
-void driver_width(){
+void driver_lineBelow(){
 	cursor.x = 0;
-	if(cursor.y + WIDTH*escalaPixel > screen->height){
+	if(cursor.y + HEIGHT*escalaPixel > screen->height){
 		//lo que hacemos acá es que todo el código que teníamos se mueve una linea hacia 
 		//arriba, se borra la primer linea y se pone el cursor en la ultima linea
 		scrolleo();
@@ -178,15 +176,14 @@ void driver_width(){
 	}
 }
 
-
+// borra el caracter anterior
 void driver_backspace(){
 	if(cursor.x == 0){
-		driver_sound();
 		return;
 	}
 	else{
 		cursor.x -= 8*escalaPixel;
-		drawChar(' ',cursor,WHITE,BLACK);
+		drawChar(' ',WHITE,BLACK);
 	}
 }
 
@@ -198,6 +195,30 @@ static uint32_t* getPixel(uint16_t y, uint16_t x) {
     return (uint32_t*)pixelPtr;
 }
 
-void driver_sound(){
-	//hace un sonido
+//font_bitmap es el un arreglo que tiene arreglos de los mapas de caracteres de cada letra
+static void drawChar(char c,ColorT fuenteColor, ColorT fondoColor){
+	//es una mascara para chequear cada uno de los bits del mapa de bits
+	int mask[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
+	const uint8_t * charBitMap = font_bitmap+16*(c-32); // c es el ASCII del caracter a imprimir, en esa direccion se encuentra el primer byte del caracter
+	checkInsideScreen();
+	int cy,cx;
+	for (cy = 0; cy < 16; cy++) {
+        for (cx = 0; cx < 8; cx++) {
+            for (int i = 0; i < escalaPixel; i++) {
+                for (int j = 0; j < escalaPixel; j++) {
+                    putPixel(charBitMap[cy] & mask[cx] ? colorToHexa(fuenteColor) : colorToHexa(fondoColor),
+					cursor.x + (8 - cx) * escalaPixel + i, cursor.y + cy * escalaPixel + j );
+                }
+            }
+        }
+    }
+}
+
+//función para pasar el color a hexadecimal
+uint32_t colorToHexa(ColorT color){
+    uint32_t hexValue = 0;
+    hexValue |= (color.red << 16);
+    hexValue |= (color.green << 8);
+    hexValue |= color.blue;
+    return hexValue;
 }
