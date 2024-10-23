@@ -14,45 +14,45 @@ section .text
 
 sys_read:
     mov rax, 0x00
-    int 0x80
+    int 80h
     ret
     
 sys_write:
     mov rax, 0x01
-    int 0x80
+    int 80h
     ret
 
 sys_clear:
     mov rax, 0x02
-    int 0x80
+    int 80h
     ret
 
 sys_wait:
     mov rax, 0x03
-    int 0x80
+    int 80h
     ret
 
 sys_sound:
     mov rax, 0x04
-    int 0x80
+    int 80h
     ret
 
 sys_seconds:
     mov rax, 0x05
-    int 0x80
+    int 80h
     ret
 
 sys_minutes:
     mov rax, 0x06
-    int 0x80
+    int 80h
     ret
 
 sys_hours:
     mov rax, 0x07
-    int 0x80
+    int 80h
     ret
 
 sys_cursor:
     mov rax, 0x08
-    int 0x80
+    int 80h
     ret
