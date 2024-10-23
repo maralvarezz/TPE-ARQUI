@@ -7,6 +7,8 @@ global sys_seconds
 global sys_minutes
 global sys_hours
 global sys_cursor
+global sys_wait
+
 
 section .text
 
