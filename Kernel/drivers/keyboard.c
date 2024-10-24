@@ -35,7 +35,9 @@ static const char * mapLetras[] = {vecMin,vecMay};
 
 //nos entra la tecla que se oprimió
 char keyboard_handler(){
-    if(((teclaPressed = getKey()) <= 0x79) || teclaPressed == 0xAA || teclaPressed == 0xB6 || teclaPressed == 0x3A){
+    teclaPressed = getKey();
+    _hlt();
+    if(((teclaPressed) <= 0x79) || teclaPressed == 0xAA || teclaPressed == 0xB6 || teclaPressed == 0x3A){
         //shift oprimido
         if (teclaPressed == 0x2A || teclaPressed == 0x36){
             shift = 1;
@@ -55,13 +57,8 @@ char keyboard_handler(){
 
 
 char getKeyboard(){
-   
     if(isLetter(teclaPressed)){
-        if((bloqMayus==1 && shift==0) || (bloqMayus==0 && shift==1)){
-            return mapLetras[1][(int)teclaPressed];
-        }else{
-            return mapLetras[0][(int)teclaPressed];
-        }
+        return mapLetras[(bloqMayus+shift)%2][(int)teclaPressed];
     }
     return mapLetras[shift][(int)teclaPressed];
 }

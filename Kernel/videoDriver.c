@@ -163,7 +163,7 @@ void driver_read(char * buffer){
 		if(*buffer == 0){
 			return;
 		}
-		drawChar(*buffer,WHITE,BLACK);
+		driver_print(buffer,1);
 }
 
 void driver_print(char * buffer, uint64_t count){ 
@@ -209,9 +209,16 @@ void driver_lineBelow(){
 
 // borra el caracter anterior
 void driver_backspace(){
-	if(cursorX == 0){
+	if(cursorX == 0 && cursorY == 0){
 		return;
 	}
+	/*Ver como hacer
+	else if(cursorX == 0){
+		cursorY -= HEIGHT*escalaPixel;
+		cursorX = screen->width - WIDTH*escalaPixel;
+		drawChar(' ',WHITE,BLACK);
+		cursorX -= WIDTH*escalaPixel;
+	}*/
 	else{
 		cursorX -= WIDTH*escalaPixel;
 		drawChar(' ',WHITE,BLACK);

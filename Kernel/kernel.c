@@ -47,10 +47,7 @@ int main()
 {	
 	load_idt();
 	((EntryPoint)sampleCodeModuleAddress)();
-		//char c;
-		//while((c = getChar()) != '\0'){
-		//	_hlt();
-		//}
+		char c;
 		int hours=sys_hours();
 		char *s3= numToStr(hours-3,2);
 		driver_print(s3,2);
@@ -63,9 +60,13 @@ int main()
 		char *s2= numToStr(seconds,2);
 		driver_print(s2,2);
 		driver_print("\n",1);
-
 		sys_cursor();
 	
+		while(1){
+			_hlt();
+			c = getChar();
+		}
+		
 
 	/*driver_print("hola iNGRESE UN MENSAJE\n",24);
 	for(int i=0;i<7;i++){
