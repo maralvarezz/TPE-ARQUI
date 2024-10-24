@@ -160,7 +160,7 @@ void driver_clear(){
 
 void driver_read(char * buffer, uint64_t count){
 	for(uint64_t i = 0; i < count; i++){
-		buffer[i] = keyboard_handler();
+		buffer[i] = getKeyboard();
 		drawChar(buffer[i],WHITE,BLACK);
 	}
 }

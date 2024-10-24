@@ -135,7 +135,43 @@ interrupcion_teclado:
     pushState
 	xor rax, rax ; limpio rax
     in al, 0x60 ;leo el scancode
-	mov rdi, rax ;guardo el scancode en rdi ; POR AHORA NO HACEMOS NADA MAS
+	mov rdi, rax ;guardo el scancode en rdi
+	cmp al, 0x1D ;si es la tecla ctrl
+	jne .ctrlNotPressed
+	mov byte [ctrlFlag], 1 ;si es la tecla ctrl
+.ctrlNotPressed:
+	cmp al, 0x9D ;si se solto la tecla ctrl
+	jne .ctrl_plus_r_pressed
+	mov byte [ctrlFlag], 0 ;si se solto la tecla ctrl
+.ctrl_plus_r_pressed:
+	cmp byte [ctrlFlag], 1 ;si se solto la tecla ctrl
+	jne .handle_keyboard
+	cmp al, 0x13 ;si esta presionada la tecla r
+	jne .handle_keyboard
+
+;hacemos el gaurdado de los registros 
+.guardamos_registros:
+    mov [registros+2*8], rbx
+    mov [registros+3*8], rcx
+    mov [registros+4*8], rdx
+    mov [registros+5*8], rsi
+    mov [registros+6*8], rdi
+    mov [registros+7*8], rbp
+    mov [registros+9*8], r8
+    mov [registros+10*8], r9
+    mov [registros+11*8], r10
+    mov [registros+12*8], r11
+    mov [registros+13*8], r12
+    mov [registros+14*8], r13
+    mov [registros+15*8], r14
+    mov [registros+16*8], r15
+	mov rax, rsp
+    add rax, 160
+    mov [registros+8*8], rax
+    mov rax, [rsp+15*8]
+    mov [registros], rax
+    mov rax, [rsp+14*8]
+    mov [registros+1*8], rax
 .handle_keyboard:
 	call keyboard_handler
 	mov al, 0x20
@@ -159,26 +195,6 @@ _sti:
 ;8254 Timer (Timer Tick)
 _irq00Handler:
 	irqHandlerMaster 0
-
-;Keyboard
-_irq01Handler:
-	irqHandlerMaster 1
-
-;Cascade pic never called
-_irq02Handler:
-	irqHandlerMaster 2
-
-;Serial Port 2 and 4
-_irq03Handler:
-	irqHandlerMaster 3
-
-;Serial Port 1 and 3
-_irq04Handler:
-	irqHandlerMaster 4
-
-;USB
-_irq05Handler:
-	irqHandlerMaster 5
 
 syscallHandler:
 	pushState
@@ -212,6 +228,6 @@ haltcpu:
 	ret
 
 SECTION .bss
-	aux resq 1 ;variable auxiliar para guardar el valor de r10
-	shiftFlag resb 1 ;variable que se usa para saber si se presiono shift
-    exceptionRegs resq 17 
+	ctrlFlag resb 1 ;variable que se usa para saber si se presiono shift
+    exceptionRegs resq 18
+	registros resq 18

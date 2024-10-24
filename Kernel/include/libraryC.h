@@ -5,7 +5,6 @@
 extern uint64_t getHours();
 extern uint64_t getMinutes();
 extern uint64_t getSeconds();
-extern uint64_t getKey();
 extern void sound(int freq);
 extern void stopSound();
 

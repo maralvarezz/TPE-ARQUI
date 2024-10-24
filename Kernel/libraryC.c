@@ -63,7 +63,7 @@ void scanf(char * string, char * buffer, int bufferLength){
 
 char getChar(){
     char buffer[2]={0};
-    buffer[0]=keyboard_handler();
+    buffer[0]=getKeyboard();
     return sys_read(0, buffer, 1);
 }
 

@@ -1,5 +1,5 @@
 #include <stdint.h>
 
 char getKeyboard();
-char keyboard_handler();
-int isLetter(int key);
+void keyboard_handler(uint8_t tecla);
+int isLetter(char key);

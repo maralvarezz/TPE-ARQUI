@@ -1,6 +1,5 @@
 #include"./include/kernel.h"
 
-
 extern uint8_t text;
 extern uint8_t rodata;
 extern uint8_t data;
@@ -50,12 +49,12 @@ int main()
 	load_idt();
 
 	((EntryPoint)sampleCodeModuleAddress)();
-	char buffer[20];
-	sys_sound(1000,10);
+	//sys_sound(1000,10);
 	driver_print("hola\n",5);
-	driver_read(buffer,20);
-	driver_print("ho\bla\n",6);
-	for(int j=0;j<1;j++){
+	char buffer[20];
+	driver_read(buffer, 20);
+	sys_wait(50);
+	driver_read(buffer,20);	for(int j=0;j<1;j++){
 		for(int i=0;i<49;i++){
 			driver_print("holaholaholaholaholaholaholaholaholaholaholahola",50-i);
 			driver_print("\n",1);
