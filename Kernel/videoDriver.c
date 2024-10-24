@@ -108,7 +108,7 @@ uint16_t getRealCharWidth() {
 uint16_t getRealCharHeight() {
     return HEIGHT_FONT * escalaPixel;
 }
-//HAY Q SACAR ESTO---------------------------------------------------------------------
+//------------------------------------------------------------------------------------
 
 
 //función para chequear que el cursor no se pase de la pantalla
