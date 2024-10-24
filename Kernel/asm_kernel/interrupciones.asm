@@ -135,7 +135,6 @@ interrupcion_teclado:
     pushState
 	xor rax, rax ; limpio rax
     in al, 0x60 ;leo el scancode
-	mov rdi, rax ;guardo el scancode en rdi
 	cmp al, 0x1D ;si es la tecla ctrl
 	jne .ctrlNotPressed
 	mov byte [ctrlFlag], 1 ;si es la tecla ctrl
@@ -149,7 +148,7 @@ interrupcion_teclado:
 	cmp al, 0x13 ;si esta presionada la tecla r
 	jne .handle_keyboard
 
-;hacemos el gaurdado de los registros 
+;hacemos el guardado de los registros 
 .guardamos_registros:
     mov [registros+2*8], rbx
     mov [registros+3*8], rcx

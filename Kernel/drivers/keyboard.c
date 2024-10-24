@@ -5,6 +5,8 @@ extern char getKey();
 unsigned char teclaPressed = 0;
 int bloqMayus = 0;
 int shift = 0;
+static char retChar = 0;
+
 
 static const char vecMay[] = {
 
@@ -32,25 +34,28 @@ static const char vecMin[] = {
 static const char * mapLetras[] = {vecMin,vecMay};
 
 //nos entra la tecla que se oprimió
-void keyboard_handler(uint8_t tecla){
-    teclaPressed = tecla;
-    //shift oprimido
-    if (teclaPressed == 0x2A || teclaPressed == 0x36){
-        shift = 1;
+char keyboard_handler(){
+    if((teclaPressed = getKey()) <= 0x79){
+        //shift oprimido
+        if (teclaPressed == 0x2A || teclaPressed == 0x36){
+            shift = 1;
+        }
+        //shift no oprimido
+        if (teclaPressed == 0xAA || teclaPressed == 0xB6) {
+            shift = 0;
+        }
+        //bloq mayus oprimido
+        if (teclaPressed == 0x3A) {
+            bloqMayus = (bloqMayus+1)%2; //si esta en 1 lo pongo en 0 y viceversa
+        }
+        return getKeyboard();
     }
-    //shift no oprimido
-    if (teclaPressed == 0xAA || teclaPressed == 0xB6) {
-        shift = 0;
-    }
-    //bloq mayus oprimido
-    if (teclaPressed == 0x3A) {
-        bloqMayus = (bloqMayus+1)%2; //si esta en 1 lo pongo en 0 y viceversa
-    } 
-    return;
+    return 0;
 }
 
 
 char getKeyboard(){
+   
     if(isLetter(teclaPressed)){
         if((shift + bloqMayus)%2==1){
             return mapLetras[1][(int)teclaPressed];
@@ -59,6 +64,17 @@ char getKeyboard(){
         }
     }
     return mapLetras[shift][(int)teclaPressed];
+    
+    /*
+    if (teclaPressed > 0x80 || teclaPressed == 0x0F){
+        retChar = 0;
+    }
+    else{
+        retChar = mapLetras[shift][teclaPressed];
+    }
+    */
+
+    //return retChar;
 }
 
 //nos dice si la tecla es una letra

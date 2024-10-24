@@ -158,11 +158,12 @@ void driver_clear(){
 	cursorY = 0;
 }
 
-void driver_read(char * buffer, uint64_t count){
-	for(uint64_t i = 0; i < count; i++){
-		buffer[i] = getKeyboard();
-		drawChar(buffer[i],WHITE,BLACK);
-	}
+void driver_read(char * buffer){
+		*buffer = keyboard_handler();
+		if(*buffer == 0){
+			return;
+		}
+		drawChar(*buffer,WHITE,BLACK);
 }
 
 void driver_print(char * buffer, uint64_t count){ 
@@ -252,8 +253,6 @@ static void drawChar(char c, ColorT fuenteColor, ColorT fondoColor){
         }
     }
 	cursorX += WIDTH*escalaPixel;	
-	
-	
 }
 
 //función para pasar el color a hexadecimal

@@ -45,15 +45,23 @@ void * initializeKernelBinary()
 
 int main()
 {	
-
 	load_idt();
-
 	((EntryPoint)sampleCodeModuleAddress)();
+	while(1){
+		char c;
+		while((c = getChar()) != '\0'){
+			_hlt();
+		}
+		driver_print("\n",1);
+	}
+	
 	//sys_sound(1000,10);
-	//driver_print("hola iNGRESE UN MENSAJE\n",24);
-	sys_wait(50);
-	char buffer[2];
-	driver_read(buffer, 2);
+	/*driver_print("hola iNGRESE UN MENSAJE\n",24);
+	for(int i=0;i<7;i++){
+		driver_read(buffer);
+		driver_print("\n",1);
+	}
+	//driver_read(buffer);
 	//sys_wait(50);
 	/*driver_read(buffer,20);
 		for(int j=0;j<1;j++){

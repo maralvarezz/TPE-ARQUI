@@ -52,6 +52,7 @@ uint64_t strlen(char * string){
     return i;
 }
 
+/*
 void scanf(char * string, char * buffer, int bufferLength){
     print(string, strlen(string));
     int resp=sys_read(0, buffer, bufferLength); //mando 0 porque es la entrada estandar
@@ -59,12 +60,11 @@ void scanf(char * string, char * buffer, int bufferLength){
     if(resp==0){
         print("Error al leer", 12);
     }
-}
+}*/
 
 char getChar(){
-    char buffer[2]={0};
-    buffer[0]=getKeyboard();
-    return sys_read(0, buffer, 1);
+    char buffer[1]={0};
+    return sys_read(0, buffer);
 }
 
 

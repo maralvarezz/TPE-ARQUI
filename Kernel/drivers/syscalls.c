@@ -20,7 +20,7 @@ extern void stop_sound();
 uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax) {
 	switch (rax) {
         case READ:
-			return sys_read(rdi, (char *)rsi, rdx);
+			return sys_read(rdi, (char *)rsi);
 		case WRITE:
 			return sys_write(rdi, (char *)rsi, rdx);
 		case CLEAR:
@@ -42,9 +42,9 @@ uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint6
 	}
 }
 
-uint64_t sys_read(uint64_t fd, char * buffer, uint64_t count){
+uint64_t sys_read(uint64_t fd, char * buffer){
     if(fd == 0){
-        driver_read(buffer, count);
+        driver_read(buffer);
         return 1;
     }
     return 0;

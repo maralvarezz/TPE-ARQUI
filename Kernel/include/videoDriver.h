@@ -9,7 +9,7 @@ typedef struct color{
 
 void putPixel(uint32_t hexColor, uint64_t x, uint64_t y);
 void driver_clear();
-void driver_read(char * buffer, uint64_t count);
+void driver_read(char * buffer);
 void driver_lineBelow();
 void driver_backspace();
 uint32_t colorToHexa(ColorT color);
