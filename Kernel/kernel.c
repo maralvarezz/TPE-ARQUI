@@ -50,22 +50,23 @@ int main()
 
 	((EntryPoint)sampleCodeModuleAddress)();
 	//sys_sound(1000,10);
-	driver_print("hola\n",5);
+	//driver_print("hola iNGRESE UN MENSAJE\n",24);
 	char buffer[20];
 	driver_read(buffer, 20);
-	sys_wait(50);
-	driver_read(buffer,20);	for(int j=0;j<1;j++){
+	//sys_wait(50);
+	driver_read(buffer,20);/*
+		for(int j=0;j<1;j++){
 		for(int i=0;i<49;i++){
 			driver_print("holaholaholaholaholaholaholaholaholaholaholahola",50-i);
 			driver_print("\n",1);
 		}
-	}
-	driver_print("holaholaholaholaholaholaholaholaholaholaholahola",50);
-	driver_clear();
-	driver_print("holaholaholaholaholaholaholaholaholaholaholahola",50);
+	}*/
+	//driver_print("holaholaholaholaholaholaholaholaholaholaholahola",50);
+	//driver_clear();
+	//driver_print("holaholaholaholaholaholaholaholaholaholaholahola",50);
 	
 
-	driver_print(buffer,20);
+	//driver_print(buffer,20);
 
 	//B6E8E4 celeste mas oscuro
 	//CDF4F1 celeste mas clarito

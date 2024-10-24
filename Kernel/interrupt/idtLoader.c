@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include "../include/idtLoader.h"
-#include <defs.h>
+#include "../include/defs.h"
 #include "../include/interrupts.h"
 
 #pragma pack(push)		/* Push de la alineación actual */
@@ -30,7 +30,6 @@ void load_idt() {
   setup_IDT_entry (0x80, (uint64_t) &syscallHandler); //agrego para poder hacer el llamado a las syscalls
 
 
-	//Solo interrupcion timer tick habilitadas
 	picMasterMask(0xFC); 
 	picSlaveMask(0xFF);
         
