@@ -22,7 +22,7 @@ static const char vecMay[] = {
 static const char vecMin[] = {
       0,   27, '1', '2', '3', '4', '5', '6', '7', '8', '9',  '0', '-', '=',
    '\b', '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',  '[', ']',
-   '\n',    0, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`',
+   '\n', 0, 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', '`',
       0, '\\', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/',    0, '*',
       0,  ' ',   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,    0,   0,
       0,    0,   38,   0, '-',   37,   0,   39, '+',   0,   40,   0,    0,   0,
@@ -35,7 +35,7 @@ static const char * mapLetras[] = {vecMin,vecMay};
 
 //nos entra la tecla que se oprimió
 char keyboard_handler(){
-    if((teclaPressed = getKey()) <= 0x79){
+    if(((teclaPressed = getKey()) <= 0x79) || teclaPressed == 0xAA || teclaPressed == 0xB6 || teclaPressed == 0x3A){
         //shift oprimido
         if (teclaPressed == 0x2A || teclaPressed == 0x36){
             shift = 1;
@@ -57,24 +57,13 @@ char keyboard_handler(){
 char getKeyboard(){
    
     if(isLetter(teclaPressed)){
-        if((shift + bloqMayus)%2==1){
+        if((bloqMayus==1 && shift==0) || (bloqMayus==0 && shift==1)){
             return mapLetras[1][(int)teclaPressed];
         }else{
             return mapLetras[0][(int)teclaPressed];
         }
     }
     return mapLetras[shift][(int)teclaPressed];
-    
-    /*
-    if (teclaPressed > 0x80 || teclaPressed == 0x0F){
-        retChar = 0;
-    }
-    else{
-        retChar = mapLetras[shift][teclaPressed];
-    }
-    */
-
-    //return retChar;
 }
 
 //nos dice si la tecla es una letra

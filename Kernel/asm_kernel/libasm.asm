@@ -55,12 +55,10 @@ getMinutes:
     in al, 71h
     or al, 4
     out 71h, al
-
     mov al, 0x02
     out 70h, al
     in al, 71h
     sti
-
     ret
 
 getSeconds:
@@ -80,7 +78,7 @@ getSeconds:
 getKey:
     push rbp
     mov rbp, rsp
-    mov rax, 0
+    mov rax, 0  
     
     in al, 0x60
 

@@ -2,14 +2,21 @@
 
 char * numToStr(uint64_t n, uint64_t c){
     uint64_t i = 0;
-    char res[c+1];
+    char * res = {0};
     for(i = 0 ; i < c; i++){
-        res[c-i] = n % 10 + '0';
+        res[c-i-1] = n % 10 + '0';
         n = n / 10;
     }
-    res[i] = '\0';
-    char * aux = res;
-    return aux;
+    res[c] = '\0';
+    return res;
+}
+
+void strcpy(char * dest, char * src){
+    int i = 0;
+    while(src[i] != '\0'){
+        dest[i++] = src[i];
+    }
+    dest[i] = '\0';
 }
 
 static void printT(char * vec, int time){
