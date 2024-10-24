@@ -2,7 +2,7 @@
 
 extern char getKey();
 
-char teclaPressed = 0;
+unsigned char teclaPressed = 0;
 int bloqMayus = 0;
 int shift = 0;
 
@@ -49,15 +49,16 @@ void keyboard_handler(uint8_t tecla){
     return;
 }
 
+
 char getKeyboard(){
     if(isLetter(teclaPressed)){
         if((shift + bloqMayus)%2==1){
-            return mapLetras[1][teclaPressed];
+            return mapLetras[1][(int)teclaPressed];
         }else{
-        return mapLetras[0][teclaPressed];
+            return mapLetras[0][(int)teclaPressed];
         }
     }
-    return mapLetras[shift][teclaPressed];
+    return mapLetras[shift][(int)teclaPressed];
 }
 
 //nos dice si la tecla es una letra

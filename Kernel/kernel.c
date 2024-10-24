@@ -51,10 +51,11 @@ int main()
 	((EntryPoint)sampleCodeModuleAddress)();
 	//sys_sound(1000,10);
 	//driver_print("hola iNGRESE UN MENSAJE\n",24);
-	char buffer[20];
-	driver_read(buffer, 20);
+	sys_wait(50);
+	char buffer[2];
+	driver_read(buffer, 2);
 	//sys_wait(50);
-	driver_read(buffer,20);/*
+	/*driver_read(buffer,20);
 		for(int j=0;j<1;j++){
 		for(int i=0;i<49;i++){
 			driver_print("holaholaholaholaholaholaholaholaholaholaholahola",50-i);
