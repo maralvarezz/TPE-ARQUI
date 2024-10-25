@@ -1,4 +1,5 @@
 #include "libraryUser.h"
+#include <stdint.h>
 
 extern void invalidopcode();
 

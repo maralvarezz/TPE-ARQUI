@@ -1,8 +1,8 @@
 #include "./include/shell.h"
-#include <stdint.h>
+
 
 #define USER_MAX 32 
-#define COMMAND_MAX 50
+#define COMMAND_MAX 75
 #define BUFFER 300
 #define TOTAL_COMMANDS 10
 

@@ -56,7 +56,7 @@ typedef struct vbe_mode_info_structure * VBEInfoPtr;
 
 VBEInfoPtr screen = (VBEInfoPtr) 0x0000000000005C00;
 
-uint8_t escalaPixel=1;
+uint8_t escalaPixel=5;
 
 static uint32_t* getPixel(uint16_t y, uint16_t x);
 static void scrolleo();
@@ -147,7 +147,6 @@ void driver_print(char * buffer, uint64_t count){
 static void scrolleo(){
 	ColorT*  pixel;
 	ColorT*  pixelAfter;
-
 	for(int i=0; i<screen->height-HEIGHT*escalaPixel; i++){ //cambie WIDTH por HEIGht
 		for(int j=0; j<screen->width; j++){
 			pixel = (ColorT *)getPixel(i,j); 
@@ -155,8 +154,13 @@ static void scrolleo(){
 			*pixel = *pixelAfter; 
 		}
 	}
+	for(int i=0;i<HEIGHT*escalaPixel;i++){
+	for(int j=0; j<screen->width; j++){
+		pixel=(ColorT *)getPixel(screen->height-HEIGHT*escalaPixel+i,j);
+		*pixel=BLACK; 
+	}
+	}
 }
-
 void driver_lineBelow(){
 	cursorX = 0;
 	cursorY += HEIGHT*escalaPixel;
@@ -189,11 +193,13 @@ static uint32_t* getPixel(uint16_t y, uint16_t x) {
 }
 
 static void setPixel(uint16_t x, uint16_t y, ColorT clr){
-	if (x >= screen->width || y >= screen->height)
-        return;
+	if (x >= screen->width || y >= screen->height){
+		return;
+	}
     ColorT* pixel = (ColorT*) getPixel(y, x);
     *pixel = clr;
 }
+
 //font_bitmap es el un arreglo que tiene arreglos de los mapas de caracteres de cada letra
 static void drawChar(char c, ColorT fuenteColor, ColorT fondoColor){
 	//es una mascara para chequear cada uno de los bits del mapa de bits

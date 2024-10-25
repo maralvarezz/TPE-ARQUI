@@ -25,7 +25,10 @@ void putChar(char c){
 
 char getChar(){
     char c;
+    printCursor();
     sys_read(0,&c, 1); //mando 0 porque es la entrada estandar
+    //sleep(2); // no esta definido
+    
     return c;
 }
 
