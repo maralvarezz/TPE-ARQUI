@@ -4,7 +4,7 @@
 
 
 int main() {
-    //printString("Hola Mundo!",11);
-    //terminal();
+    entry();
+    terminal();
     return 0;
 }

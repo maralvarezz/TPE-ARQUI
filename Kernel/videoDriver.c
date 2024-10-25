@@ -1,7 +1,7 @@
 #include "./include/videoDriver.h"
 
 
-#define WIDTH 10
+#define WIDTH 8
 #define HEIGHT 16
 
 uint64_t flagCursor=1;
@@ -9,13 +9,9 @@ uint64_t flagCursor=1;
 uint16_t cursorX = 0;
 uint16_t cursorY = 0;
 
-const uint16_t WIDTH_FONT = 9;
-const uint16_t HEIGHT_FONT = 16;
-
 
 ColorT WHITE = {255,255,255};
 ColorT BLACK = {0,0,0};
-
 ColorT color = {0,0,0};
 
 struct vbe_mode_info_structure {
@@ -66,6 +62,8 @@ static uint32_t* getPixel(uint16_t y, uint16_t x);
 static void scrolleo();
 static void checkInsideScreen();
 static void drawChar(char c, ColorT fuenteColor, ColorT fondoColor);
+static void setPixel(uint16_t x, uint16_t y, ColorT clr);
+static uint32_t* getPixel(uint16_t y, uint16_t x);
 
 void driver_putCursor(){
 		//es una mascara para chequear si el color es 
@@ -89,8 +87,8 @@ void driver_putCursor(){
 			for (cx = 0; cx < 8; cx++) {
 				for (int i = 0; i < escalaPixel; i++) {
 					for (int j = 0; j < escalaPixel; j++) {
-						putPixel(charBitMap[cy] & mask[cx] ? colorToHexa(caracterColor) : colorToHexa(fondoColor),
-						cursorX + (8 - cx) * escalaPixel + i, cursorY + cy * escalaPixel + j );
+						setPixel(cursorX + (8 - cx) * escalaPixel + i, cursorY + cy * escalaPixel + j 
+						,charBitMap[cy] & mask[cx] ? caracterColor : fondoColor);
 					}
 				}
 			}
@@ -98,57 +96,21 @@ void driver_putCursor(){
 
 }
 
-//-----------------------------------------------------------------------------------
-// Obtener el ancho real de un carácter según el factor de escala actual
-uint16_t getRealCharWidth() {
-    return WIDTH_FONT * escalaPixel;
-}
-
-// Obtener el alto real de un carácter según el factor de escala actual
-uint16_t getRealCharHeight() {
-    return HEIGHT_FONT * escalaPixel;
-}
-//------------------------------------------------------------------------------------
-
-
 //función para chequear que el cursor no se pase de la pantalla
 static void checkInsideScreen(){
-	if(cursorX >= screen->width){
-		cursorX = 0;
-		if(cursorY + HEIGHT*escalaPixel > screen->height){ 
-			scrolleo();
-		}
-		else{
-			cursorY += HEIGHT*escalaPixel;
-		}
-	}
-
-	/*
-	if (cursorX >= screen->width) {
+    if(cursorX >= screen->width){
         cursorX = 0;
-        if (cursorY + getRealCharHeight() > screen->height) {
-            cursorY -= getRealCharHeight();
+        if(cursorY + HEIGHT*escalaPixel > screen->height){ 
+			cursorY -= HEIGHT*escalaPixel;
             scrolleo();
         } else {
-            cursorY += getRealCharHeight();
+            cursorY += HEIGHT*escalaPixel;
         }
-    }*/
-
-
-}
-
-void putPixel(uint32_t hexColor, uint64_t x, uint64_t y){
-    uint8_t * framebuffer = (uint8_t *)(uintptr_t)screen->framebuffer;
-    uint64_t offset = (x * ((screen->bpp)/8)) + (y * screen->pitch);
-    framebuffer[offset]     =  (hexColor) & 0xFF;
-    framebuffer[offset+1]   =  (hexColor >> 8) & 0xFF; 
-    framebuffer[offset+2]   =  (hexColor >> 16) & 0xFF;
+    }
 }
 
 void driver_clear(){
     //limpia la pantalla
-	ColorT clr=BLACK;
-	ColorT* pixel = (ColorT*) ((uint64_t)screen->framebuffer);
 	for(uint32_t i = 0; i <= (uint32_t)(screen -> width * screen->height); i++){
 		((uint32_t *)(uintptr_t)screen->framebuffer)[i] = 0;
 	}
@@ -163,7 +125,6 @@ void driver_read(char * buffer){
 		if(*buffer == 0){
 			return;
 		}
-		driver_print(buffer,1);
 }
 
 void driver_print(char * buffer, uint64_t count){ 
@@ -179,6 +140,7 @@ void driver_print(char * buffer, uint64_t count){
 		else{
 			drawChar(buffer[i],WHITE,BLACK); //si no es ninguno de los casos especiales 
 		}
+		checkInsideScreen();
 	}
 }
 
@@ -197,13 +159,12 @@ static void scrolleo(){
 
 void driver_lineBelow(){
 	cursorX = 0;
+	cursorY += HEIGHT*escalaPixel;
 	if(cursorY + HEIGHT*escalaPixel > screen->height){
+		cursorY -= HEIGHT*escalaPixel;
 		//lo que hacemos acá es que todo el código que teníamos se mueve una linea hacia 
 		//arriba, se borra la primer linea y se pone el cursor en la ultima linea
 		scrolleo();
-	}
-	else{
-		cursorY += HEIGHT*escalaPixel;
 	}
 }
 
@@ -212,13 +173,6 @@ void driver_backspace(){
 	if(cursorX == 0 && cursorY == 0){
 		return;
 	}
-	/*Ver como hacer
-	else if(cursorX == 0){
-		cursorY -= HEIGHT*escalaPixel;
-		cursorX = screen->width - WIDTH*escalaPixel;
-		drawChar(' ',WHITE,BLACK);
-		cursorX -= WIDTH*escalaPixel;
-	}*/
 	else{
 		cursorX -= WIDTH*escalaPixel;
 		drawChar(' ',WHITE,BLACK);
@@ -234,16 +188,14 @@ static uint32_t* getPixel(uint16_t y, uint16_t x) {
     return (uint32_t*)pixelPtr;
 }
 
-static void setPixel(uint16_t y, uint16_t x, ColorT clr){
+static void setPixel(uint16_t x, uint16_t y, ColorT clr){
 	if (x >= screen->width || y >= screen->height)
         return;
-    ColorT* pixel = (ColorT*) getPixel(x, y);
+    ColorT* pixel = (ColorT*) getPixel(y, x);
     *pixel = clr;
 }
-
 //font_bitmap es el un arreglo que tiene arreglos de los mapas de caracteres de cada letra
 static void drawChar(char c, ColorT fuenteColor, ColorT fondoColor){
-	
 	//es una mascara para chequear cada uno de los bits del mapa de bits
 	int mask[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
 	const uint8_t * charBitMap = font_bitmap+16*(c-32); // c es el ASCII del caracter a imprimir, en esa direccion se encuentra el primer byte del caracter
@@ -259,14 +211,6 @@ static void drawChar(char c, ColorT fuenteColor, ColorT fondoColor){
             }
         }
     }
-	cursorX += WIDTH*escalaPixel;	
-}
-
-//función para pasar el color a hexadecimal
-uint32_t colorToHexa(ColorT color){
-    uint32_t hexValue = 0;
-    hexValue |= (color.red << 16);
-    hexValue |= (color.green << 8);
-    hexValue |= color.blue;
-    return hexValue;
+	cursorX += WIDTH*escalaPixel;
+	checkInsideScreen();
 }

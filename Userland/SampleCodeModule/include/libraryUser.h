@@ -6,7 +6,7 @@ typedef struct Nota{
     int time;
 } NotaT;
 
-void printChar(char c);
+void putChar(char c);
 void printString(char * string, int length);
 void printInt(int num);
 char getChar();

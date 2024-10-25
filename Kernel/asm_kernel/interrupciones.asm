@@ -199,12 +199,8 @@ syscallHandler:
 	pushState
 	mov rbp,rsp
 	push r9 ;guardo r9 porque sysCaller lo puede modificar
-	mov r9, r8
-	mov r8, r10
-	mov rcx, rdx
-	mov rdx, rsi
-	mov rsi, rdi
-	mov rdi, rax ;acomodo los argumentos para que sysCaller los pueda tomar
+	mov rcx, r10	;acomodo los argumentos para que sysCaller los pueda tomar
+	mov r9, rax
 	call sysCaller
 	pop r9
 	mov al, 20h

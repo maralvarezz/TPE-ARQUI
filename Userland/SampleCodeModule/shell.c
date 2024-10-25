@@ -27,8 +27,8 @@ void command_help(){
     printString("-clear: Limpia la terminal\n", 27);
     printString("-modifyuser: Cambia el nombre de usuario\n", 45);
     printString("-registers: Muestra el estado actual de los registros\n", 54);
-    printString("-divzero: Excepcion de dividir por cero\n", 42);
-    printString("-invalidopcode: Excepcion de codigo de operacion invalido\n", 58);
+    printString("-divzero: Excepcion de dividir por cero\n", 42); // NO VA
+    printString("-invalidopcode: Excepcion de codigo de operacion invalido\n", 58);// NO VA
     printString("-snakes: Inicia el juego Snakes\n", 33);
     printString("-username: Muestra el nombre de usuario actual\n", 48);
     printString("-exit: Cierra la terminal\n", 27);
@@ -41,11 +41,11 @@ void command_time(){
     int minutos=gettingMinutes();
     int horas=gettingHours();
     printInt(horas);
-    printChar(':');
+    putChar(':');
     printInt(minutos);
-    printChar(':');
+    putChar(':');
     printInt(segundos);
-    printChar('\n');
+    putChar('\n');
 }
 
 //Limpia la terminal
@@ -56,22 +56,30 @@ void command_clear(){
 void command_modifyuser(){
     int c, size = 0;
     while((c = getChar()) != '\n' && size < USER_MAX){
-        //llamar al cursor
-        USER[size] = c;
-        size++;
-        printChar(c);
+        if( c != 0){//llamar al cursor
+            if(c !='\b'|| size==0){
+                if(c=='\b'){
+                    size--;
+                }else{
+                USER[size] = c;
+                size++;
+                putChar(c);
+                }
+            }
+        }
     }
     if(size >= USER_MAX){
-        printString("Ingrese un nombre de usuario valido\n", 32);
+        printString("Ingrese un nombre de usuario valido\n", 36);
         command_modifyuser();
         return;
     }
     else{
         USER[size] = '\0';
         USER_SIZE = size;
-        printString("Bienvenido ", 10);
+        putChar('\n');
+        printString("Bienvenido ", 11);
         printString(USER, USER_SIZE);
-        printChar('\n');
+        putChar('\n');
     }
 }
 
@@ -97,7 +105,7 @@ void command_snakes(){
 void command_username(){
     printString("Su nombre de usuario es: ", 25);
     printString(USER, USER_SIZE);
-    printChar('\n');
+    putChar('\n');
 }
 
 void command_exit(){
@@ -107,21 +115,24 @@ void command_exit(){
 
 //Lo que se pone al inicial la terminal
 void entry(){
-    printString("Bienvenidos al SO del Grupo 2 :)\n", 31);
+    printString("Bienvenidos al SO del Grupo 2 :)\n", 33);
     //scanf("Ingrese su nombre de usuario:\n");
-    printString("Ingrese su nombre de usuario (maximo 32 caracteres):\n", 45);
+    printString("Ingrese su nombre de usuario (maximo 32 caracteres): ", 53);
     command_modifyuser();
     printString("Para ver los comandos disponibles, escriba -help\n", 49);
 }
 
 void terminal(){
-    entry();
+    //entry();
+    printString("Ingrese un comando:\n", 21);
     while(on){
-        printString("Ingrese un comando: ", 21);
+        putLine();
         printCursor();
         readLine();
-        putLine();
+        putChar('\n');
     }
+    
+
 }
 
 void noCommand(){
@@ -131,19 +142,29 @@ void noCommand(){
 void readLine(){
     char c;
     int i = 0;
-    while((c = getChar()) != '\n'){
-        command[i] = c;
+    while((c = getChar()) != '\n' && i < COMMAND_MAX){
+        if( c != 0){//llamar al cursor
+            if(c !='\b'|| i==0){
+                if(c=='\b'){
+                    i--;
+                }
+                else{
+                    command[i] = c;
+                    i++;
+                }
+                putChar(c);
+            }
+        }
     }
     checkCommand(command);
 }
 
 void checkCommand(char*  c){
     int i = 0;
-    while(command[i] != '\0'){
-        if(command[i] == '-'){
-            check(i+1);
-        }
+    if(command[i] == '-'){
+        check(i+1);
     }
+    return;
 }
 
 void check(int i){

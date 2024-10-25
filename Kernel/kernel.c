@@ -47,6 +47,7 @@ int main()
 {	
 	load_idt();
 	((EntryPoint)sampleCodeModuleAddress)();
+		/*
 		char c;
 		int hours=sys_hours();
 		char *s3= numToStr(hours-3,2);
@@ -61,10 +62,11 @@ int main()
 		driver_print(s2,2);
 		driver_print("\n",1);
 		sys_cursor();
+		*/
 	
 		while(1){
 			_hlt();
-			c = getChar();
+			//c = getChar();
 		}
 		
 
@@ -75,7 +77,7 @@ int main()
 	}
 	//driver_read(buffer);
 	//sys_wait(50);
-	/*driver_read(buffer,20);
+	driver_read(buffer,20);
 		for(int j=0;j<1;j++){
 		for(int i=0;i<49;i++){
 			driver_print("holaholaholaholaholaholaholaholaholaholaholahola",50-i);

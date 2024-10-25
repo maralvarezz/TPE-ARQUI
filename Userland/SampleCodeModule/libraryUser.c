@@ -18,7 +18,7 @@ void printString(char * string, int length){
     sys_write(1,string, length); //mando 1 porque es la salida estandar
 }
 
-void printChar(char c){
+void putChar(char c){
     char * c1 = &c;
     sys_write(1,c1, 1);
 }
@@ -94,7 +94,7 @@ void printInt(int num){
     }
     i--;
     while(i >= 0){
-        printChar(buffer[i]);
+        putChar(buffer[i]);
         i--;
     }
 }
