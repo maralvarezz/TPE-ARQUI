@@ -133,7 +133,7 @@ void terminal(){
         readLine();
         putChar('\n');
     }
-    
+
 }
 
 void noCommand(){
@@ -173,8 +173,7 @@ void checkCommand(char*  c){
 
 void check(){
     for(int j = 0; j < TOTAL_COMMANDS; j++){
-        if(commandList[j][1] == command[1]){
-            if(strcmp(commandList[j], getCommand()) == 0){
+        if(strcmp(commandList[j], getCommand()) == 0){
                 switch(j){
                     case 0:
                         command_help();
@@ -211,7 +210,6 @@ void check(){
                         break;
                 }
                 return;
-            }
         }
     }
     noCommand();
