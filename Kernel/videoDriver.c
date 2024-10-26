@@ -162,6 +162,9 @@ static void scrolleo(){
 	}
 }
 void driver_lineBelow(){
+	if(flagCursor==0){
+		driver_putCursor();
+	}
 	cursorX = 0;
 	cursorY += HEIGHT*escalaPixel;
 	if(cursorY + HEIGHT*escalaPixel > screen->height){
@@ -178,6 +181,9 @@ void driver_backspace(){
 		return;
 	}
 	else{
+	if(flagCursor==0){
+		driver_putCursor();
+	}
 		cursorX -= WIDTH*escalaPixel;
 		drawChar(' ',WHITE,BLACK);
 		cursorX -= WIDTH*escalaPixel;

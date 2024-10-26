@@ -27,8 +27,8 @@ void command_help(){
     printString("-clear: Limpia la terminal\n", 27);
     printString("-modifyuser: Cambia el nombre de usuario\n", 45);
     printString("-registers: Muestra el estado actual de los registros\n", 54);
-    printString("-divzero: Excepcion de dividir por cero\n", 42); // NO VA
-    printString("-invalidopcode: Excepcion de codigo de operacion invalido\n", 58);// NO VA
+    printString("-divzero: Excepcion de dividir por cero\n", 42); 
+    printString("-invalidopcode: Excepcion de codigo de operacion invalido\n", 58);
     printString("-snakes: Inicia el juego Snakes\n", 33);
     printString("-username: Muestra el nombre de usuario actual\n", 48);
     printString("-exit: Cierra la terminal\n", 27);
@@ -36,6 +36,7 @@ void command_help(){
 
 //Imprime el tiempo en pantalla
 void command_time(){
+    putChar('\n');
     printString("Su hora actual es: ", 19);
     int segundos=gettingSeconds();
     int minutos=gettingMinutes();
@@ -166,6 +167,7 @@ void readLine(){
 
 void checkCommand(char*  c){
     if(command[0] == '-'){
+        putChar('\n');
         check();
     }
     return;
@@ -209,7 +211,7 @@ void check(){
                         noCommand();
                         break;
                 }
-                return;
+            return;
         }
     }
     noCommand();
