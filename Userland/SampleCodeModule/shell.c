@@ -21,7 +21,7 @@ char USER[USER_MAX] = "guest";
 
 //Menu de comandos disponibles
 void command_help(){
-    printString("Lista de comandos disponibles:\n", 30);
+    printString("\nLista de comandos disponibles:\n", 32);
     printString("-help: Muestra la lista de comandos disponibles\n", 50);
     printString("-time: Muestra la hora actual\n", 30);
     printString("-clear: Limpia la terminal\n", 27);
@@ -134,10 +134,10 @@ void terminal(){
         putChar('\n');
     }
     
-
 }
 
 void noCommand(){
+    putChar('\n');
     printString("Comando no encontrado. Escriba -help para ver los comandos disponibles\n", 70);
 }
 
@@ -165,17 +165,16 @@ void readLine(){
 }
 
 void checkCommand(char*  c){
-    int i = 0;
-    if(command[i] == '-'){
-        check(i+1);
+    if(command[0] == '-'){
+        check();
     }
     return;
 }
 
-void check(int i){
+void check(){
     for(int j = 0; j < TOTAL_COMMANDS; j++){
-        if(commandList[j][0] == command[i]){
-            if(strcmp(commandList[j], getCommand(i))){
+        if(commandList[j][1] == command[1]){
+            if(strcmp(commandList[j], getCommand()) == 0){
                 switch(j){
                     case 0:
                         command_help();
@@ -211,17 +210,20 @@ void check(int i){
                         noCommand();
                         break;
                 }
+                return;
             }
         }
     }
+    noCommand();
 }
 
-char * getCommand(int i){
-    char * res ;
-    for(int j = i, k = 0; (command[j] != ' ') && (command[j] != '\0'); j++, k++){
+char * getCommand(){
+    char * res = {0};
+    res[0] = '-';
+    for(int j = 1, k = 1; (command[j] != ' ') && (command[j] != '\0'); j++, k++){
         res[k] = command[j];
     }
-    return res;//corregir
+    return res;
 }
 
 void putLine(){

@@ -36,6 +36,7 @@ static const char * mapLetras[] = {vecMin,vecMay};
 //nos entra la tecla que se oprimió
 char keyboard_handler(){
     teclaPressed = getKey();
+    // no deberia rstar el halt aunque parchee
     _hlt();
     if(((teclaPressed) <= 0x79) || teclaPressed == 0xAA || teclaPressed == 0xB6 || teclaPressed == 0x3A){
         //shift oprimido

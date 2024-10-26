@@ -37,9 +37,9 @@ void readLine();
 
 void checkCommand(char*  c);
 
-void check(int i);
+void check();
 
-char * getCommand(int i);
+char * getCommand();
 
 void putLine();
 
