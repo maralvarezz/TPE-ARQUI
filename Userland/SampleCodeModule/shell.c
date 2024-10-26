@@ -55,7 +55,8 @@ void command_clear(){
 }
 
 void command_modifyuser(){
-    int c, size = 0;
+    int c=0, size = 0;
+    
     while((c = getChar()) != '\n' && size < USER_MAX){
         if(c!=0){
             if(c == '\b' && size > 0){
@@ -167,7 +168,6 @@ void readLine(){
 
 void checkCommand(char*  c){
     if(command[0] == '-'){
-        putChar('\n');
         check();
     }
     return;
@@ -175,7 +175,7 @@ void checkCommand(char*  c){
 
 void check(){
     for(int j = 0; j < TOTAL_COMMANDS; j++){
-        if(strcmp(commandList[j], getCommand()) == 0){
+        if(strcmp(commandList[j], command) == 0){
                 switch(j){
                     case 0:
                         command_help();
@@ -215,15 +215,6 @@ void check(){
         }
     }
     noCommand();
-}
-
-char * getCommand(){
-    char * res = {0};
-    res[0] = '-';
-    for(int j = 1, k = 1; (command[j] != ' ') && (command[j] != '\0'); j++, k++){
-        res[k] = command[j];
-    }
-    return res;
 }
 
 void putLine(){

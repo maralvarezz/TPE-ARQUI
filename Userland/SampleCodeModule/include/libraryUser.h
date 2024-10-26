@@ -12,7 +12,7 @@ void printInt(int num);
 char getChar();
 void sleep(uint64_t time);
 int strlen(char * str);
-int strcmp(char * str1, char * str2);
+int strcmp(const char * str1, const char * str2);
 void clearAll();
 void invokeOpCode();
 void invokeDivZero();
