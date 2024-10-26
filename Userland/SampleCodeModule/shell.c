@@ -2,7 +2,7 @@
 
 
 #define USER_MAX 32 
-#define COMMAND_MAX 75
+#define COMMAND_MAX 150
 #define BUFFER 300
 #define TOTAL_COMMANDS 10
 
@@ -56,15 +56,17 @@ void command_clear(){
 void command_modifyuser(){
     int c, size = 0;
     while((c = getChar()) != '\n' && size < USER_MAX){
-        if( c != 0){//llamar al cursor
-            if(c !='\b'|| size==0){
-                if(c=='\b'){
-                    size--;
-                }else{
+        if(c!=0){
+            if(c == '\b' && size > 0){
+                size--;
+                putChar('\b');
+                putChar(' ');
+                putChar('\b');
+            }
+            else if(c != '\b'){
                 USER[size] = c;
                 size++;
                 putChar(c);
-                }
             }
         }
     }
@@ -142,20 +144,23 @@ void noCommand(){
 void readLine(){
     char c;
     int i = 0;
-    while((c = getChar()) != '\n' && i < COMMAND_MAX){
-        if( c != 0){//llamar al cursor
-            if(c !='\b'|| i==0){
-                if(c=='\b'){
-                    i--;
-                }
-                else{
-                    command[i] = c;
-                    i++;
-                }
+
+    while((c = getChar()) != '\n' && i < COMMAND_MAX) {
+        if( c != 0){
+            if(c == '\b' && i > 0){
+                i--;
+                putChar('\b');
+                putChar(' ');
+                putChar('\b');
+            }
+            else if(c != '\b'){
+                command[i] = c;
+                i++;
                 putChar(c);
             }
         }
     }
+    command[i] = '\0';
     checkCommand(command);
 }
 

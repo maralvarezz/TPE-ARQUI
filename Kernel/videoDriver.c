@@ -56,7 +56,7 @@ typedef struct vbe_mode_info_structure * VBEInfoPtr;
 
 VBEInfoPtr screen = (VBEInfoPtr) 0x0000000000005C00;
 
-uint8_t escalaPixel=5;
+uint8_t escalaPixel=1;
 
 static uint32_t* getPixel(uint16_t y, uint16_t x);
 static void scrolleo();
