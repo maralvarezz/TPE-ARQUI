@@ -15,3 +15,4 @@ void driver_backspace();
 uint32_t colorToHexa(ColorT color);
 void driver_putCursor();
 void driver_print(char * buffer, uint64_t count);
+void driver_drawRect(uint64_t x,uint64_t y ,uint64_t x2 , uint64_t y2 ,ColorT colorToPaint);

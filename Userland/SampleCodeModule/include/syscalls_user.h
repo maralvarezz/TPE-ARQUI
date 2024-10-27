@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "libraryUser.h"
 
 extern uint64_t sys_write(uint64_t fd, char * buffer, uint64_t count);
 extern uint64_t sys_read(uint64_t fd, char * buffer, uint64_t count);
@@ -10,4 +11,4 @@ extern uint64_t sys_seconds();
 extern uint64_t sys_minutes();
 extern uint64_t sys_hours();
 extern uint64_t sys_cursor();
-
+extern uint64_t sys_drawRectangle(uint64_t x, uint64_t y, uint64_t x2,uint64_t y2,ColorT* colorToPaint);

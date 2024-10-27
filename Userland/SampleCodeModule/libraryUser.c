@@ -102,6 +102,10 @@ void printInt(int num){
     }
 }
 
+void drawRect(uint64_t x,uint64_t y,uint64_t x2,uint64_t y2, ColorT* colorToPaint){
+    sys_drawRectangle(x,y,x2,y2,colorToPaint);
+}
+
 
 
 
