@@ -87,21 +87,26 @@ int gettingHours(){
     return sys_hours();
 }
 
-void printInt(int num){
-    char buffer[10];
+void printInt(int num) {
+    char buffer[12]; // Suficiente para almacenar int de 32 bits con signo
     int i = 0;
-    while(num > 0){
-        buffer[i] = num%10 + '0';
-        num = num/10;
-        i++;
+    if (num == 0) {
+        putChar('0');
+        return;
     }
-    i--;
-    while(i >= 0){
-        putChar(buffer[i]);
-        i--;
+    if (num < 0) {   // Maneja el signo
+        putChar('-');
+        num = -num;
+    }
+    while (num > 0) { // Convierte el número a caracteres
+        buffer[i++] = (num % 10) + '0';
+        num /= 10;
+    }
+    // Imprime el número en el orden correcto
+    for (int j = i - 1; j >= 0; j--) {
+        putChar(buffer[j]);
     }
 }
-
 
 
 

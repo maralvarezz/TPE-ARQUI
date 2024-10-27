@@ -63,7 +63,6 @@ int main()
 		driver_print("\n",1);
 		sys_cursor();
 		*/
-	
 		while(1){
 			_hlt();
 			//c = getChar();
