@@ -10,6 +10,7 @@
 #define HOURS 7
 #define CURSOR 8
 #define REGISTERS 10
+#define PAINT 9
 
 extern int getSeconds();
 extern int getMinutes();
@@ -42,6 +43,17 @@ uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint6
             return sys_cursor();
         case REGISTERS:
             return sys_registers((uint64_t *)rdi);
+        case PAINT:
+            uint8_t r,g,b;
+            ColorT color;
+            r=(r8>>16)&0xFF;
+            g=(r8>>8)&0xFF;
+            b= r8 & 0xFF;
+            color.red=r;
+            color.green=g;
+            color.blue=b;
+            return sys_drawRect(rdi, rsi ,rdx ,r10 , color); // se le pasan la esquina sup izq, su largo y su altura
+
         default:
             return 0;
 	}
@@ -109,4 +121,9 @@ uint64_t sys_sound(uint64_t freq, uint64_t time){
     wait_time(time);
     stop_sound();
     return 1;
+}
+
+uint64_t sys_drawRect(uint64_t x,uint64_t y ,uint64_t x2 , uint64_t y2 ,ColorT color){
+    driver_drawRect(x,y,x2,y2,color);
+    return 0;
 }

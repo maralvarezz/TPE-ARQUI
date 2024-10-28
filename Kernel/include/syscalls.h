@@ -16,3 +16,4 @@ uint64_t sys_hours();
 uint64_t sys_cursor();
 uint64_t sys_registers(uint64_t vec[17]);
 
+uint64_t sys_drawRect(uint64_t rdi,uint64_t rsi ,uint64_t rdx , uint64_t r10 ,ColorT r8 );

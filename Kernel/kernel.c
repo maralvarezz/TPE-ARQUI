@@ -63,12 +63,15 @@ int main()
 		driver_print("\n",1);
 		sys_cursor();
 		*/
+		
 		while(1){
 			_hlt();
 			//c = getChar();
 		}
 		
-
+	//ColorT myColor={252,152,52}; 
+	//driver_drawRect(500,600,2000,2000,&myColor);
+		
 	/*driver_print("hola iNGRESE UN MENSAJE\n",24);
 	for(int i=0;i<7;i++){
 		driver_read(buffer);

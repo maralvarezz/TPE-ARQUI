@@ -9,6 +9,7 @@ global sys_hours
 global sys_cursor
 global sys_wait
 global sys_registers
+global sys_drawRectangle
 
 section .text
 
@@ -59,5 +60,11 @@ sys_cursor:
 
 sys_registers:
     mov rax, 0x0A
+    int 80h
+    ret
+    
+sys_drawRectangle:
+    mov rax, 0x09
+    mov r10, rcx
     int 80h
     ret
