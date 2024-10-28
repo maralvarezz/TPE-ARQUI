@@ -45,14 +45,6 @@ uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint6
             return sys_registers((uint64_t *)rdi);
         case PAINT:
             ColorT* color=(ColorT*)r8;
-            /*uint8_t r,g,b;
-            ColorT color;
-            r=(r8>>16)&0xFF;
-            g=(r8>>8)&0xFF;
-            b= r8 & 0xFF;
-            color.red=r;
-            color.green=g;
-            color.blue=b;*/
             return sys_drawRect(rdi, rsi ,rdx ,r10 , *color); // se le pasan la esquina sup izq, su largo y su altura
 
         default:
