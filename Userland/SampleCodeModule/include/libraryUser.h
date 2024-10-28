@@ -22,3 +22,4 @@ int gettingSeconds();
 int gettingMinutes();
 int gettingHours();
 void printCursor();
+void printRegisters();

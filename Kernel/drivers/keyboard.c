@@ -5,8 +5,6 @@ extern char getKey();
 unsigned char teclaPressed = 0;
 int bloqMayus = 0;
 int shift = 0;
-static char retChar = 0;
-
 
 static const char vecMay[] = {
 

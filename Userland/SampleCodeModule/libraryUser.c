@@ -3,6 +3,11 @@
 #include "./include/syscalls_user.h"
 #include "./include/exceptions_user.h"
 
+static void pasoHexa(uint64_t num1, char buffer[16]);
+
+static char *registros64[17] = {
+	"RIP", "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8 ", "R9 ", "R10", "R11", "R12", "R13", "R14", "R15"};
+
 
 void playNota(uint64_t freq, uint64_t time){
     sys_sound(freq, time);
@@ -13,6 +18,45 @@ void playMusic(NotaT * music, int duration){
         playNota(music[i].frec, music[i].time);
     }
 }
+
+static void pasoHexa(uint64_t num1, char buffer[16]){
+	int i = 15;
+	do
+	{
+		int num2 = num1 % 16;
+		buffer[i] = (num2 < 10 ? '0' : ('A' - 10)) + num2;
+		num1 /= 16;
+	} while (i-- != 0);
+}
+
+void printRegisters(){
+    char hexa[19];
+	hexa[0] = '0';
+	hexa[1] = 'x';
+	hexa[18] = '\0';
+	uint64_t infoRegistros[17];
+	int i = sys_registers(infoRegistros);
+    printInt(i);
+	putChar('\n');
+	if (i==1){
+		for (int i = 0; i < 17; i++)
+		{
+			printString(registros64[i], 3);
+			printString(": ", 1);
+			pasoHexa(registros64[i], hexa + 2);
+			if (i % 4 == 3)
+				putChar('\n');
+			else
+				printString("   ", 3);
+		}
+	}
+	else
+	{
+		printString("\nERROR: presionar primero la tecla Ctrl\n", 47);
+	}
+}
+
+
 
 void printString(char * string, int length){
     sys_write(1,string, length); //mando 1 porque es la salida estandar

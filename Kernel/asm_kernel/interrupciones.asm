@@ -19,6 +19,8 @@ GLOBAL backupRegs
 GLOBAL syscallHandler
 GLOBAL interrupcion_teclado
 GLOBAL exceptionRegs
+GLOBAL registros
+GLOBAL registersFlag
 
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
@@ -147,6 +149,7 @@ interrupcion_teclado:
 	jne .handle_keyboard
 	cmp al, 0x13 ;si esta presionada la tecla r
 	jne .handle_keyboard
+	mov byte [registersFlag], 0
 
 ;hacemos el guardado de los registros 
 .guardamos_registros:
@@ -171,7 +174,12 @@ interrupcion_teclado:
     mov [registros], rax
     mov rax, [rsp+14*8]
     mov [registros+1*8], rax
+	mov byte [registersFlag], 1 
+
+
+
 .handle_keyboard:
+	mov byte [registersFlag], 0
 	call keyboard_handler
 	mov al, 0x20
 	out 0x20, al
@@ -226,3 +234,4 @@ SECTION .bss
 	ctrlFlag resb 1 ;variable que se usa para saber si se presiono shift
     exceptionRegs resq 18
 	registros resq 18
+	registersFlag resb 1 ;variable que se usa para saber si se presiono shift

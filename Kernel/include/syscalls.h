@@ -14,4 +14,5 @@ uint64_t sys_seconds();
 uint64_t sys_minutes();
 uint64_t sys_hours();
 uint64_t sys_cursor();
+uint64_t sys_registers(uint64_t vec[17]);
 

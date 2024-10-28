@@ -10,4 +10,4 @@ extern uint64_t sys_seconds();
 extern uint64_t sys_minutes();
 extern uint64_t sys_hours();
 extern uint64_t sys_cursor();
-
+uint64_t sys_registers(uint64_t vec[17]);

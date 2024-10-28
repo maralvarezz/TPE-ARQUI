@@ -8,7 +8,7 @@ global sys_minutes
 global sys_hours
 global sys_cursor
 global sys_wait
-
+global sys_registers
 
 section .text
 
@@ -54,5 +54,10 @@ sys_hours:
 
 sys_cursor:
     mov rax, 0x08
+    int 80h
+    ret
+
+sys_registers:
+    mov rax, 0x0A
     int 80h
     ret

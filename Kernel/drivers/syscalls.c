@@ -9,12 +9,15 @@
 #define MINUTES 6
 #define HOURS 7
 #define CURSOR 8
+#define REGISTERS 10
 
 extern int getSeconds();
 extern int getMinutes();
 extern int getHours();
 extern void sound(int freq);
 extern void stop_sound();
+extern uint8_t registersFlag;
+extern uint64_t registros[17];
 
 
 uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax) {
@@ -37,6 +40,8 @@ uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint6
             return sys_hours();
         case CURSOR:
             return sys_cursor();
+        case REGISTERS:
+            return sys_registers((uint64_t *)rdi);
         default:
             return 0;
 	}
@@ -67,11 +72,17 @@ uint64_t sys_clear(){
     driver_clear();
     return 1;
 }
-/*
-uint64_t sys_registers(){
-    //preguntar
+
+uint64_t sys_registers(uint64_t vec[17]){
+    uint64_t *flag= registersFlag;
+    if(registersFlag){
+        for(int i = 0; i < 17; i++){
+            vec[i] = registros[i];
+        }
+    }
+    return *flag;
 }
-*/
+
 
 uint64_t sys_seconds(){
     return getSeconds();

@@ -36,7 +36,6 @@ void command_help(){
 
 //Imprime el tiempo en pantalla
 void command_time(){
-
     putChar('\n');
     printString("Su hora actual es: ", 19);
     int segundos=gettingSeconds();
@@ -90,7 +89,7 @@ void command_modifyuser(){
 
 //Imprimir el estado de todos los registros
 void command_registers(){
-    //sys_registers();
+    printRegisters();
 }
 
 //Excepcion de dividir por cero
@@ -128,8 +127,6 @@ void entry(){
 }
 
 void terminal(){
-    command_time();
-    putChar('\n');
     //entry();
     printString("Ingrese un comando:\n", 21);
     while(on){
