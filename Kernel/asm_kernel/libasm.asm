@@ -1,11 +1,11 @@
 GLOBAL cpuVendor
-global getHours
-global getMinutes
-global getSeconds
 global getKey
 global hlt_aux
 global sound
 global stop_sound
+global getHours
+global getMinutes
+global getSeconds
 
 section .text
 
@@ -32,7 +32,6 @@ cpuVendor:
 	mov rsp, rbp
 	pop rbp
 	ret
-
 
 getHours:
     cli
@@ -73,6 +72,7 @@ getSeconds:
     in al, 71h
     sti
     ret
+
 
 getKey:
     push rbp

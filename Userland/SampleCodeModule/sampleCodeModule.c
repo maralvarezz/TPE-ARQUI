@@ -5,8 +5,9 @@
 ColorT color1={0xBB, 0xAA, 0x0A};
 ColorT color2={0xAF,0xFA,0xAA};
 int main() {
-    //entry();
-    //terminal();
+    entry();
+    terminal();
+    /*
      for (int row = 0; row < 1000/SQUARESIZE; row++) {
         for (int col = 0; col < 1000/SQUARESIZE; col++) {
             int x = col * SQUARESIZE;
@@ -20,5 +21,6 @@ int main() {
             //drawRect(x, y, SQUARESIZE, SQUARESIZE, &color);
         }
     }
+    */
     return 0;
 }

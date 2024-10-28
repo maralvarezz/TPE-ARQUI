@@ -38,14 +38,11 @@ void command_help(){
 void command_time(){
     putChar('\n');
     printString("Su hora actual es: ", 19);
-    int segundos=gettingSeconds();
-    int minutos=gettingMinutes();
-    int horas=gettingHours();
-    printInt(horas);
+    gettingHours();
     putChar(':');
-    printInt(minutos);
+    gettingMinutes();
     putChar(':');
-    printInt(segundos);
+    gettingSeconds();
     putChar('\n');
 }
 

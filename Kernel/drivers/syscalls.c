@@ -90,14 +90,17 @@ uint64_t sys_registers(uint64_t vec[17]){
 
 
 uint64_t sys_seconds(){
+    driver_print(numToStr(getSeconds(),2), strlen(numToStr(getSeconds(),2)));
     return getSeconds();
 }
 
 uint64_t sys_minutes(){
+    driver_print(numToStr(getMinutes(),2), strlen(numToStr(getMinutes(),2)));
     return getMinutes();
 }
 
 uint64_t sys_hours(){
+    driver_print(numToStr(getHours()-3,2), strlen(numToStr(getHours(),2)));
     return getHours();
 }
 
