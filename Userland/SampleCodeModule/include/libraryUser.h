@@ -15,24 +15,26 @@ typedef struct Nota{
     int frec;
     int time;
 } NotaT;
-
-static ColorT RED = {0xFF, 0,0};
-static ColorT GREEN = {0,0xFF,0};
-static ColorT BLUE = {0,0,0xFF};
-static ColorT ORANGE = {0xFF,0x80,0};
-static ColorT YELLOW = {0xFF,0xE8,0};
-static ColorT LIGHT_GREEN = {0,0xE0,0x03};
-static ColorT DARK_GREEN = {0,0x9C,0x02};
-static ColorT LIGHT_BLUE={0,0xC1,0xFF};
-static ColorT DARK_BLUE={0,0,0xD2};
-static ColorT VIOLET = {0x93,0,0xFF};
-static ColorT DARK_PINK={0xDA,0,0xEC};
-static ColorT PINK={0xFF,0,0xFF};
-static ColorT WINE={0xB4,0,0x57};
+static const ColorT BLACK ={0,0,0};
+static const ColorT WHITE = {0xFF,0xFF,0xFF};
+static const ColorT RED = {0xFF, 0,0};
+static const ColorT GREEN = {0,0xFF,0};
+static const ColorT BLUE = {0,0,0xFF};
+static const ColorT ORANGE = {0xFF,0x80,0};
+static const ColorT YELLOW = {0xFF,0xE8,0};
+static const ColorT LIGHT_GREEN = {0,0xE0,0x03};
+static const ColorT DARK_GREEN = {0,0x9C,0x02};
+static const ColorT LIGHT_BLUE={0,0xC1,0xFF};
+static const ColorT DARK_BLUE={0,0,0xD2};
+static const ColorT VIOLET = {0x93,0,0xFF};
+static const ColorT DARK_PINK={0xDA,0,0xEC};
+static const ColorT PINK={0xFF,0,0xFF};
+static const ColorT WINE={0xB4,0,0x57};
 
 
 void putChar(char c);
 void printString(char * string, int length);
+void printStringColor(char * string, int length,ColorT* colorFte, ColorT* colorFdo);
 void printInt(int num);
 char getChar();
 void sleep(uint64_t time);

@@ -2,14 +2,18 @@
 #define LIBRARYC_H
 
 #include <stdint.h>
+#include "color.h"
 #include "syscalls.h"
 #include "keyboard.h"
+#include "videoDriver.h"
+
 
 extern uint64_t getHours();
 extern uint64_t getMinutes();
 extern uint64_t getSeconds();
 extern void sound(int freq);
 extern void stopSound();
+
 
 uint64_t strleng(char * string);
 void printTime(char * vec); // no se deberia de borrar?

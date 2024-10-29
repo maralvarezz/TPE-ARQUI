@@ -28,7 +28,12 @@ uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint6
         case READ:
 			return sys_read(rdi, (char *)rsi);
 		case WRITE:
-			return sys_write(rdi, (char *)rsi, rdx);
+            ColorT* colorFd=(ColorT*)r8;
+            ColorT* colorFte=(ColorT*)r10;
+            ColorT auxfd={colorFd->blue,colorFd->green,colorFd->red};
+            ColorT auxfte={colorFte->blue,colorFte->green,colorFte->red};
+			return sys_write(rdi, (char *)rsi, rdx, auxfte,auxfd);
+
 		case CLEAR:
 			return sys_clear();
         case WAIT:
@@ -66,9 +71,9 @@ uint64_t sys_read(uint64_t fd, char * buffer){
     return 0;
 }
 
-uint64_t sys_write(uint64_t fd, char * buffer, uint64_t count){
+uint64_t sys_write(uint64_t fd, char * buffer, uint64_t count,ColorT colorFte,ColorT colorFdo){
     if(fd == 1){
-        driver_print(buffer, count);
+        driver_print_color(buffer, count,colorFte,colorFdo);
         return 1;
     }
     return 0;

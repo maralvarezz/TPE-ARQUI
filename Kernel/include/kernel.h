@@ -1,3 +1,5 @@
+#include <stdint.h>
+#include "color.h"
 #include <string.h>
 #include "videoDriver.h"
 #include "lib.h"

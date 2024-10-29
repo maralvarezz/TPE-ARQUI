@@ -13,8 +13,10 @@ int main() {
             drawRect(x, y, SQUARESIZE, SQUARESIZE, color);
         }
     }*/
-
-
+    printStringColor("HOLA MUNDO PERO EN ROJO",23,&RED, &BLACK);
+    printStringColor("HOLA MUNDO PERO EN ROJO",23,&RED, &WHITE);
+    printStringColor("HOLA MUNDO PERO EN ROJO",23,&RED, &GREEN);
+    printStringColor("HOLA MUNDO PERO EN VERDE",24,&GREEN, &BLACK);
     
     return 0;
 }

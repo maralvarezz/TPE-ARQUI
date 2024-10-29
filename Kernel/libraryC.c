@@ -49,7 +49,7 @@ void printTime(char * vec){
 }
 
 void print(char * string, int length){
-    sys_write(1,string, length); //mando 1 porque es la salida estandar
+    sys_write(1,string, length,WHITE,BLACK); //mando 1 porque es la salida estandar
 }
 
 uint64_t strleng(char * string){

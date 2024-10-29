@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include "libraryUser.h"
 
-extern uint64_t sys_write(uint64_t fd, char * buffer, uint64_t count);
+extern uint64_t sys_write(uint64_t fd, char * buffer, uint64_t count,ColorT* colorFuente,ColorT* colorFondo);
 extern uint64_t sys_read(uint64_t fd, char * buffer, uint64_t count);
 extern uint64_t sys_clear();
 extern uint64_t sys_exit();

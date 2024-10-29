@@ -3,6 +3,9 @@
 #include "./include/syscalls_user.h"
 #include "./include/exceptions_user.h"
 
+
+static ColorT DEFAULT_COLOR_FND=BLACK;
+static ColorT DEFAULT_COLOR_FTE=WHITE;
 static void pasoHexa(uint64_t num1, char buffer[16]);
 
 static char *registros64[17] = {
@@ -58,14 +61,17 @@ void printRegisters(){
 }
 
 
-
 void printString(char * string, int length){
-    sys_write(1,string, length); //mando 1 porque es la salida estandar
+    printStringColor(string,length,&DEFAULT_COLOR_FTE,&DEFAULT_COLOR_FND);
+}
+
+void printStringColor(char * string, int length, ColorT* colorFte, ColorT* colorFdo){
+    sys_write(1,string, length,colorFte,colorFdo); //mando 1 porque es la salida estandar
 }
 
 void putChar(char c){
     char * c1 = &c;
-    sys_write(1,c1, 1);
+    printString(c1,1);
 }
 
 char getChar(){

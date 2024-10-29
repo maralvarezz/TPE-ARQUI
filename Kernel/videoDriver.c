@@ -10,9 +10,7 @@ uint16_t cursorX = 0;
 uint16_t cursorY = 0;
 
 
-ColorT WHITE = {255,255,255};
-ColorT BLACK = {0,0,0};
-ColorT color = {0,0,0};
+
 
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
@@ -127,7 +125,7 @@ void driver_read(char * buffer){
 		}
 }
 
-void driver_print(char * buffer, uint64_t count){ 
+void driver_print_color(char * buffer, uint64_t count,ColorT colorFte,ColorT colorFdo){ 
 	for(uint64_t i = 0; i < count; i++){
 		if(buffer[i] == '\n'){
 			driver_lineBelow(); //salto de linea
@@ -138,7 +136,7 @@ void driver_print(char * buffer, uint64_t count){
 			return; 
 		}
 		else{
-			drawChar(buffer[i],WHITE,BLACK); //si no es ninguno de los casos especiales 
+			drawChar(buffer[i],colorFte,colorFdo); //si no es ninguno de los casos especiales 
 		}
 		checkInsideScreen();
 	}
