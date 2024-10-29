@@ -20,6 +20,7 @@ void exceptionDispatcher(int exception) {
 		zero_division();
 	else if(exception == OPCODE_EXCEPTION_ID)
 		opcode_exception();
+	((EntryPoint)sampleCodeModuleAddress)();
 }
 
 void print_registers() {
@@ -35,11 +36,13 @@ static void zero_division() {
 	print("ZERO DIVISION EXCEPTION\n", 24);
 	print_registers();
 	print("\n",1);
+	return;
 }
 
 static void opcode_exception() {
 	print("OPCODE EXCEPTION\n", 17);
 	print_registers();
 	print("\n",1);
+	return;
 }
 
