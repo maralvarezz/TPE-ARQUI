@@ -12,6 +12,8 @@ global sys_registers
 global sys_drawRectangle
 global sys_width
 global sys_height
+global sys_reduceSize
+global sys_increaseSize
 
 section .text
 
@@ -81,5 +83,15 @@ sys_width:
 
 sys_height:
     mov rax, 0x0C
+    int 80h
+    ret
+
+sys_reduceSize:
+    mov rax, 0x0D
+    int 80h
+    ret
+
+sys_increaseSize:
+    mov rax, 0x0E
     int 80h
     ret

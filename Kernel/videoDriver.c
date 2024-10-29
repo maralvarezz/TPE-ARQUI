@@ -98,11 +98,10 @@ void driver_putCursor(){
 static void checkInsideScreen(){
     if(cursorX >= screen->width){
         cursorX = 0;
-        if(cursorY + HEIGHT*escalaPixel > screen->height){ 
-			cursorY -= HEIGHT*escalaPixel;
+        if(cursorY + HEIGHT*escalaPixel >= screen->height){ 
             scrolleo();
         } else {
-            cursorY += HEIGHT*escalaPixel;
+            cursorY += HEIGHT*escalaPixel; 
         }
     }
 }
@@ -243,3 +242,25 @@ uint16_t driver_width(){
 uint16_t driver_height(){
 	return screen->height;
 }
+
+uint64_t driver_increaseSize(){
+	if(escalaPixel<=3){
+		escalaPixel+=1;
+	}
+	else{
+		driver_print("No se puede aumentar mas el tamaño de la letra\n",47);
+	}
+	return 1;
+}
+
+uint64_t driver_reduceSize(){
+	if(escalaPixel>1){
+		escalaPixel-=1;
+	}
+	else{
+		driver_print("No se puede reducir mas el tamaño de la letra\n", 47);
+	}
+	return 1;
+}
+
+

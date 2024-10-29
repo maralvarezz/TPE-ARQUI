@@ -172,5 +172,14 @@ void getHeight(uint64_t* h){
     sys_height(h);
 }
 
+void reduceSize(){
+    clearAll();
+    sys_reduceSize();
+}
+
+void increaseSize(){
+    clearAll();
+    sys_increaseSize();
+}
 
 

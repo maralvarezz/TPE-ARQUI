@@ -239,7 +239,7 @@ void putLine(){
 
 
 void printUserDef(){ //cambiar nombre
-    printString(USER, USER_SIZE);
+    printStringColor(USER, USER_SIZE,&GREEN,&BLACK);
     printString(":~ $",3);
 }
 

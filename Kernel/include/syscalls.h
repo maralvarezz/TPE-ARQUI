@@ -1,10 +1,8 @@
-
 #include "color.h"
 #include "videoDriver.h"
 #include <stdint.h>
 #include "libraryC.h"
 #include "time.h"
-
 
 
 uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax);
@@ -21,3 +19,5 @@ uint64_t sys_registers(uint64_t vec[17], uint64_t * rsi);
 uint64_t sys_drawRect(uint64_t rdi,uint64_t rsi ,uint64_t rdx , uint64_t r10 ,ColorT r8 );
 uint64_t sys_width(uint64_t* rdi);
 uint64_t sys_height(uint64_t* rdi);
+uint64_t sys_increaseSize();
+uint64_t sys_reduceSize();

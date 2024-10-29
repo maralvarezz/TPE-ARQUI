@@ -53,5 +53,7 @@ void printRegisters();
 void drawRect(uint64_t x,uint64_t y,uint64_t x2,uint64_t y2, ColorT* colorToPaint);
 void getWidth(uint64_t* w);
 void getHeight(uint64_t* h);
+void increaseSize();
+void reduceSize();
 
 #endif // LIBRARY_USER_H

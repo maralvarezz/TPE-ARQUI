@@ -21,6 +21,7 @@ void driver_print_color(char * buffer, uint64_t count,ColorT colorFte,ColorT col
 void driver_drawRect(uint64_t x,uint64_t y ,uint64_t x2 , uint64_t y2 ,ColorT colorToPaint);
 uint16_t driver_width();
 uint16_t driver_height();
-
+uint64_t driver_reduceSize();
+uint64_t driver_increaseSize();
 
 #endif

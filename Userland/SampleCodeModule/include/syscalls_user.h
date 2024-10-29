@@ -15,3 +15,6 @@ extern uint64_t sys_height(uint64_t* h);
 extern uint64_t sys_width(uint64_t* w);
 uint64_t sys_registers(uint64_t vec[17], uint64_t * flag);
 extern uint64_t sys_drawRectangle(uint64_t x, uint64_t y, uint64_t x2,uint64_t y2,ColorT* colorToPaint);
+extern uint64_t sys_reduceSize();
+extern uint64_t sys_increaseSize();
+

@@ -44,3 +44,7 @@ char * getCommand();
 void putLine();
 
 void printUserDef();
+
+void command_reducesize();
+
+void command_increasesize();
