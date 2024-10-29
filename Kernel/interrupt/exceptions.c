@@ -2,7 +2,7 @@
 
 
 #define ZERO_EXCEPTION_ID 0
-#define OPCODE_EXCEPTION_ID 1
+#define OPCODE_EXCEPTION_ID 6
 #define REGISTERS 18
 
 static void zero_division();
@@ -22,10 +22,9 @@ void exceptionDispatcher(int exception) {
 		opcode_exception();
 }
 
-//esto no va acá pero lo dejo hasta que le preguntemos a Fede
-void print_registers() { //fijarnos como imprimir
+void print_registers() {
 	for (int i = 0; i < 18; i++) {
-		print(regs[i], 3);
+		print(regs[i], strlen(regs[i]));
 		print(": ", 2);
 		print(numToStr(exceptionRegs[i], 18),18);
 		print("\n",1);
@@ -33,7 +32,7 @@ void print_registers() { //fijarnos como imprimir
 }
 
 static void zero_division() {
-	print("ZERO DIVISION EXCEPTION\n", 22);
+	print("ZERO DIVISION EXCEPTION\n", 24);
 	print_registers();
 	print("\n",1);
 }

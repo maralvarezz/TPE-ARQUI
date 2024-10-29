@@ -113,10 +113,12 @@ void printCursor(){
 }
 
 void invokeOpCode(){
+    putChar('\n');
     exc_invalidopcode();
 }
 
 void invokeDivZero(){
+    putChar('\n');
     exc_divzero();
 }
 

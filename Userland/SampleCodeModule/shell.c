@@ -92,6 +92,7 @@ void command_registers(){
 //Excepcion de dividir por cero
 void command_divzero(){
     invokeDivZero();
+    terminal();
 }
 
 //Excepcion de codigo de operacion invalido
