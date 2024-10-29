@@ -52,7 +52,7 @@ void print(char * string, int length){
     sys_write(1,string, length); //mando 1 porque es la salida estandar
 }
 
-uint64_t strlen(char * string){
+uint64_t strleng(char * string){
     uint64_t i = 0;
     while(string[i] != '\0'){
         i++;

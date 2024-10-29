@@ -24,7 +24,7 @@ void exceptionDispatcher(int exception) {
 
 void print_registers() {
 	for (int i = 0; i < 18; i++) {
-		print(regs[i], strlen(regs[i]));
+		print(regs[i], strleng(regs[i]));
 		print(": ", 2);
 		print(numToStr(exceptionRegs[i], 18),18);
 		print("\n",1);

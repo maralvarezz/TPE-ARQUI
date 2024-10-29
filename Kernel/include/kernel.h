@@ -5,3 +5,4 @@
 #include "naiveConsole.h"
 #include "idtLoader.h"
 #include "keyboard.h"
+#include "libraryC.h"

@@ -230,7 +230,6 @@ static void drawChar(char c, ColorT fuenteColor, ColorT fondoColor){
 
 // x2 representa el ancho, y2 la altura
 void driver_drawRect(uint64_t x,uint64_t y ,uint64_t x2 , uint64_t y2 ,ColorT colorToPaint){
-
 	ColorT* pixel;
 	for(int i=0;i<y2;i++){
 		pixel = (ColorT*) getPixel(y+i,x);
@@ -238,4 +237,11 @@ void driver_drawRect(uint64_t x,uint64_t y ,uint64_t x2 , uint64_t y2 ,ColorT co
 			*pixel=colorToPaint;
 		}
 	}
+}
+
+uint16_t driver_width(){
+	return screen->width;
+}
+uint16_t driver_height(){
+	return screen->height;
 }

@@ -43,7 +43,6 @@ void command_time(){
     gettingMinutes();
     putChar(':');
     gettingSeconds();
-    putChar('\n');
 }
 
 //Limpia la terminal

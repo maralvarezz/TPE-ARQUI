@@ -1,3 +1,6 @@
+#ifndef FUENTE_H
+#define FUENTE_H
+
 #include <stdint.h>
 
 
@@ -1810,3 +1813,5 @@ static const uint8_t font_bitmap[] =
 
 
 };
+
+#endif

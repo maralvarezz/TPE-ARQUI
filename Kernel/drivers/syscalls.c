@@ -9,12 +9,15 @@
 #define MINUTES 6
 #define HOURS 7
 #define CURSOR 8
-#define REGISTERS 10
 #define PAINT 9
+#define REGISTERS 10
+#define GETWIDTH 11
+#define GETHEIGHT 12
 
-extern int getSeconds();
-extern int getMinutes();
-extern int getHours();
+
+//extern int getSeconds();
+//extern int getMinutes();
+//extern int getHours();
 extern void sound(int freq);
 extern void stop_sound();
 extern uint8_t registersFlag;
@@ -40,12 +43,16 @@ uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint6
             return sys_hours();
         case CURSOR:
             return sys_cursor();
-        case REGISTERS:
-            return sys_registers((uint64_t *) rdi, (uint64_t *) rsi);
         case PAINT:
             ColorT* color=(ColorT*)r8;
-            return sys_drawRect(rdi, rsi ,rdx ,r10 , *color); // se le pasan la esquina sup izq, su largo y su altura
-
+            ColorT aux={color->blue,color->green,color->red}; // por la forma en la que llega el color debo invertir el red y el blue
+            return sys_drawRect(rdi, rsi ,rdx ,r10 , aux); // se le pasan la esquina sup izq, su largo y su altura
+        case REGISTERS:
+            return sys_registers((uint64_t *) rdi, (uint64_t *) rsi);
+        case GETWIDTH:
+            return  sys_width((uint64_t *) rdi);
+        case GETHEIGHT:
+            return  sys_height((uint64_t *) rdi);
         default:
             return 0;
 	}
@@ -116,17 +123,17 @@ uint64_t sys_registers(uint64_t vec[17],uint64_t * flag){
 
 
 uint64_t sys_seconds(){
-    driver_print(numToStr(getSeconds(),2), strlen(numToStr(getSeconds(),2)));
+    driver_print(numToStr(getSeconds(),2), strleng(numToStr(getSeconds(),2)));
     return getSeconds();
 }
 
 uint64_t sys_minutes(){
-    driver_print(numToStr(getMinutes(),2), strlen(numToStr(getMinutes(),2)));
+    driver_print(numToStr(getMinutes(),2), strleng(numToStr(getMinutes(),2)));
     return getMinutes();
 }
 
 uint64_t sys_hours(){
-    driver_print(numToStr(getHours()-3,2), strlen(numToStr(getHours(),2)));
+    driver_print(numToStr(getHours()-3,2), strleng(numToStr(getHours(),2)));
     return getHours();
 }
 
@@ -149,3 +156,12 @@ uint64_t sys_drawRect(uint64_t x,uint64_t y ,uint64_t x2 , uint64_t y2 ,ColorT c
     driver_drawRect(x,y,x2,y2,color);
     return 0;
 }
+
+uint64_t sys_width(uint64_t* rdi){
+    *rdi = driver_width() ;
+    return 1;
+}			
+uint64_t sys_height(uint64_t* rdi){
+    *rdi = driver_height() ;
+    return 1;
+}	

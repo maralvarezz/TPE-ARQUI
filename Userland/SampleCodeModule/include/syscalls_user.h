@@ -11,5 +11,7 @@ extern uint64_t sys_seconds();
 extern uint64_t sys_minutes();
 extern uint64_t sys_hours();
 extern uint64_t sys_cursor();
+extern uint64_t sys_height(uint64_t* h);
+extern uint64_t sys_width(uint64_t* w);
 uint64_t sys_registers(uint64_t vec[17], uint64_t * flag);
 extern uint64_t sys_drawRectangle(uint64_t x, uint64_t y, uint64_t x2,uint64_t y2,ColorT* colorToPaint);

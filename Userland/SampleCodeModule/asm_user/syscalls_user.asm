@@ -10,6 +10,8 @@ global sys_cursor
 global sys_wait
 global sys_registers
 global sys_drawRectangle
+global sys_width
+global sys_height
 
 section .text
 
@@ -57,14 +59,26 @@ sys_cursor:
     mov rax, 0x08
     int 80h
     ret
-
-sys_registers:
-    mov rax, 0x0A
-    int 80h
-    ret
     
 sys_drawRectangle:
     mov rax, 0x09
     mov r10, rcx
+    int 80h
+    ret
+
+    
+sys_registers:
+    mov rax, 0x0A
+    int 80h
+    ret
+
+    
+sys_width:
+    mov rax, 0x0B
+    int 80h
+    ret
+
+sys_height:
+    mov rax, 0x0C
     int 80h
     ret
