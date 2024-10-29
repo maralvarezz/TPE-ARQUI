@@ -13,6 +13,9 @@
 #define REGISTERS 10
 #define GETWIDTH 11
 #define GETHEIGHT 12
+#define REDUCESIZE 13
+#define INCREASESIZE 14
+
 
 
 //extern int getSeconds();
@@ -58,6 +61,10 @@ uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint6
             return  sys_width((uint64_t *) rdi);
         case GETHEIGHT:
             return  sys_height((uint64_t *) rdi);
+        case REDUCESIZE:
+            return sys_reduceSize();
+        case INCREASESIZE:
+            return sys_increaseSize();
         default:
             return 0;
 	}
@@ -165,8 +172,18 @@ uint64_t sys_drawRect(uint64_t x,uint64_t y ,uint64_t x2 , uint64_t y2 ,ColorT c
 uint64_t sys_width(uint64_t* rdi){
     *rdi = driver_width() ;
     return 1;
-}			
+}
 uint64_t sys_height(uint64_t* rdi){
     *rdi = driver_height() ;
     return 1;
-}	
+}
+
+uint64_t sys_reduceSize(){
+    driver_reduceSize();
+    return 1;
+}
+
+uint64_t sys_increaseSize(){
+    driver_increaseSize();
+    return 1;
+}
