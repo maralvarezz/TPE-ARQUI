@@ -62,6 +62,7 @@ static void checkInsideScreen();
 static void drawChar(char c, ColorT fuenteColor, ColorT fondoColor);
 static void setPixel(uint16_t x, uint16_t y, ColorT clr);
 static uint32_t* getPixel(uint16_t y, uint16_t x);
+static void driver_print(char * buffer, uint64_t count);
 
 void driver_putCursor(){
 		//es una mascara para chequear si el color es 
@@ -261,6 +262,10 @@ uint64_t driver_reduceSize(){
 		driver_print("No se puede reducir mas el tamaño de la letra\n", 47);
 	}
 	return 1;
+}
+
+static void driver_print(char * buffer, uint64_t count){
+    driver_print_color(buffer,count,WHITE,BLACK);
 }
 
 

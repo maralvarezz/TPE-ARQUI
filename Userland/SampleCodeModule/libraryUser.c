@@ -168,6 +168,7 @@ void drawRect(uint64_t x,uint64_t y,uint64_t x2,uint64_t y2, ColorT* colorToPain
 void getWidth(uint64_t* w){
     sys_width(w);
 }
+
 void getHeight(uint64_t* h){
     sys_height(h);
 }
@@ -181,5 +182,7 @@ void increaseSize(){
     clearAll();
     sys_increaseSize();
 }
+
+
 
 

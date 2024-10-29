@@ -104,10 +104,7 @@ void command_invalidopcode(){
 void command_snakes(){
     printString("Ingrese el numero de jugadores (1-2):",37);
     char jug = getChar();
-    if(jug !=  '1' || jug != '2'){
-        printString("Numero de jugadores invalido\n", 30);
-        command_snakes();
-    }
+    //bancar funcion
     startGame(jug);
 }
 
@@ -143,6 +140,7 @@ void terminal(){
     //entry();
     printString("Ingrese un comando:\n", 21);
     while(on){
+        playNota(330,3);
         putLine();
         printCursor();
         readLine();

@@ -14,12 +14,12 @@ int seconds_elapsed() {
 	return ticks / 18;
 }
 
-void wait_time (int time) {
+void wait_time(int time){
 	if(time <= 0){
 		return;
 	}
-	int start = ticks;
-	while (ticks - start < time){
+	int start=ticks;
+	while (ticks-start < time){
 		_hlt();
 	}
 }

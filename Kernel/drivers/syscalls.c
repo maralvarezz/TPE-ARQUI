@@ -36,7 +36,6 @@ uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint6
             ColorT auxfd={colorFd->blue,colorFd->green,colorFd->red};
             ColorT auxfte={colorFte->blue,colorFte->green,colorFte->red};
 			return sys_write(rdi, (char *)rsi, rdx, auxfte,auxfd);
-
 		case CLEAR:
 			return sys_clear();
         case WAIT:
@@ -95,33 +94,6 @@ uint64_t sys_clear(){
     driver_clear();
     return 1;
 }
-static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base){
-    char *p = buffer;
-    char *p1, *p2;
-    uint32_t digits = 0;
-
-    //Calculate characters for each digit
-    do{
-        uint32_t remainder = value % base;
-        *p++ = (remainder < 10) ? remainder + '0' : remainder + 'A' - 10;
-        digits++;
-    }while (value /= base);
-
-    // Terminate string in buffer.
-    *p = 0;
-
-    //Reverse string in buffer.
-    p1 = buffer;
-    p2 = p - 1;
-    while (p1 < p2){
-        char tmp = *p1;
-        *p1 = *p2;
-        *p2 = tmp;
-        p1++;
-        p2--;
-    }
-    return digits;
-}
 
 uint64_t sys_registers(uint64_t vec[17],uint64_t * flag){
     *flag=registersFlag;
@@ -135,17 +107,17 @@ uint64_t sys_registers(uint64_t vec[17],uint64_t * flag){
 
 
 uint64_t sys_seconds(){
-    driver_print(numToStr(getSeconds(),2), strleng(numToStr(getSeconds(),2)));
+    driver_print_color(numToStr(getSeconds(),2), strleng(numToStr(getSeconds(),2)), WHITE, BLACK);
     return getSeconds();
 }
 
 uint64_t sys_minutes(){
-    driver_print(numToStr(getMinutes(),2), strleng(numToStr(getMinutes(),2)));
+    driver_print_color(numToStr(getMinutes(),2), strleng(numToStr(getMinutes(),2)), WHITE, BLACK);
     return getMinutes();
 }
 
 uint64_t sys_hours(){
-    driver_print(numToStr(getHours()-3,2), strleng(numToStr(getHours(),2)));
+    driver_print_color(numToStr(getHours()-3,2), strleng(numToStr(getHours(),2)), WHITE, BLACK);
     return getHours();
 }
 
@@ -155,10 +127,9 @@ uint64_t sys_wait(uint64_t time){
 }
 
 uint64_t sys_sound(uint64_t freq, uint64_t time){
-    if(freq<=0 || time<=0){
-        return 0;
+    if(freq>0){
+        sound(freq);
     }
-    sound(freq);
     wait_time(time);
     stop_sound();
     return 1;
@@ -170,11 +141,11 @@ uint64_t sys_drawRect(uint64_t x,uint64_t y ,uint64_t x2 , uint64_t y2 ,ColorT c
 }
 
 uint64_t sys_width(uint64_t* rdi){
-    *rdi = driver_width() ;
+    *rdi = driver_width();
     return 1;
 }
 uint64_t sys_height(uint64_t* rdi){
-    *rdi = driver_height() ;
+    *rdi = driver_height();
     return 1;
 }
 
