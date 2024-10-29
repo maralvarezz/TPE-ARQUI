@@ -30,20 +30,21 @@ static void pasoHexa(uint64_t num1, char buffer[16]){
 }
 
 void printRegisters(){
-    char hexa[19];
-	hexa[0] = '0';
-	hexa[1] = 'x';
-	hexa[18] = '\0';
+    char hexbuf[19];
+	hexbuf[0] = '0';
+	hexbuf[1] = 'x';
+	hexbuf[18] = '\0';
 	uint64_t infoRegistros[17];
-	int i = sys_registers(infoRegistros);
-    printInt(i);
+    uint64_t flag=0;
+	int i=sys_registers(infoRegistros, &flag);
 	putChar('\n');
-	if (i==1){
+	if (flag==1){
 		for (int i = 0; i < 17; i++)
 		{
 			printString(registros64[i], 3);
 			printString(": ", 1);
-			pasoHexa(registros64[i], hexa + 2);
+            pasoHexa(infoRegistros[i], hexbuf + 2);
+            printString(hexbuf, 18);
 			if (i % 4 == 3)
 				putChar('\n');
 			else

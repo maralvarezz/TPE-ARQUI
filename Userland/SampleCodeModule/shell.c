@@ -104,7 +104,7 @@ void command_snakes(){
     char jug = getChar();
     if(jug !=  '1' || jug != '2'){
         printString("Numero de jugadores invalido\n", 30);
-        return;
+        command_snakes();
     }
     startGame(jug);
 }

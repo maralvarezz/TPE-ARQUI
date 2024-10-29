@@ -20,7 +20,6 @@ extern void stop_sound();
 extern uint8_t registersFlag;
 extern uint64_t registros[17];
 
-
 uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax) {
 	switch (rax) {
         case READ:
@@ -42,7 +41,7 @@ uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint6
         case CURSOR:
             return sys_cursor();
         case REGISTERS:
-            return sys_registers((uint64_t *)rdi);
+            return sys_registers((uint64_t *) rdi, (uint64_t *) rsi);
         case PAINT:
             ColorT* color=(ColorT*)r8;
             return sys_drawRect(rdi, rsi ,rdx ,r10 , *color); // se le pasan la esquina sup izq, su largo y su altura
@@ -77,15 +76,42 @@ uint64_t sys_clear(){
     driver_clear();
     return 1;
 }
+static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base){
+    char *p = buffer;
+    char *p1, *p2;
+    uint32_t digits = 0;
 
-uint64_t sys_registers(uint64_t vec[17]){
-    uint64_t *flag= registersFlag;
+    //Calculate characters for each digit
+    do{
+        uint32_t remainder = value % base;
+        *p++ = (remainder < 10) ? remainder + '0' : remainder + 'A' - 10;
+        digits++;
+    }while (value /= base);
+
+    // Terminate string in buffer.
+    *p = 0;
+
+    //Reverse string in buffer.
+    p1 = buffer;
+    p2 = p - 1;
+    while (p1 < p2){
+        char tmp = *p1;
+        *p1 = *p2;
+        *p2 = tmp;
+        p1++;
+        p2--;
+    }
+    return digits;
+}
+
+uint64_t sys_registers(uint64_t vec[17],uint64_t * flag){
+    *flag=registersFlag;
     if(registersFlag){
         for(int i = 0; i < 17; i++){
             vec[i] = registros[i];
         }
     }
-    return *flag;
+    return 1;
 }
 
 
