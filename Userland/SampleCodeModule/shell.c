@@ -4,12 +4,12 @@
 #define USER_MAX 32 
 #define COMMAND_MAX 150
 #define BUFFER 300
-#define TOTAL_COMMANDS 10
+#define TOTAL_COMMANDS 12
 
 int on = 1;
 char command[COMMAND_MAX] = {0};
 
-char * commandList[] = {"-help", "-time", "-clear", "-modifyuser", "-registers", "-divzero", "-invalidopcode", "-snakes", "-username", "-exit"};
+char * commandList[] = {"-help", "-time", "-clear", "-modifyuser", "-registers", "-divzero", "-invalidopcode", "-snakes", "-reducesize", "-increasesize", "-username", "-exit"};
 
 int USER_SIZE = 5;
 char USER[USER_MAX] = "guest";
@@ -30,6 +30,8 @@ void command_help(){
     printString("-divzero: Excepcion de dividir por cero\n", 42); 
     printString("-invalidopcode: Excepcion de codigo de operacion invalido\n", 58);
     printString("-snakes: Inicia el juego Snakes\n", 33);
+    printString("-reducesize: Reduce el tamaño de la letra\n", 45);
+    printString("-increasesize: Aumenta el tamaño de la letra\n", 49);
     printString("-username: Muestra el nombre de usuario actual\n", 48);
     printString("-exit: Cierra la terminal\n", 27);
 }
@@ -91,6 +93,7 @@ void command_registers(){
 //Excepcion de dividir por cero
 void command_divzero(){
     invokeDivZero();
+    terminal();
 }
 
 //Excepcion de codigo de operacion invalido
@@ -117,6 +120,14 @@ void command_username(){
 void command_exit(){
     printString("Muchas gracias por su visita :)\n", 31);
     on = 0;
+}
+
+void command_reducesize(){
+    reduceSize();
+}
+
+void command_increasesize(){
+    increaseSize();
 }
 
 //Lo que se pone al inicial la terminal
@@ -204,9 +215,12 @@ void check(){
                         command_snakes();
                         break;
                     case 8:
-                        command_username();
+                        command_reducesize();
                         break;
                     case 9:
+                        command_increasesize();
+                        break;
+                    case 10:
                         command_exit();
                         break;
                     default:
