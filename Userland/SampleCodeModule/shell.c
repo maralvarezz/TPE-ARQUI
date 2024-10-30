@@ -102,10 +102,12 @@ void command_invalidopcode(){
 }
 
 void command_snakes(){
+    /*
     printString("Ingrese el numero de jugadores (1-2):",37);
     char jug = getChar();
     //bancar funcion
     startGame(jug);
+    */
 }
 
 void command_username(){
@@ -129,6 +131,7 @@ void command_increasesize(){
 
 //Lo que se pone al inicial la terminal
 void entry(){
+    playNota(330,3);
     printString("Bienvenidos al SO del Grupo 2 :)\n", 33);
     //scanf("Ingrese su nombre de usuario:\n");
     printString("Ingrese su nombre de usuario (maximo 32 caracteres): ", 53);

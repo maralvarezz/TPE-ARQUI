@@ -1,3 +1,4 @@
+/*
 #include "./include/snakes.h"
 #define SQUARESIZE 32
 #define WIDTH 1024
@@ -180,5 +181,5 @@ void setPassenger(){
 }
 
 
-
+*/
 

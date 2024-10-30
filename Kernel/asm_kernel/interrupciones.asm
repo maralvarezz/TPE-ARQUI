@@ -136,7 +136,7 @@ picSlaveMask:
 interrupcion_teclado:
     pushState
 	xor rax, rax ; limpio rax
-    in al, 0x60 ;leo el scancode
+;    in al, 60h ;leo el scancode
 	cmp al, 0x1D ;si es la tecla ctrl
 	jne .ctrlNotPressed
 	mov byte [ctrlFlag], 1 ;si es la tecla ctrl

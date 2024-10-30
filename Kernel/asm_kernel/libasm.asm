@@ -75,13 +75,17 @@ getSeconds:
 
 
 getKey:
-    push rbp
-    mov rbp, rsp
-    mov rax, 0  
-    in al, 0x60
-    mov rsp, rbp
-    pop rbp
-    ret
+        push rbp
+        mov rbp, rsp
+        mov rax, 0  
+        in al, 64h
+        mov cl, al
+        and al, 0x01
+        jz .end
+        in al, 0x60
+.end:   mov rsp, rbp
+        pop rbp
+        ret
 
 sound:
     push rbp
