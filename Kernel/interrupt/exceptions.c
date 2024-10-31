@@ -20,7 +20,7 @@ void exceptionDispatcher(int exception) {
 		zero_division();
 	else if(exception == OPCODE_EXCEPTION_ID)
 		opcode_exception();
-	((EntryPoint)sampleCodeModuleAddress)();
+	//((EntryPoint)sampleCodeModuleAddress)();
 }
 
 void print_registers() {

@@ -1,4 +1,5 @@
 #include "../include/syscalls.h"
+#include "../include/keyboard.h"
 
 #define READ 0
 #define WRITE 1
@@ -15,6 +16,8 @@
 #define GETHEIGHT 12
 #define REDUCESIZE 13
 #define INCREASESIZE 14
+#define CURSORSETTERX 15
+#define CURSORSETTERY 16
 
 
 
@@ -43,11 +46,11 @@ uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint6
         case SOUND:
             return sys_sound(rdi, rsi);
         case SECONDS:
-            return sys_seconds();
+            return sys_seconds((uint64_t *) rdi);
         case MINUTES:
-            return sys_minutes();
+            return sys_minutes((uint64_t *) rdi);
         case HOURS:
-            return sys_hours();
+            return sys_hours((uint64_t *) rdi);
         case CURSOR:
             return sys_cursor();
         case PAINT:
@@ -64,6 +67,10 @@ uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint6
             return sys_reduceSize();
         case INCREASESIZE:
             return sys_increaseSize();
+        case CURSORSETTERX:
+            return sys_cursorSetterX(rdi);
+        case CURSORSETTERY:
+            return sys_cursorSetterY(rdi);
         default:
             return 0;
 	}
@@ -90,14 +97,26 @@ uint64_t sys_cursor(){
     return 1;
 }
 
+uint64_t sys_cursorSetterX(uint64_t x){
+    driver_setCursorX(x);
+    return 1;
+}
+
+uint64_t sys_cursorSetterY(uint64_t y){
+    driver_setCursorY(y);
+    return 1;
+}
+
+
+
 uint64_t sys_clear(){
     driver_clear();
     return 1;
 }
 
 uint64_t sys_registers(uint64_t vec[17],uint64_t * flag){
-    *flag=registersFlag;
-    if(registersFlag){
+    *flag=getCtrlFlag();
+    if(*flag){
         for(int i = 0; i < 17; i++){
             vec[i] = registros[i];
         }
@@ -106,19 +125,19 @@ uint64_t sys_registers(uint64_t vec[17],uint64_t * flag){
 }
 
 
-uint64_t sys_seconds(){
-    driver_print_color(numToStr(getSeconds(),2), strleng(numToStr(getSeconds(),2)), WHITE, BLACK);
-    return getSeconds();
+uint64_t sys_seconds(uint64_t * flag){
+    *flag=getSeconds();
+    return 1;
 }
 
-uint64_t sys_minutes(){
-    driver_print_color(numToStr(getMinutes(),2), strleng(numToStr(getMinutes(),2)), WHITE, BLACK);
-    return getMinutes();
+uint64_t sys_minutes(uint64_t * flag){
+    *flag=getMinutes();
+    return 1;
 }
 
-uint64_t sys_hours(){
-    driver_print_color(numToStr(getHours()-3,2), strleng(numToStr(getHours(),2)), WHITE, BLACK);
-    return getHours();
+uint64_t sys_hours(uint64_t * flag){
+    *flag=getHours();
+    return 1;
 }
 
 uint64_t sys_wait(uint64_t time){

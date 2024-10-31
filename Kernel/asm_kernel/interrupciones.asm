@@ -4,13 +4,7 @@ GLOBAL picMasterMask
 GLOBAL picSlaveMask
 GLOBAL haltcpu
 GLOBAL _hlt
-
 GLOBAL _irq00Handler
-GLOBAL _irq01Handler
-GLOBAL _irq02Handler
-GLOBAL _irq03Handler
-GLOBAL _irq04Handler
-GLOBAL _irq05Handler
 
 GLOBAL exception_zero_division
 GLOBAL exception_op_code
@@ -21,11 +15,11 @@ GLOBAL interrupcion_teclado
 GLOBAL exceptionRegs
 GLOBAL registros
 GLOBAL registersFlag
+GLOBAL guardar_registros
 
 EXTERN irqDispatcher
 EXTERN exceptionDispatcher
-
-
+EXTERN load_main
 EXTERN keyboard_handler
 EXTERN sysCaller
 EXTERN exceptionsCaller
@@ -87,32 +81,29 @@ SECTION .text
     mov [exceptionRegs + 96], r13
     mov [exceptionRegs + 104], r14
     mov [exceptionRegs + 112], r15
-	
-    mov rax, rsp
+    mov rax, rsp 
     add rax, 160 ;nos ponemos antes de que suceda el error 
     mov [exceptionRegs + 120], rax
     mov rax, [rsp+120] ;Obtenemos el valor de RIP en el momento en el que sucede la excepción tomando el valor de la interrupción que se encuentra en la pila.
 	mov [exceptionRegs+128], rax
 	mov rax, [rsp+128] ;Obtenemos el valor de RFLAGS también de esta manera, ya que son pusheadas cuando ocurre una interrupción
 	mov [exceptionRegs+136], rax
-
     mov rdi, %1 ;pasaje de parametro
 	call exceptionDispatcher
-
 	popState
+	add rsp, 8 ;saco el error code de la pila
+	push load_main ;vuelvo a la función main
 	iretq
 %endmacro
 
+
 %macro irqHandlerMaster 1
 	pushState
-
 	mov rdi, %1 ; pasaje de parametro
 	call irqDispatcher
-
-	; signal pic EOI (End of Interrupt)
+	;signal pic EOI (End of Interrupt)
 	mov al, 20h
 	out 20h, al
-
 	popState
 	iretq
 %endmacro
@@ -133,25 +124,19 @@ picSlaveMask:
     pop     rbp
     retn
 
-interrupcion_teclado:
+interrupcion_teclado: 
     pushState
 	xor rax, rax ; limpio rax
-;    in al, 60h ;leo el scancode
-	cmp al, 0x1D ;si es la tecla ctrl
-	jne .ctrlNotPressed
-	mov byte [ctrlFlag], 1 ;si es la tecla ctrl
-.ctrlNotPressed:
-	cmp al, 0x9D ;si se solto la tecla ctrl
-	jne .ctrl_plus_r_pressed
-	mov byte [ctrlFlag], 0 ;si se solto la tecla ctrl
-.ctrl_plus_r_pressed:
-	cmp byte [ctrlFlag], 1 ;si se solto la tecla ctrl
-	jne .handle_keyboard
-	cmp al, 0x13 ;si esta presionada la tecla r
-	jne .handle_keyboard
+.handle_keyboard:
+	call keyboard_handler
+	mov al, 0x20 ;EOI
+	out 0x20, al
+	popState
+	iretq
 
-;hacemos el guardado de los registros 
-.guardamos_registros:
+
+guardar_registros:
+	pushState
     mov [registros+2*8], rbx
     mov [registros+3*8], rcx
     mov [registros+4*8], rdx
@@ -173,13 +158,8 @@ interrupcion_teclado:
     mov [registros], rax
     mov rax, [rsp+14*8]
     mov [registros+1*8], rax
-	mov byte [registersFlag], 1
-.handle_keyboard:
-	call keyboard_handler
-	mov al, 0x20
-	out 0x20, al
 	popState
-	iretq
+	ret
 
 _hlt:
 	sti ;permite que se reciban interrupciones mientras el procesador esta en hlt
@@ -217,6 +197,7 @@ syscallHandler:
 exception_zero_division:
     backupRegs 0	
 
+;Op Code Exception
 exception_op_code:
     backupRegs 6
 
@@ -229,4 +210,3 @@ SECTION .bss
 	ctrlFlag resb 1 ;variable que se usa para saber si se presiono shift
     exceptionRegs resq 18
 	registros resq 18
-	registersFlag resb 1 ;variable que se usa para saber si se presiono shift

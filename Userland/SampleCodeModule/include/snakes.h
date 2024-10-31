@@ -3,6 +3,7 @@
 #define WIDTH 1024
 #define HEIGHT 768
 #define MAX_VAGONES 100
+#define SQUARESIZE 32
 
 typedef struct player{
     char l; //si esta vivo
@@ -12,8 +13,8 @@ typedef struct player{
     int dirY;
     int points;
     int vagones[MAX_VAGONES][2];
-    //faltaria el color
-    char mapa[WIDTH][HEIGHT];  //mapea donde se esta moviendo el jugador
+    const ColorT* pColor;
+    char mapa[WIDTH/SQUARESIZE][HEIGHT/SQUARESIZE];  //mapea donde se esta moviendo el jugador
 }player;
 
 typedef struct player * TPlayer;

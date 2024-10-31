@@ -35,18 +35,21 @@ void command_help(){
     printString("-reducesize: Reduce el tamaño de la letra\n", 45);
     printString("-increasesize: Aumenta el tamaño de la letra\n", 49);
     printString("-username: Muestra el nombre de usuario actual\n", 48);
-    printString("-exit: Cierra la terminal\n", 27);
+    printString("-exit: Cierra la terminal", 26);
 }
 
 //Imprime el tiempo en pantalla
 void command_time(){
     putChar('\n');
     printString("Su hora actual es: ", 19);
-    gettingHours();
+    int hours=gettingHours();
+    printInt(hours);
     putChar(':');
-    gettingMinutes();
+    int minutes=gettingMinutes();
+    printInt(minutes);
     putChar(':');
-    gettingSeconds();
+    int seconds=gettingSeconds();
+    printInt(seconds);
 }
 
 //Limpia la terminal
@@ -74,7 +77,7 @@ void command_modifyuser(){
         }
     }
     if(size >= USER_MAX){
-        printString("Ingrese un nombre de usuario valido\n", 36);
+        printString("\nIngrese un nombre de usuario valido", 36);
         command_modifyuser();
         return;
     }
@@ -84,7 +87,6 @@ void command_modifyuser(){
         putChar('\n');
         printString("Bienvenido ", 11);
         printString(USER, USER_SIZE);
-        putChar('\n');
     }
 }
 
@@ -96,7 +98,6 @@ void command_registers(){
 //Excepcion de dividir por cero
 void command_divzero(){
     invokeDivZero();
-    terminal();
 }
 
 //Excepcion de codigo de operacion invalido
@@ -106,21 +107,24 @@ void command_invalidopcode(){
 
 void command_snakes(){
     putChar('\n');
+    printString("Bienvenido a Snakes\n", 20);
     printString("Ingrese el numero de jugadores (1-2):",37);
     char jug;
     while((jug = getChar()) != '1' && jug != '2'){
-     
+        
     }
     startGame(jug);
 }
 
 void command_username(){
+    putChar('\n');
     printString("Su nombre de usuario es: ", 25);
     printString(USER, USER_SIZE);
     putChar('\n');
 }
 
 void command_exit(){
+    putChar('\n');
     printString("Muchas gracias por su visita :)\n", 31);
     on = 0;
 }
@@ -137,7 +141,7 @@ void command_increasesize(){
 void entry(){
     if(first){
         first = 0;
-        //playNota(330,3);
+        //playNota(150,10);
         printString("Bienvenidos al SO del Grupo 2 :)", 32);
         //scanf("Ingrese su nombre de usuario:\n");
         command_modifyuser();
@@ -147,14 +151,13 @@ void entry(){
 
 void terminal(){
     printString("Ingrese un comando:\n", 21);
-    while(on){
+    while(1 && on){
         //playNota(330,3);
         putLine();
         printCursor();
         readLine();
         putChar('\n');
     }
-
 }
 
 void noCommand(){
@@ -227,6 +230,9 @@ void check(){
                         command_increasesize();
                         break;
                     case 10:
+                        command_username();
+                        break;
+                    case 11:
                         command_exit();
                         break;
                     default:

@@ -14,6 +14,8 @@ global sys_width
 global sys_height
 global sys_reduceSize
 global sys_increaseSize
+global sys_cursorSetterX
+global sys_cursorSetterY
 
 section .text
 
@@ -93,5 +95,15 @@ sys_reduceSize:
 
 sys_increaseSize:
     mov rax, 0x0E
+    int 80h
+    ret
+
+sys_cursorSetterX:
+    mov rax, 0x0F
+    int 80h
+    ret
+
+sys_cursorSetterY:
+    mov rax, 0x10
     int 80h
     ret

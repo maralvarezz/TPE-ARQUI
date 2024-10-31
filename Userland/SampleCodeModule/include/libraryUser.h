@@ -15,6 +15,7 @@ typedef struct Nota{
     int frec;
     int time;
 } NotaT;
+
 static const ColorT BLACK ={0,0,0};
 static const ColorT WHITE = {0xFF,0xFF,0xFF};
 static const ColorT RED = {0xFF, 0,0};
@@ -34,7 +35,7 @@ static const ColorT WINE={0xB4,0,0x57};
 
 void putChar(char c);
 void printString(char * string, int length);
-void printStringColor(char * string, int length,ColorT* colorFte, ColorT* colorFdo);
+void printStringColor(char * string, int length,const ColorT* colorFte,const ColorT* colorFdo);
 void printInt(int num);
 char getChar();
 void sleep(uint64_t time);
@@ -50,10 +51,14 @@ int gettingMinutes();
 int gettingHours();
 void printCursor();
 void printRegisters();
-void drawRect(uint64_t x,uint64_t y,uint64_t x2,uint64_t y2, ColorT* colorToPaint);
+void drawRect(uint64_t x,uint64_t y,uint64_t x2,uint64_t y2, const ColorT* colorToPaint);
 void getWidth(uint64_t* w);
 void getHeight(uint64_t* h);
 void increaseSize();
 void reduceSize();
+char peekChar();
+char toLower(char c);
+void setCursorX(uint64_t x);
+void setCursorY(uint64_t y);
 
 #endif // LIBRARY_USER_H

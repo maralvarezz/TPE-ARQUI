@@ -2,10 +2,8 @@
 #define LIBRARYC_H
 
 #include <stdint.h>
-#include "color.h"
 #include "syscalls.h"
 #include "keyboard.h"
-#include "videoDriver.h"
 
 
 extern uint64_t getHours();

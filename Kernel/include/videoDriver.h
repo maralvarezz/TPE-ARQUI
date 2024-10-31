@@ -20,5 +20,7 @@ uint16_t driver_width();
 uint16_t driver_height();
 uint64_t driver_reduceSize();
 uint64_t driver_increaseSize();
+void driver_setCursorX(uint64_t x);
+void driver_setCursorY(uint64_t y);
 
 #endif

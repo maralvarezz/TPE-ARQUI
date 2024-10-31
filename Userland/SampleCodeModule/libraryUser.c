@@ -3,13 +3,16 @@
 #include "./include/syscalls_user.h"
 #include "./include/exceptions_user.h"
 
+#define DIFFHOUR 3
+
 
 static ColorT DEFAULT_COLOR_FND=BLACK;
 static ColorT DEFAULT_COLOR_FTE=WHITE;
 static void pasoHexa(uint64_t num1, char buffer[16]);
 
 static char *registros64[17] = {
-	"RIP", "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8 ", "R9 ", "R10", "R11", "R12", "R13", "R14", "R15"};
+	"RIP", "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8 ", "R9 ", "R10", "R11", "R12", "R13", "R14", "R15"
+};
 
 
 void playNota(uint64_t freq, uint64_t time){
@@ -39,8 +42,7 @@ void printRegisters(){
 	hexbuf[18] = '\0';
 	uint64_t infoRegistros[17];
     uint64_t flag=0;
-	int i=sys_registers(infoRegistros, &flag);
-	putChar('\n');
+	sys_registers(infoRegistros, &flag);
 	if (flag==1){
 		for (int i = 0; i < 17; i++)
 		{
@@ -56,7 +58,7 @@ void printRegisters(){
 	}
 	else
 	{
-		printString("\nERROR: presionar primero la tecla Ctrl\n", 47);
+		printString("\nERROR: presionar primero la tecla Ctrl", 46);
 	}
 }
 
@@ -65,7 +67,7 @@ void printString(char * string, int length){
     printStringColor(string,length,&DEFAULT_COLOR_FTE,&DEFAULT_COLOR_FND);
 }
 
-void printStringColor(char * string, int length, ColorT* colorFte, ColorT* colorFdo){
+void printStringColor(char * string, int length, const ColorT* colorFte,const ColorT* colorFdo){
     sys_write(1,string, length,colorFte,colorFdo); //mando 1 porque es la salida estandar
 }
 
@@ -80,6 +82,13 @@ char getChar(){
     sys_read(0,&c, 1); //mando 0 porque es la entrada estandar
     //sleep(2); // no esta definido
     
+    return c;
+}
+
+//es un getChar pero sin imprimir el cursor
+char peekChar(){
+    char c;
+    sys_read(0,&c, 1); //mando 0 porque es la entrada estandar
     return c;
 }
 
@@ -129,15 +138,21 @@ void invokeDivZero(){
 }
 
 int gettingSeconds(){
-    return sys_seconds();
+    uint64_t seconds;
+    sys_seconds(&seconds);
+    return seconds;
 }
 
 int gettingMinutes(){
-    return sys_minutes();
+    uint64_t minutes;
+    sys_minutes(&minutes);
+    return minutes;
 }
 
 int gettingHours(){
-    return sys_hours();
+    uint64_t hours;
+    sys_hours(&hours);
+    return hours-DIFFHOUR;
 }
 
 void printInt(int num) {
@@ -161,7 +176,7 @@ void printInt(int num) {
     }
 }
 
-void drawRect(uint64_t x,uint64_t y,uint64_t x2,uint64_t y2, ColorT* colorToPaint){
+void drawRect(uint64_t x,uint64_t y,uint64_t x2,uint64_t y2,const ColorT* colorToPaint){
     sys_drawRectangle(x,y,x2,y2,colorToPaint);
 }
 
@@ -183,6 +198,19 @@ void increaseSize(){
     sys_increaseSize();
 }
 
+char toLower(char c){
+    if(c>='A' && c<='Z'){
+        return c + 'a'-'A' ;
+    }
+    return c;
+}
 
+void setCursorX(uint64_t x){
+    sys_cursorSetterX(x);
+}
+
+void setCursorY(uint64_t y){
+    sys_cursorSetterY(y);
+}
 
 

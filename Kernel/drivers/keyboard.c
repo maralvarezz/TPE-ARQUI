@@ -3,11 +3,13 @@
 #define BUFFER_MAX 256
 
 extern char getKey();
+extern void guardar_registros();
 
 unsigned char teclaPressed = 0;
 int bloqMayus = 0;
 int shift = 0;
 char BUFFER[BUFFER_MAX] = {0};
+unsigned char ctrl=0;
 
 int w = 0, r = 0;
 
@@ -40,7 +42,7 @@ static const char * mapLetras[] = {vecMin,vecMay};
 //nos entra la tecla que se oprimió
 void keyboard_handler(){
     teclaPressed = getKey();
-    if(((teclaPressed) <= 0x79) || teclaPressed == 0xAA || teclaPressed == 0xB6 || teclaPressed == 0x3A){
+    if(((teclaPressed) <= 0x79) || teclaPressed == 0xAA || teclaPressed == 0xB6 ){
         //shift oprimido
         if (teclaPressed == 0x2A || teclaPressed == 0x36){
             shift = 1;
@@ -48,6 +50,11 @@ void keyboard_handler(){
         //shift no oprimido
         if (teclaPressed == 0xAA || teclaPressed == 0xB6) {
             shift = 0;
+        }
+        //tecla ctrl oprimida
+        if(teclaPressed == 0x1D){
+            ctrl=1;
+            guardar_registros();
         }
         //bloq mayus oprimido
         if (teclaPressed == 0x3A) {
@@ -62,6 +69,12 @@ void addBuffer(){
         w = 0;
     }
     BUFFER[w++] = getKeyboard();
+}
+
+uint64_t getCtrlFlag(){
+    uint64_t resp=ctrl;
+    ctrl=0;
+    return resp;
 }
 
 char getBuffer(){

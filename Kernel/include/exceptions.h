@@ -1,4 +1,7 @@
+#ifndef EXCEPTIONS_H
+#define EXCEPTIONS_H
 
-//#include "color.h"
 #include "libraryC.h"
 #include "kernel.h"
+
+#endif

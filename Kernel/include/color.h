@@ -9,7 +9,7 @@ typedef struct color{
 }ColorT;
 
 
-static ColorT WHITE = {255,255,255};
-static ColorT BLACK = {0,0,0};
+static const ColorT WHITE = {255,255,255};
+static const ColorT BLACK = {0,0,0};
 
 #endif

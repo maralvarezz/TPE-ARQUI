@@ -19,6 +19,8 @@ void _irq00Handler(void);
 void exception_zero_division(void);
 void exception_op_code(void);
 
+void guardar_registros(void);
+
 void _cli(void);
 
 void _sti(void);

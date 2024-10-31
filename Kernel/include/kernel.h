@@ -1,5 +1,7 @@
+#ifndef KERNEL_H
+#define KERNEL_H
+
 #include <stdint.h>
-#include "color.h"
 #include <string.h>
 #include "videoDriver.h"
 #include "lib.h"
@@ -13,4 +15,6 @@ static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
 
 typedef int (*EntryPoint)();
+
+#endif
 

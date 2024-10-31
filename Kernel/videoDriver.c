@@ -120,9 +120,9 @@ void driver_clear(){
 
 void driver_read(char * buffer){
 	*buffer = getBuffer();
-		if(*buffer == 0){
-			return;
-		}
+	if(*buffer == 0){
+		return;
+	}
 }
 
 void driver_print_color(char * buffer, uint64_t count,ColorT colorFte,ColorT colorFdo){ 
@@ -171,6 +171,20 @@ void driver_lineBelow(){
 		//arriba, se borra la primer linea y se pone el cursor en la ultima linea
 		scrolleo();
 	}
+}
+
+void driver_setCursorX(uint64_t x){
+	if(x >= screen->width || x < 0){
+		return;
+	}
+	cursorX = x;
+}
+
+void driver_setCursorY(uint64_t y){
+	if(y >= screen->height || y < 0){
+		return;
+	}
+	cursorY = y;
 }
 
 // borra el caracter anterior
