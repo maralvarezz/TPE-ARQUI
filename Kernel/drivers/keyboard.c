@@ -1,13 +1,19 @@
 #include "../include/keyboard.h"
 
+#define BUFFER_MAX 256
+
 extern char getKey();
 
 unsigned char teclaPressed = 0;
 int bloqMayus = 0;
 int shift = 0;
+char BUFFER[BUFFER_MAX] = {0};
+
+int w = 0, r = 0;
+
+
 
 static const char vecMay[] = {
-
       0,   27, '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+',
    '\b', '\t', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}',
    '\n',    0, 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', '~',
@@ -32,10 +38,8 @@ static const char vecMin[] = {
 static const char * mapLetras[] = {vecMin,vecMay};
 
 //nos entra la tecla que se oprimió
-char keyboard_handler(){
+void keyboard_handler(){
     teclaPressed = getKey();
-    // no deberia rstar el halt aunque parchee
-    _hlt();
     if(((teclaPressed) <= 0x79) || teclaPressed == 0xAA || teclaPressed == 0xB6 || teclaPressed == 0x3A){
         //shift oprimido
         if (teclaPressed == 0x2A || teclaPressed == 0x36){
@@ -49,9 +53,25 @@ char keyboard_handler(){
         if (teclaPressed == 0x3A) {
             bloqMayus = (bloqMayus+1)%2; //si esta en 1 lo pongo en 0 y viceversa
         }
-        return getKeyboard();
+        addBuffer();
     }
-    return 0;
+}
+
+void addBuffer(){
+    if(w >= BUFFER_MAX){
+        w = 0;
+    }
+    BUFFER[w++] = getKeyboard();
+}
+
+char getBuffer(){
+    if(r == w){
+        return 0;
+    }
+    if(r >= BUFFER_MAX){
+        r = 0;
+    }
+    return BUFFER[r++];
 }
 
 

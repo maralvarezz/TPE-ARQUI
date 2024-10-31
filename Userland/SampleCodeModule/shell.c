@@ -131,7 +131,7 @@ void command_increasesize(){
 
 //Lo que se pone al inicial la terminal
 void entry(){
-    playNota(330,3);
+    //playNota(330,3);
     printString("Bienvenidos al SO del Grupo 2 :)\n", 33);
     //scanf("Ingrese su nombre de usuario:\n");
     printString("Ingrese su nombre de usuario (maximo 32 caracteres): ", 53);
@@ -143,7 +143,7 @@ void terminal(){
     //entry();
     printString("Ingrese un comando:\n", 21);
     while(on){
-        playNota(330,3);
+        //playNota(330,3);
         putLine();
         printCursor();
         readLine();

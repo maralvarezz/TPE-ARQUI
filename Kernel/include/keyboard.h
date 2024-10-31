@@ -2,5 +2,7 @@
 
 extern void _hlt();
 char getKeyboard();
-char keyboard_handler();
+void keyboard_handler();
 int isLetter(char key);
+void addBuffer();
+char getBuffer();

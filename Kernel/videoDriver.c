@@ -119,7 +119,7 @@ void driver_clear(){
 }
 
 void driver_read(char * buffer){
-		*buffer = keyboard_handler();
+	*buffer = getBuffer();
 		if(*buffer == 0){
 			return;
 		}
