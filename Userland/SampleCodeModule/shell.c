@@ -7,6 +7,8 @@
 #define TOTAL_COMMANDS 12
 
 int on = 1;
+
+int first = 1;
 char command[COMMAND_MAX] = {0};
 
 char * commandList[] = {"-help", "-time", "-clear", "-modifyuser", "-registers", "-divzero", "-invalidopcode", "-snakes", "-reducesize", "-increasesize", "-username", "-exit"};
@@ -54,7 +56,8 @@ void command_clear(){
 
 void command_modifyuser(){
     int c=0, size = 0;
-    
+    putChar('\n');
+    printString("Ingrese su nombre de usuario (maximo 32 caracteres): ", 53);
     while((c = getChar()) != '\n' && size < USER_MAX){
         if(c!=0){
             if(c == '\b' && size > 0){
@@ -102,12 +105,13 @@ void command_invalidopcode(){
 }
 
 void command_snakes(){
-    /*
+    putChar('\n');
     printString("Ingrese el numero de jugadores (1-2):",37);
-    char jug = getChar();
-    //bancar funcion
+    char jug;
+    while((jug = getChar()) != '1' && jug != '2'){
+     
+    }
     startGame(jug);
-    */
 }
 
 void command_username(){
@@ -131,16 +135,17 @@ void command_increasesize(){
 
 //Lo que se pone al inicial la terminal
 void entry(){
-    //playNota(330,3);
-    printString("Bienvenidos al SO del Grupo 2 :)\n", 33);
-    //scanf("Ingrese su nombre de usuario:\n");
-    printString("Ingrese su nombre de usuario (maximo 32 caracteres): ", 53);
-    command_modifyuser();
-    printString("Para ver los comandos disponibles, escriba -help\n", 49);
+    if(first){
+        first = 0;
+        //playNota(330,3);
+        printString("Bienvenidos al SO del Grupo 2 :)", 32);
+        //scanf("Ingrese su nombre de usuario:\n");
+        command_modifyuser();
+        printString("Para ver los comandos disponibles, escriba -help\n", 49);
+    }
 }
 
 void terminal(){
-    //entry();
     printString("Ingrese un comando:\n", 21);
     while(on){
         //playNota(330,3);

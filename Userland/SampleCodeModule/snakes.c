@@ -1,8 +1,8 @@
-/*
+
 #include "./include/snakes.h"
 #define SQUARESIZE 32
-#define WIDTH 1024
-#define HEIGHT 768
+//#define WIDTH 1024
+//#define HEIGHT 768
 
 void drawChart();
 
@@ -13,13 +13,13 @@ char cantjug = 0;
 
 int passengerX, passengerY;
 
-int direc[4] = {
+int direc[4][2] = {
     {0, 1}, //derecha
     {0, -1}, //izquierda
     {1, 0}, //abajo
     {-1, 0} //arriba
-}
-
+};
+/*
 typedef struct player{
     char l; //si esta vivo
     int posX;
@@ -32,7 +32,7 @@ typedef struct player{
 }player;
 
 typedef struct player * TPlayer;
-
+*/
 TPlayer p1;
 TPlayer p2;
 
@@ -76,6 +76,8 @@ void initializePlayer(TPlayer p){
     p->dirY = 0;
     p->points = 0;
     p->l = 1;
+    p->vagones[0][0] = p->posX;
+    p->vagones[0][1] = p->posY;
 }
 
 void initializePlayers(TPlayer p1, TPlayer p2){
@@ -86,6 +88,8 @@ void initializePlayers(TPlayer p1, TPlayer p2){
     p2->dirY = 0;
     p2->points = 0;
     p2->l = 1;
+    p2->vagones[0][0] = p2->posX;
+    p2->vagones[0][1] = p2->posY;
 }
 
 
@@ -112,7 +116,7 @@ void playGame2(){
 
 //devulve 0 si no hay colision
 int collision(TPlayer p){
-    if(p->posX + p->dirX >= BOARD_SIZE || p->posY + p->dirY >= BOARD_SIZE){
+    if(p->posX + p->dirX >= WIDTH * HEIGHT || p->posY + p->dirY >= WIDTH * HEIGHT){
         return 1;
     }
     else if(cantjug == 2 && crash(p)){
@@ -131,12 +135,14 @@ int crash(TPlayer p){
             }
         }
     }
+    return 0;
 }
 
 int checkPassenger(TPlayer p){
     if(p->posX == passengerX && p->posY == passengerY){
         return 1;
     }
+    return 0;
 }
 
 void movePlayer(TPlayer p){
@@ -145,7 +151,6 @@ void movePlayer(TPlayer p){
     }
     else{
         if(checkPassenger(p)){
-            p->points++;
             addMap(p);
         }
         else{
@@ -155,13 +160,25 @@ void movePlayer(TPlayer p){
 }
 
 void updateMap(TPlayer p){
+
+    for(int i = p->points; i > 0; i--){
+        p->vagones[i][0] = p->vagones[i-1][0];
+        p->vagones[i][1] = p->vagones[i-1][1];
+    }
+
     p->posX += p->dirX;
     p->posY += p->dirY;
-    p->mapa[p->posX][p->posY] = 1;
-    
+    p->vagones[0][0] = p->posX;
+    p->vagones[0][1] = p->posY;
+
+    for(int i = 0; i < p->points; i++){
+        p->mapa[p->vagones[i][0]][p->vagones[i][1]] = 1;
+    }
+
 }
 
 void addMap(TPlayer p){
+    p->points++;
     p->mapa[p->posX][p->posY] = 1;
 }
 
@@ -181,5 +198,4 @@ void setPassenger(){
 }
 
 
-*/
 

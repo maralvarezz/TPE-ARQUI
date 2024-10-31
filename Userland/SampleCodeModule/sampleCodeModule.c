@@ -1,6 +1,8 @@
 /* sampleCodeModule.c */
 #include "./include/shell.h"
 #define SQUARESIZE 50
+
+
 int main() {
     entry();
     terminal();
