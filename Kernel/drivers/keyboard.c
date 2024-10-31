@@ -8,13 +8,12 @@ extern void guardar_registros();
 unsigned char teclaPressed = 0;
 int bloqMayus = 0;
 int shift = 0;
-char BUFFER[BUFFER_MAX] = {0};
+char BUFFER[BUFFER_MAX] = {0}; //usamos un buffer circular para guardar las teclas que se oprimieron
 unsigned char ctrl=0;
 
 int w = 0, r = 0;
 
-
-
+//vectores para el mapeo de las letras minusculas y mayusculas
 static const char vecMay[] = {
       0,   27, '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+',
    '\b', '\t', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}',
@@ -71,6 +70,7 @@ void addBuffer(){
     BUFFER[w++] = getKeyboard();
 }
 
+//se usa para saber si se omprimió la tecla ctrl y guardar los registros
 uint64_t getCtrlFlag(){
     uint64_t resp=ctrl;
     ctrl=0;
@@ -86,7 +86,6 @@ char getBuffer(){
     }
     return BUFFER[r++];
 }
-
 
 char getKeyboard(){
     if(isLetter(teclaPressed)){

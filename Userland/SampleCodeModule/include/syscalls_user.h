@@ -19,4 +19,5 @@ extern uint64_t sys_reduceSize();
 extern uint64_t sys_increaseSize();
 extern uint64_t sys_cursorSetterX(uint64_t x);
 extern uint64_t sys_cursorSetterY(uint64_t y);
+extern uint64_t sys_pixelSize(uint64_t* size);
 

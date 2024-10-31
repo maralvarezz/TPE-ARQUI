@@ -6,13 +6,11 @@
 #define DIFFHOUR 3
 
 
-static ColorT DEFAULT_COLOR_FND=BLACK;
-static ColorT DEFAULT_COLOR_FTE=WHITE;
+static const ColorT DEFAULT_COLOR_FND=BLACK;
+static const ColorT DEFAULT_COLOR_FTE=WHITE;
 static void pasoHexa(uint64_t num1, char buffer[16]);
 
-static char *registros64[17] = {
-	"RIP", "RAX", "RBX", "RCX", "RDX", "RSI", "RDI", "RBP", "RSP", "R8 ", "R9 ", "R10", "R11", "R12", "R13", "R14", "R15"
-};
+static char *registros64[18] = {"RAX","RBX","RCX","RDX","RSI","RDI","RBP","R8","R9","R10","R11","R12","R13","R14","R15", "RSP","RIP", "RFLAGS"};
 
 
 void playNota(uint64_t freq, uint64_t time){
@@ -36,17 +34,18 @@ static void pasoHexa(uint64_t num1, char buffer[16]){
 }
 
 void printRegisters(){
+    putChar('\n');
     char hexbuf[19];
 	hexbuf[0] = '0';
 	hexbuf[1] = 'x';
 	hexbuf[18] = '\0';
-	uint64_t infoRegistros[17];
+	uint64_t infoRegistros[18];
     uint64_t flag=0;
 	sys_registers(infoRegistros, &flag);
 	if (flag==1){
-		for (int i = 0; i < 17; i++)
+		for (int i = 0; i < 18; i++)
 		{
-			printString(registros64[i], 3);
+			printString(registros64[i], strlen(registros64[i]));
 			printString(": ", 1);
             pasoHexa(infoRegistros[i], hexbuf + 2);
             printString(hexbuf, 18);
@@ -58,7 +57,7 @@ void printRegisters(){
 	}
 	else
 	{
-		printString("\nERROR: presionar primero la tecla Ctrl", 46);
+		printString("ERROR: presionar primero la tecla Ctrl", 46);
 	}
 }
 
@@ -176,6 +175,27 @@ void printInt(int num) {
     }
 }
 
+void printIntColor(int num, ColorT* c1, ColorT* c2){
+    char buffer[12]; // Suficiente para almacenar int de 32 bits con signo
+    int i = 0;
+    if (num == 0) {
+        printStringColor("0",1,c1,c2);
+        return;
+    }
+    if (num < 0) {   // Maneja el signo
+        printStringColor("-",1,c1,c2);
+        num = -num;
+    }
+    while (num > 0) { // Convierte el número a caracteres
+        buffer[i++] = (num % 10) + '0';
+        num /= 10;
+    }
+    // Imprime el número en el orden correcto
+    for (int j = i - 1; j >= 0; j--) {
+        printStringColor(buffer+j,1,c1,c2);
+    }
+}
+
 void drawRect(uint64_t x,uint64_t y,uint64_t x2,uint64_t y2,const ColorT* colorToPaint){
     sys_drawRectangle(x,y,x2,y2,colorToPaint);
 }
@@ -189,12 +209,10 @@ void getHeight(uint64_t* h){
 }
 
 void reduceSize(){
-    clearAll();
     sys_reduceSize();
 }
 
 void increaseSize(){
-    clearAll();
     sys_increaseSize();
 }
 
@@ -213,4 +231,13 @@ void setCursorY(uint64_t y){
     sys_cursorSetterY(y);
 }
 
+void moveCursor(uint64_t x,uint64_t y){
+    setCursorY(y);
+    setCursorX(x);
+}
 
+int getPixelSize(){
+    uint64_t size;
+    sys_pixelSize(&size);
+    return size;
+}

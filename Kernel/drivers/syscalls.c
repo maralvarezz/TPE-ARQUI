@@ -1,5 +1,4 @@
 #include "../include/syscalls.h"
-#include "../include/keyboard.h"
 
 #define READ 0
 #define WRITE 1
@@ -18,16 +17,11 @@
 #define INCREASESIZE 14
 #define CURSORSETTERX 15
 #define CURSORSETTERY 16
+#define PIXELSIZE 17
 
-
-
-//extern int getSeconds();
-//extern int getMinutes();
-//extern int getHours();
 extern void sound(int freq);
 extern void stop_sound();
-extern uint8_t registersFlag;
-extern uint64_t registros[17];
+extern uint64_t registros[18];
 
 uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax) {
 	switch (rax) {
@@ -71,6 +65,8 @@ uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint6
             return sys_cursorSetterX(rdi);
         case CURSORSETTERY:
             return sys_cursorSetterY(rdi);
+        case PIXELSIZE:
+            return sys_pixelSize((uint64_t *) rdi);
         default:
             return 0;
 	}
@@ -107,23 +103,20 @@ uint64_t sys_cursorSetterY(uint64_t y){
     return 1;
 }
 
-
-
 uint64_t sys_clear(){
     driver_clear();
     return 1;
 }
 
-uint64_t sys_registers(uint64_t vec[17],uint64_t * flag){
+uint64_t sys_registers(uint64_t vec[18],uint64_t * flag){
     *flag=getCtrlFlag();
     if(*flag){
-        for(int i = 0; i < 17; i++){
+        for(int i = 0; i < 18; i++){
             vec[i] = registros[i];
         }
     }
     return 1;
 }
-
 
 uint64_t sys_seconds(uint64_t * flag){
     *flag=getSeconds();
@@ -175,5 +168,10 @@ uint64_t sys_reduceSize(){
 
 uint64_t sys_increaseSize(){
     driver_increaseSize();
+    return 1;
+}
+
+uint64_t sys_pixelSize(uint64_t * resp){
+    *resp = driver_getPixelSize();
     return 1;
 }

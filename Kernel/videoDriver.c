@@ -9,9 +9,6 @@ uint64_t flagCursor=1;
 uint16_t cursorX = 0;
 uint16_t cursorY = 0;
 
-
-
-
 struct vbe_mode_info_structure {
 	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
 	uint8_t window_a;			// deprecated
@@ -280,6 +277,10 @@ uint64_t driver_reduceSize(){
 
 static void driver_print(char * buffer, uint64_t count){
     driver_print_color(buffer,count,WHITE,BLACK);
+}
+
+uint64_t driver_getPixelSize(){
+	return escalaPixel;
 }
 
 

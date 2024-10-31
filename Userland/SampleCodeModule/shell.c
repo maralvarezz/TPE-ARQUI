@@ -20,7 +20,6 @@ char USER[USER_MAX] = "guest";
 //char commandHist[COMMAND_MAX][BUFFER] = {0}
 
 
-
 //Menu de comandos disponibles
 void command_help(){
     printString("\nLista de comandos disponibles:\n", 32);
@@ -130,10 +129,12 @@ void command_exit(){
 }
 
 void command_reducesize(){
+    clearAll();
     reduceSize();
 }
 
 void command_increasesize(){
+    clearAll();
     increaseSize();
 }
 
@@ -141,7 +142,6 @@ void command_increasesize(){
 void entry(){
     if(first){
         first = 0;
-        //playNota(150,10);
         printString("Bienvenidos al SO del Grupo 2 :)", 32);
         //scanf("Ingrese su nombre de usuario:\n");
         command_modifyuser();

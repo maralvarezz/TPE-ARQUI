@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include "libraryC.h"
 #include "time.h"
+#include "../include/keyboard.h"
 
 
 uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax);
@@ -18,7 +19,7 @@ uint64_t sys_seconds(uint64_t * rdi);
 uint64_t sys_minutes(uint64_t * rdi);
 uint64_t sys_hours(uint64_t * rdi);
 uint64_t sys_cursor();
-uint64_t sys_registers(uint64_t vec[17], uint64_t * rsi);
+uint64_t sys_registers(uint64_t vec[18], uint64_t * rsi);
 uint64_t sys_drawRect(uint64_t rdi,uint64_t rsi ,uint64_t rdx , uint64_t r10 ,ColorT r8 );
 uint64_t sys_width(uint64_t* rdi);
 uint64_t sys_height(uint64_t* rdi);
@@ -26,5 +27,6 @@ uint64_t sys_increaseSize();
 uint64_t sys_reduceSize();
 uint64_t sys_cursorSetterX(uint64_t rdi);
 uint64_t sys_cursorSetterY(uint64_t rdi);
+uint64_t sys_pixelSize(uint64_t* rdi);
 
 #endif

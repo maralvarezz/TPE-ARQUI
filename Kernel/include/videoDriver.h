@@ -22,5 +22,6 @@ uint64_t driver_reduceSize();
 uint64_t driver_increaseSize();
 void driver_setCursorX(uint64_t x);
 void driver_setCursorY(uint64_t y);
+uint64_t driver_getPixelSize();
 
 #endif

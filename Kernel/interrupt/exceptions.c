@@ -1,5 +1,4 @@
-#include "../include/exceptions.h"
-
+#include <exceptions.h>
 
 #define ZERO_EXCEPTION_ID 0
 #define OPCODE_EXCEPTION_ID 6
@@ -8,19 +7,16 @@
 static void zero_division();
 static void opcode_exception();
 
-
 extern const uint64_t exceptionRegs[REGISTERS];
 static char * regs[REGISTERS] = {
 "RAX","RBX","RCX","RDX","RSI","RDI","RBP","R8","R9","R10","R11","R12","R13","R14","R15", "RSP","RIP", "RFLAGS"
 };
-
 
 void exceptionDispatcher(int exception) {
 	if (exception == ZERO_EXCEPTION_ID)
 		zero_division();
 	else if(exception == OPCODE_EXCEPTION_ID)
 		opcode_exception();
-	//((EntryPoint)sampleCodeModuleAddress)();
 }
 
 void print_registers() {

@@ -96,7 +96,6 @@ SECTION .text
 	iretq
 %endmacro
 
-
 %macro irqHandlerMaster 1
 	pushState
 	mov rdi, %1 ; pasaje de parametro
@@ -134,40 +133,41 @@ interrupcion_teclado:
 	popState
 	iretq
 
-
 guardar_registros:
 	pushState
-    mov [registros+2*8], rbx
-    mov [registros+3*8], rcx
-    mov [registros+4*8], rdx
-    mov [registros+5*8], rsi
-    mov [registros+6*8], rdi
-    mov [registros+7*8], rbp
-    mov [registros+9*8], r8
-    mov [registros+10*8], r9
-    mov [registros+11*8], r10
-    mov [registros+12*8], r11
-    mov [registros+13*8], r12
-    mov [registros+14*8], r13
-    mov [registros+15*8], r14
-    mov [registros+16*8], r15
+   	mov [registros+8*1],rbx
+	mov [registros+8*2],rcx
+	mov [registros+8*3],rdx
+	mov [registros+8*4],rsi
+	mov [registros+8*5],rdi
+	mov [registros+8*6],rbp
+	mov [registros+8*7], r8
+	mov [registros+8*8], r9
+	mov [registros+8*9], r10
+	mov [registros+8*10], r11
+	mov [registros+8*11], r12
+	mov [registros+8*12], r13
+	mov [registros+8*13], r14
+	mov [registros+8*14], r15
 	mov rax, rsp
-    add rax, 160
-    mov [registros+8*8], rax
-    mov rax, [rsp+15*8]
-    mov [registros], rax
-    mov rax, [rsp+14*8]
-    mov [registros+1*8], rax
+	add rax, 160;volvemos a antes de pushear los registros
+	mov [registros + 8*15], rax  ;RSP
+	mov rax, [rsp+15*8]
+	mov [registros + 8*16], rax ;RIP
+	mov rax, [rsp + 14*8]	;RAX
+	mov [registros], rax
+	mov rax, [rsp+15*9]
+	mov [registros + 8*17], rax ;RFLAGS
 	popState
 	ret
 
 _hlt:
 	sti ;permite que se reciban interrupciones mientras el procesador esta en hlt
-	hlt 
+	hlt ;detiene la CPU hasta que se produzcauna interrupción
 	ret
 
 _cli:
-	cli
+	cli ;limpia la bandera de interrupciones
 	ret
 
 _sti:
@@ -192,7 +192,6 @@ syscallHandler:
 	popState
 	iretq
 
-
 ;Zero Division Exception
 exception_zero_division:
     backupRegs 0	
@@ -207,6 +206,5 @@ haltcpu:
 	ret
 
 SECTION .bss
-	ctrlFlag resb 1 ;variable que se usa para saber si se presiono shift
     exceptionRegs resq 18
 	registros resq 18

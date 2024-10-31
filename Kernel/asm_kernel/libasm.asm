@@ -1,14 +1,16 @@
 GLOBAL cpuVendor
-global getKey
-global hlt_aux
-global sound
-global stop_sound
-global getHours
-global getMinutes
-global getSeconds
+GLOBAL getKey
+GLOBAL hlt_aux
+GLOBAL sound
+GLOBAL stop_sound
+GLOBAL getHours
+GLOBAL getMinutes
+GLOBAL getSeconds
 
 section .text
 
+;obtiene la cadena de identificación del 
+;fabricante de la CPU y lo almacena en el buffer apuntado por rdi
 cpuVendor:
 	push rbp
 	mov rbp, rsp
@@ -32,7 +34,6 @@ getHours:
     in al, 71h
     or al, 4
     out 71h, al
-
     mov al, 0x04
     out 70h, al
     in al, 71h
@@ -65,6 +66,7 @@ getSeconds:
     sti
     ret
 
+;función para obtener la tecla presionada
 getKey:
         push rbp
         mov rbp, rsp

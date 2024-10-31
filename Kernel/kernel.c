@@ -60,7 +60,7 @@ int main()
 		*/
 	
 		while(1){
-			_hlt();
+			//_hlt();
 			//c = getChar();
 		}
 		

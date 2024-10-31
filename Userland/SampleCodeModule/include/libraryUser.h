@@ -37,6 +37,7 @@ void putChar(char c);
 void printString(char * string, int length);
 void printStringColor(char * string, int length,const ColorT* colorFte,const ColorT* colorFdo);
 void printInt(int num);
+void printIntColor(int num, ColorT* c1, ColorT* c2);
 char getChar();
 void sleep(uint64_t time);
 int strlen(char * str);
@@ -60,5 +61,7 @@ char peekChar();
 char toLower(char c);
 void setCursorX(uint64_t x);
 void setCursorY(uint64_t y);
+void moveCursor(uint64_t x,uint64_t y);
+int getPixelSize();
 
 #endif // LIBRARY_USER_H

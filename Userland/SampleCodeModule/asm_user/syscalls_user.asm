@@ -16,6 +16,7 @@ global sys_reduceSize
 global sys_increaseSize
 global sys_cursorSetterX
 global sys_cursorSetterY
+global sys_pixelSize
 
 section .text
 
@@ -105,5 +106,10 @@ sys_cursorSetterX:
 
 sys_cursorSetterY:
     mov rax, 0x10
+    int 80h
+    ret
+
+sys_pixelSize:
+    mov rax, 0x11
     int 80h
     ret

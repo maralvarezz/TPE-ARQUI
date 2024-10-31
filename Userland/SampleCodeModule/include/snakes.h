@@ -14,7 +14,7 @@ typedef struct player{
     int points;
     int vagones[MAX_VAGONES][2];
     const ColorT* pColor;
-    char mapa[WIDTH/SQUARESIZE][HEIGHT/SQUARESIZE];  //mapea donde se esta moviendo el jugador
+    char mapa[WIDTH/SQUARESIZE][(HEIGHT/SQUARESIZE)];  //mapea donde se esta moviendo el jugador
 }player;
 
 typedef struct player * TPlayer;
@@ -38,7 +38,6 @@ void updateMap(TPlayer p);
 void addMap(TPlayer p);
 
 void setDirection(TPlayer p, int dir);
-
 
 void setPassenger();
 

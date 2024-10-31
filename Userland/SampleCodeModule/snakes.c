@@ -1,14 +1,17 @@
 
 #include "./include/snakes.h"
 //#define SQUARESIZE 32
-//#define WIDTH 1024
+//#define WIDTH 1024 WIDTH HEIGHT
 //#define HEIGHT 768
 
 
-
+static int prevScale;
 void drawChart();
 int eatItSelf(TPlayer p);
-
+static const uint16_t cursorScoreX1=0;
+static const uint16_t cursorScoreY1=0;
+static const uint16_t cursorScoreX2=25*SQUARESIZE;
+static const uint16_t cursorScoreY2=0;
 static const ColorT * color1 = &DARK_GREEN;
 static const ColorT * color2 = &GREEN;
 //variable global para los jugadores
@@ -40,8 +43,38 @@ player player1,player2;
 TPlayer p1,p2;
 
 
+void setScale(int n){
+    if(n>0 && n<5){
+        if(getPixelSize()<n){
+        while(getPixelSize()<n){
+               increaseSize();
+        }
+        }else{
+            while(getPixelSize()>n){
+               reduceSize();
+        }
+        }
+    }
+}
+
+void printWinner(int n){
+    clearAll();
+    setScale(3);
+    moveCursor((WIDTH/2)-5*SQUARESIZE,HEIGHT/2 -SQUARESIZE);
+    if(n==0){
+        printString("YOU LOSE",8);
+        return;
+    }
+    printString("PLAYER ",7);
+    printInt(n);
+    printString(" WINS",5);
+    sleep(75);
+}
+
+
 void startGame(char jug){
     drawChart();
+    prevScale=getPixelSize();
     p1= &player1;
     p2= &player2;
     if(jug == '1'){
@@ -53,8 +86,8 @@ void startGame(char jug){
         playGame2();
     }
     clearAll();
+    setScale(prevScale);
 }
-
 
 void drawChart(){
     uint64_t w; 
@@ -62,11 +95,15 @@ void drawChart(){
     getWidth(&w);
     getHeight(&h);
     for (int row = 0; row <h/SQUARESIZE; row++) {
-        for (int col = 0; col < w/SQUARESIZE; col++) {
-            int x = col * SQUARESIZE;
-            int y = row * SQUARESIZE;
-            const ColorT *color = (row + col) % 2 == 0 ? color1 : color2;
-            drawRect(x, y, SQUARESIZE, SQUARESIZE, color);
+        if(row!=0){
+            for (int col = 0; col < w/SQUARESIZE; col++) {
+                int x = col * SQUARESIZE;
+                int y = row * SQUARESIZE;
+                const ColorT *color = (row + col) % 2 == 0 ? color1 : color2;
+                drawRect(x, y, SQUARESIZE, SQUARESIZE, color);
+            }
+        }else{
+            drawRect(0,0,w,SQUARESIZE,&WHITE);
         }
     }
 }
@@ -74,7 +111,7 @@ void drawChart(){
 void initializePlayer(TPlayer p){
     if(p!=0){
         p->posX = 0;
-        p->posY = 0;
+        p->posY = 1;
         p->dirX = 1;
         p->dirY = 0;
         p->points = 0;
@@ -87,8 +124,8 @@ void initializePlayer(TPlayer p){
 
 void initializePlayers(TPlayer p1, TPlayer p2){
     initializePlayer(p1);
-    p2->posX = WIDTH/SQUARESIZE - 1;
-    p2->posY = HEIGHT/SQUARESIZE - 1;
+    p2->posX = (WIDTH/SQUARESIZE) - 1;
+    p2->posY = (HEIGHT/SQUARESIZE) - 1;
     p2->dirX = -1;
     p2->dirY = 0;
     p2->points = 0;
@@ -99,11 +136,22 @@ void initializePlayers(TPlayer p1, TPlayer p2){
 }
 
 
+void printScore(TPlayer p){
+    printStringColor("SCORE:",6,&BLACK,&WHITE);
+    if(p->points<=9){
+        printIntColor(0,&BLACK,&WHITE);    
+    }
+    printIntColor(p->points,&BLACK,&WHITE);
+}
+
 void playGame1(){
     initializePlayer(p1);
     setPassenger();
+    setScale(2);
     char c;
     while(p1->l){
+        moveCursor(cursorScoreX1,cursorScoreY1);
+        printScore(p1);
         sleep(3);
         if((c = peekChar()) != 0){
             c= toLower(c);
@@ -124,16 +172,20 @@ void playGame1(){
         }
         movePlayer(p1);
     }
+    
 }
+
 
 void playGame2(){
     initializePlayers(p1, p2);
-    if(p1==p2){
-        printStringColor("LOS 2 SON LO MISMO",18,&RED, &BLACK );
-    }
     setPassenger();
+    setScale(2);
     char c;
     while(p1->l && p2->l){
+        moveCursor(cursorScoreX1,cursorScoreY1);
+        printScore(p1);
+        moveCursor(cursorScoreX2,cursorScoreY2);
+        printScore(p2);
         sleep(3);
         if((c = peekChar()) != 0){
             c= toLower(c);
@@ -168,35 +220,33 @@ void playGame2(){
         movePlayer(p2);
     }
     if(!p1->l && !p2->l ){
-        printString("Pierden ambos jugadores\n",24);
+        printWinner(0);
     }
     else if(p2->l){
-        printString("Gano el jugador 2\n",18);
+        printWinner(2);
     }else{
-        printString("Gano el jugador 1\n",18);
+        printWinner(1);
     }
-    sleep(20);
 }
 
 //devulve 0 si no hay colision
 int collision(TPlayer p){
     if(p->posX + p->dirX >= WIDTH/SQUARESIZE || p->posX + p->dirX  < 0 
-    || p->posY + p->dirY >= HEIGHT/SQUARESIZE || p->posY + p->dirY < 0
+    || p->posY + p->dirY >= (HEIGHT/SQUARESIZE) || p->posY + p->dirY < 1
     || eatItSelf(p)){
+        p->l=0;
         return 1;
     }
-    else if(cantjug == 2 && crash(p)){
-        return 1;
+    if(cantjug == 2){
+        return crash(p);
     }
     return 0;
 }
 
 int eatItSelf(TPlayer p){
     for(int i = p->points; i>0;i--){
-        if(p->vagones[i][0] == p->posX){
-            if(p->vagones[i][1] == p->posY){
-                return 1;
-            }
+        if(p->vagones[i][0] == p->posX && p->vagones[i][1] == p->posY ){
+            return 1;
         }
     } 
     return 0;
@@ -204,13 +254,13 @@ int eatItSelf(TPlayer p){
 
 //devuelve 1 si chocan
 int crash(TPlayer p){
-    if(p1->posX==p2->posX && p1->posY==p2->posY){
+    if(p1->posX == p2->posX && p1->posY==p2->posY){
         p1->l = 0;
         p2->l = 0;
         return 1;
     }
     for(int i = 0; i < (WIDTH/SQUARESIZE); i++){
-        for(int j = 0; j < (HEIGHT/SQUARESIZE); j++){
+        for(int j = 0; j < (HEIGHT/SQUARESIZE) - 1; j++){
             if(p1->mapa[i][j] == 1 && p2->mapa[i][j] == 1){
                 p->l = 0;
                 return 1;
@@ -222,7 +272,7 @@ int crash(TPlayer p){
 
 int checkPassenger(TPlayer p){
     if(p->posX == passengerX && p->posY == passengerY){
-        playNota(150,10);
+        //playNota(150,10);
         setPassenger();
         return 1;
     }
@@ -230,14 +280,10 @@ int checkPassenger(TPlayer p){
 }
 
 void movePlayer(TPlayer p){
-    if(collision(p)){
-        p->l = 0;
-    }
-    else{
+    if(!collision(p)){
         if(checkPassenger(p)){
             addMap(p);
-        }
-        else{
+        }else{
             updateMap(p);
         }
     }
@@ -292,7 +338,9 @@ static int random(){
 
 void setPassenger(){
     passengerX = random() % (WIDTH/SQUARESIZE);
-    passengerY = random() % (HEIGHT/SQUARESIZE);
+    do{
+        passengerY = random() % (HEIGHT/SQUARESIZE);
+    }while(passengerY<1);
     drawRect(passengerX*SQUARESIZE,passengerY*SQUARESIZE,SQUARESIZE,SQUARESIZE,&ORANGE);
 }
 
