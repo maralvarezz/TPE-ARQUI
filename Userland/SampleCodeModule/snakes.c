@@ -4,7 +4,7 @@
 //#define WIDTH 1024 WIDTH HEIGHT
 //#define HEIGHT 768
 
-
+static char randFlag = 0;
 static int prevScale;
 void drawChart();
 int eatItSelf(TPlayer p);
@@ -84,7 +84,7 @@ void printWinner(int n){
 
 void printEndGame1(){
     setScale(3);
-    moveCursor((WIDTH/2)-5*SQUARESIZE,HEIGHT/2 -SQUARESIZE);
+    moveCursor((WIDTH/2)-5*SQUARESIZE,HEIGHT/2 -SQUARESIZE); 
     printString("YOU LOSE!",9);
     sleep(30);
     clearAll();
@@ -362,7 +362,9 @@ void setDirection(TPlayer p, int dir){
 
 
 static int random(int n){ // n max numero 
-    return (int)((((((gettingSeconds()+gettingMinutes())*997))%60)/59.0)*n); 
+    int ret = randFlag? (int)(((((gettingSeconds()*997)+257)%557)/556.0)*n): (int)(((((gettingSeconds()*929)+433)%653)/652.0)*n);
+    randFlag = (randFlag+1)%2;
+    return ret; 
 }
 
 void setPassenger(){
