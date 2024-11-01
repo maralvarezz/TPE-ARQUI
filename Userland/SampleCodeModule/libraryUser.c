@@ -175,7 +175,7 @@ void printInt(int num) {
     }
 }
 
-void printIntColor(int num, ColorT* c1, ColorT* c2){
+void printIntColor(int num,const ColorT* c1,const ColorT* c2){
     char buffer[12]; // Suficiente para almacenar int de 32 bits con signo
     int i = 0;
     if (num == 0) {

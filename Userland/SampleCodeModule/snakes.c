@@ -16,7 +16,6 @@ static const ColorT * color1 = &DARK_GREEN;
 static const ColorT * color2 = &GREEN;
 //variable global para los jugadores
 char cantjug = 0;
-
 int passengerX, passengerY;
 
 int direc[4][2] = {
@@ -39,7 +38,7 @@ typedef struct player{
 
 typedef struct player * TPlayer;
 */
-player player1,player2;
+
 TPlayer p1,p2;
 
 
@@ -57,22 +56,51 @@ void setScale(int n){
     }
 }
 
+void printScore(TPlayer p){
+    printStringColor("SCORE:",6,&BLACK,&WHITE);
+    if(p->points<=9){
+        printIntColor(0,&BLACK,&WHITE);    
+    }
+    printIntColor(p->points,&BLACK,&WHITE);
+}
+
+
 void printWinner(int n){
     clearAll();
     setScale(3);
-    moveCursor((WIDTH/2)-5*SQUARESIZE,HEIGHT/2 -SQUARESIZE);
+    
     if(n==0){
-        printString("YOU LOSE",8);
+        moveCursor((WIDTH/2)-8*SQUARESIZE,HEIGHT/2 -SQUARESIZE);
+        printString("BOTH LOSE!",10);
         return;
+    }else{
+        moveCursor((WIDTH/2)-5*SQUARESIZE,HEIGHT/2 -SQUARESIZE);
+        printString("PLAYER ",7);
+        printInt(n);
+        printString(" WINS!",6);
     }
-    printString("PLAYER ",7);
-    printInt(n);
-    printString(" WINS",5);
-    sleep(75);
+    sleep(55);
+}
+
+void printEndGame1(){
+    setScale(3);
+    moveCursor((WIDTH/2)-5*SQUARESIZE,HEIGHT/2 -SQUARESIZE);
+    moveCursor((WIDTH/2)-8*SQUARESIZE,HEIGHT/2 -SQUARESIZE);
+    printString("YOU LOSE!",9);
+    sleep(30);
+    clearAll(9);
+    moveCursor((WIDTH/2)-7*SQUARESIZE,HEIGHT/2 -SQUARESIZE);
+    printStringColor("YOUR SCORE: ",12,&WHITE,&BLACK);
+    if(p1->points<=9){
+        printIntColor(0,&WHITE,&BLACK);    
+    }
+    printIntColor(p1->points,&WHITE,&BLACK);
+    sleep(30);
 }
 
 
 void startGame(char jug){
+    player player1={0},player2={0};
     drawChart();
     prevScale=getPixelSize();
     p1= &player1;
@@ -136,13 +164,6 @@ void initializePlayers(TPlayer p1, TPlayer p2){
 }
 
 
-void printScore(TPlayer p){
-    printStringColor("SCORE:",6,&BLACK,&WHITE);
-    if(p->points<=9){
-        printIntColor(0,&BLACK,&WHITE);    
-    }
-    printIntColor(p->points,&BLACK,&WHITE);
-}
 
 void playGame1(){
     initializePlayer(p1);
@@ -172,7 +193,7 @@ void playGame1(){
         }
         movePlayer(p1);
     }
-    
+    printEndGame1();
 }
 
 
@@ -224,9 +245,11 @@ void playGame2(){
     }
     else if(p2->l){
         printWinner(2);
-    }else{
+    }else if((p1->l)){
         printWinner(1);
     }
+
+    sleep(70);
 }
 
 //devulve 0 si no hay colision
@@ -261,10 +284,16 @@ int crash(TPlayer p){
     }
     for(int i = 0; i < (WIDTH/SQUARESIZE); i++){
         for(int j = 0; j < (HEIGHT/SQUARESIZE) - 1; j++){
-            if(p1->mapa[i][j] == 1 && p2->mapa[i][j] == 1){
-                p->l = 0;
+            if(p1->posX==i && p1->posY==j && p2->mapa[i][j]==1){
+                p1->l =0;
+                return 1;
+            }else if(p2->posX==i && p2->posY==j && p1->mapa[i][j]==1){
+                p2->l =0;
                 return 1;
             }
+            /*if(p1->mapa[i][j] == 1 && p2->mapa[i][j] == 1){
+                
+            }*/
         }
     }
     return 0;

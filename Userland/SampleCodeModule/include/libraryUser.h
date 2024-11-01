@@ -37,7 +37,7 @@ void putChar(char c);
 void printString(char * string, int length);
 void printStringColor(char * string, int length,const ColorT* colorFte,const ColorT* colorFdo);
 void printInt(int num);
-void printIntColor(int num, ColorT* c1, ColorT* c2);
+void printIntColor(int num,const ColorT* c1,const ColorT* c2);
 char getChar();
 void sleep(uint64_t time);
 int strlen(char * str);
