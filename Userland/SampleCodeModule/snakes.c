@@ -85,10 +85,9 @@ void printWinner(int n){
 void printEndGame1(){
     setScale(3);
     moveCursor((WIDTH/2)-5*SQUARESIZE,HEIGHT/2 -SQUARESIZE);
-    moveCursor((WIDTH/2)-8*SQUARESIZE,HEIGHT/2 -SQUARESIZE);
     printString("YOU LOSE!",9);
     sleep(30);
-    clearAll(9);
+    clearAll();
     moveCursor((WIDTH/2)-7*SQUARESIZE,HEIGHT/2 -SQUARESIZE);
     printStringColor("YOUR SCORE: ",12,&WHITE,&BLACK);
     if(p1->points<=9){
@@ -193,6 +192,7 @@ void playGame1(){
         }
         movePlayer(p1);
     }
+    clearAll();
     printEndGame1();
 }
 
@@ -361,14 +361,15 @@ void setDirection(TPlayer p, int dir){
 }
 
 
-static int random(){
-    return gettingSeconds();
+static int random(int n){ // n max numero 
+    return (int)((((((gettingSeconds()+gettingMinutes())*997))%60)/59.0)*n); 
 }
 
 void setPassenger(){
-    passengerX = random() % (WIDTH/SQUARESIZE);
+    
+    passengerX =random(WIDTH/SQUARESIZE);
     do{
-        passengerY = random() % (HEIGHT/SQUARESIZE);
+        passengerY =random(HEIGHT/SQUARESIZE);
     }while(passengerY<1);
     drawRect(passengerX*SQUARESIZE,passengerY*SQUARESIZE,SQUARESIZE,SQUARESIZE,&ORANGE);
 }
