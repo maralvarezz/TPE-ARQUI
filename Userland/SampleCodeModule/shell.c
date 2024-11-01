@@ -106,7 +106,7 @@ void command_invalidopcode(){
 
 void command_snakes(){
     putChar('\n');
-    printString("Bienvenido a Snakes\n", 20);
+    printString("Bienvenido a SNAKES, para moverte usa W-A-S-D (Juador 1) o I-J-K-L (Jugador 2)\n", 79);
     printString("Ingrese el numero de jugadores (1-2):",37);
     char jug;
     while((jug = getChar()) != '1' && jug != '2'){
