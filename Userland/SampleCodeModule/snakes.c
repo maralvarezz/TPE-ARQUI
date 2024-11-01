@@ -10,7 +10,7 @@ void drawChart();
 int eatItSelf(TPlayer p);
 static const uint16_t cursorScoreX1=0;
 static const uint16_t cursorScoreY1=0;
-static const uint16_t cursorScoreX2=25*SQUARESIZE;
+static const uint16_t cursorScoreX2=28*SQUARESIZE - 10;
 static const uint16_t cursorScoreY2=0;
 static const ColorT * color1 = &DARK_GREEN;
 static const ColorT * color2 = &GREEN;
@@ -70,7 +70,7 @@ void printWinner(int n){
     setScale(3);
     
     if(n==0){
-        moveCursor((WIDTH/2)-8*SQUARESIZE,HEIGHT/2 -SQUARESIZE);
+        moveCursor((WIDTH/2)-5*SQUARESIZE,HEIGHT/2 -SQUARESIZE);
         printString("BOTH LOSE!",10);
         return;
     }else{
@@ -137,8 +137,8 @@ void drawChart(){
 
 void initializePlayer(TPlayer p){
     if(p!=0){
-        p->posX = 0;
-        p->posY = 1;
+        p->posX = 4;
+        p->posY = (HEIGHT/SQUARESIZE)/2;
         p->dirX = 1;
         p->dirY = 0;
         p->points = 0;
@@ -151,8 +151,9 @@ void initializePlayer(TPlayer p){
 
 void initializePlayers(TPlayer p1, TPlayer p2){
     initializePlayer(p1);
-    p2->posX = (WIDTH/SQUARESIZE) - 1;
-    p2->posY = (HEIGHT/SQUARESIZE) - 1;
+    p1->posY= (HEIGHT/SQUARESIZE)/4;
+    p2->posX = (WIDTH/SQUARESIZE) - 5;
+    p2->posY = ((HEIGHT/SQUARESIZE)/4)*3;
     p2->dirX = -1;
     p2->dirY = 0;
     p2->points = 0;
