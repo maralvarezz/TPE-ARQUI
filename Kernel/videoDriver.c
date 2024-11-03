@@ -260,7 +260,7 @@ uint64_t driver_increaseSize(){
 		escalaPixel+=1;
 	}
 	else{
-		driver_print("No se puede aumentar mas el tamaño de la letra\n",47);
+		driver_print("No es posible aumentar mas\n",26);
 	}
 	return 1;
 }
@@ -270,7 +270,7 @@ uint64_t driver_reduceSize(){
 		escalaPixel-=1;
 	}
 	else{
-		driver_print("No se puede reducir mas el tamaño de la letra\n", 47);
+		driver_print("No es posible reducir mas",25);
 	}
 	return 1;
 }
