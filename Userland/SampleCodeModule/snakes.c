@@ -347,6 +347,7 @@ void updateMap(TPlayer p){
 
 void addMap(TPlayer p){
     p->points++;
+    playNota(330,3);
     p->mapa[p->posX][p->posY] = 1;
     drawRect(p->posX*SQUARESIZE,p->posY*SQUARESIZE,SQUARESIZE,SQUARESIZE,p->pColor);
 }

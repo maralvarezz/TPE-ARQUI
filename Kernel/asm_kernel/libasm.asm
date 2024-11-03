@@ -89,8 +89,8 @@ sound:
     mov al, 0xB6 ;configura el canal 2 para que genere un sonido
     out 0x43, al ;Envía el comando al puerto 0x43(puerto del PIT). Esto le indica al PIT que queremos cambiar la frecuencia del canal 2
                  ;el cual está conectado al speaker
-    mov rax, 1193180 ;frecuencia de 1193180 Hz la cual es la frecuencia del reloj del PIT
     mov rdx, 0 ;lo dejo en 0 así no divide basura 
+    mov rax, 1193180 ;frecuencia de 1193180 Hz la cual es la frecuencia del reloj del PIT
     div rdi ;dividimos la frecuencia del reloj por el valor que se encuentra en rdi que va a ser la frecuencia del sonido querido
     out 0x42, al ;configuramos el PIT enviandole la parte alta y la baja de la frecuencia al puerto 0x42
     mov al, ah
