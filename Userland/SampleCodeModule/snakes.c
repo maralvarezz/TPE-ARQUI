@@ -369,14 +369,30 @@ static int random(int n){ // n max numero
     return ret; 
 }
 
+
+void drawPassenger(){
+    int tam = SQUARESIZE/8;
+    drawRect((passengerX*SQUARESIZE)+11,passengerY*SQUARESIZE,SQUARESIZE-22,tam,&ORANGE);
+    drawRect((passengerX*SQUARESIZE)+7,(passengerY*SQUARESIZE)+tam,SQUARESIZE-14,tam,&ORANGE);
+    drawRect((passengerX*SQUARESIZE)+3,(passengerY*SQUARESIZE)+2*tam,SQUARESIZE-6,tam,&ORANGE);
+    drawRect((passengerX*SQUARESIZE),(passengerY*SQUARESIZE)+3*tam,SQUARESIZE,2*tam,&ORANGE);
+    drawRect((passengerX*SQUARESIZE)+3,(passengerY*SQUARESIZE)+5*tam,SQUARESIZE-6,tam,&ORANGE);
+    drawRect((passengerX*SQUARESIZE)+6,(passengerY*SQUARESIZE)+6*tam,SQUARESIZE-12,tam,&ORANGE);
+    drawRect((passengerX*SQUARESIZE)+11,(passengerY*SQUARESIZE)+7*tam,SQUARESIZE-22,tam,&ORANGE);
+    
+    
+    //drawRect(passengerX*SQUARESIZE,passengerY*SQUARESIZE,SQUARESIZE,SQUARESIZE,&ORANGE);
+}
+
 void setPassenger(){
     
     passengerX =random(WIDTH/SQUARESIZE);
     do{
         passengerY =random(HEIGHT/SQUARESIZE);
     }while(passengerY<1);
-    drawRect(passengerX*SQUARESIZE,passengerY*SQUARESIZE,SQUARESIZE,SQUARESIZE,&ORANGE);
+    drawPassenger();
 }
+
 
 
 
