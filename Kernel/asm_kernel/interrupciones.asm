@@ -134,32 +134,30 @@ interrupcion_teclado:
 
 guardar_registros:
 	pushState
-   	mov [registros+8*1],rbx
-	mov [registros+8*2],rcx
-	mov [registros+8*3],rdx
-	mov [registros+8*4],rsi
-	mov [registros+8*5],rdi
-	mov [registros+8*6],rbp
-	mov [registros+8*7], r8
-	mov [registros+8*8], r9
-	mov [registros+8*9], r10
-	mov [registros+8*10], r11
-	mov [registros+8*11], r12
-	mov [registros+8*12], r13
-	mov [registros+8*13], r14
-	mov [registros+8*14], r15
-	mov rax, rsp
-	add rax, 160;volvemos a antes de pushear los registros
-	mov [registros + 8*15], rax  ;RSP
-	mov rax, [rsp+15*8]
-	mov [registros + 8*16], rax ;RIP
-	mov rax, [rsp + 14*8]	;RAX
-	mov [registros], rax
-	mov rax, [rsp+15*9]
-	mov [registros + 8*17], rax ;RFLAGS
+ 	mov [registros + 0], rax
+    mov [registros + 8], rbx
+    mov [registros + 16], rcx
+    mov [registros + 24], rdx
+    mov [registros + 32], rsi
+    mov [registros + 40], rdi
+    mov [registros + 48], rbp
+    mov [registros + 56], r8
+    mov [registros + 64], r9
+    mov [registros + 72], r10
+    mov [registros + 80], r11
+    mov [registros + 88], r12
+    mov [registros + 96], r13
+    mov [registros + 104], r14
+    mov [registros + 112], r15
+    mov rax, rsp
+    add rax, 160 ;nos ponemos antes de que suceda el error 
+    mov [registros + 120], rax
+    mov rax, [rsp+120] ;Obtenemos el valor de RIP en el momento en el que sucede la excepción tomando el valor de la interrupción que se encuentra en la pila.
+	mov [registros+128], rax
+	mov rax, [rsp+128] ;Obtenemos el valor de RFLAGS también de esta manera, ya que son pusheadas cuando ocurre una interrupción
+	mov [registros+136], rax
 	popState
 	ret
-
 _hlt:
 	sti 
 	hlt 
