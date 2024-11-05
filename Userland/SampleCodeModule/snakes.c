@@ -1,13 +1,9 @@
 
 #include "./include/snakes.h"
-//#define SQUARESIZE 32
-//#define WIDTH 1024 WIDTH HEIGHT
-//#define HEIGHT 768
 
 static char randFlag = 0;
 static int prevScale;
-void drawChart();
-int eatItSelf(TPlayer p);
+
 static const uint16_t cursorScoreX1=0;
 static const uint16_t cursorScoreY1=0;
 static const uint16_t cursorScoreX2=28*SQUARESIZE - 10;
@@ -24,23 +20,8 @@ int direc[4][2] = {
     {1, 0}, //derecha
     {-1, 0} //izquierda
 };
-/*
-typedef struct player{
-    char l; //si esta vivo
-    int posX;
-    int posY;
-    int dirX;
-    int dirY;
-    int points;
-    //faltaria el color
-    char mapa[WIDTH][HEIGHT];  //mapea donde se esta moviendo el jugador
-}player;
-
-typedef struct player * TPlayer;
-*/
 
 TPlayer p1,p2;
-
 
 void setScale(int n){
     if(n>0 && n<5){
@@ -253,7 +234,6 @@ void playGame2(){
     sleep(70);
 }
 
-//devulve 0 si no hay colision
 int collision(TPlayer p){
     if(p->posX + p->dirX >= WIDTH/SQUARESIZE || p->posX + p->dirX  < 0 
     || p->posY + p->dirY >= (HEIGHT/SQUARESIZE) || p->posY + p->dirY < 1
@@ -276,7 +256,6 @@ int eatItSelf(TPlayer p){
     return 0;
 }
 
-//devuelve 1 si chocan
 int crash(TPlayer p){
     if(p1->posX == p2->posX && p1->posY==p2->posY){
         p1->l = 0;
@@ -292,9 +271,6 @@ int crash(TPlayer p){
                 p2->l =0;
                 return 1;
             }
-            /*if(p1->mapa[i][j] == 1 && p2->mapa[i][j] == 1){
-                
-            }*/
         }
     }
     return 0;
@@ -302,7 +278,7 @@ int crash(TPlayer p){
 
 int checkPassenger(TPlayer p){
     if(p->posX == passengerX && p->posY == passengerY){
-        //playNota(150,10);
+        playNota(150,10);
         setPassenger();
         return 1;
     }

@@ -16,9 +16,6 @@ char * commandList[] = {"-help", "-time", "-clear", "-modifyuser", "-registers",
 int USER_SIZE = 5;
 char USER[USER_MAX] = "guest";
 
-//voy guardando los comandos que se van haciendo para poder llamarlos con las flechas (ver si hacemos)
-//char commandHist[COMMAND_MAX][BUFFER] = {0}
-
 
 //Menu de comandos disponibles
 void command_help(){

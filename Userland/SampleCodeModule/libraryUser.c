@@ -17,11 +17,6 @@ void playNota(uint64_t freq, uint64_t time){
     sys_sound(freq, time);
 }
 
-void playMusic(NotaT * music, int duration){
-    for(int i = 0; i < duration; i++){
-        playNota(music[i].frec, music[i].time);
-    }
-}
 
 static void pasoHexa(uint64_t num1, char buffer[16]){
 	int i = 15;
@@ -79,7 +74,6 @@ char getChar(){
     char c;
     printCursor();
     sys_read(0,&c, 1); //mando 0 porque es la entrada estandar
-    //sleep(2); // no esta definido
     
     return c;
 }
