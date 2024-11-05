@@ -350,11 +350,20 @@ void drawPassenger(){
     drawRect((passengerX*SQUARESIZE)+11,(passengerY*SQUARESIZE)+7*tam,SQUARESIZE-22,tam,&ORANGE);
 }
 
+int validPassenger(){
+    if(cantjug==1){
+        return p1->mapa[passengerX][passengerY]==0;
+    }
+    return (p1->mapa[passengerX][passengerY]==0) && (p2->mapa[passengerX][passengerY]==0);
+}
+
 void setPassenger(){
-    passengerX =random(WIDTH/SQUARESIZE);
-    do{
-        passengerY =random(HEIGHT/SQUARESIZE);
-    }while(passengerY<1);
+    do {
+        passengerX =random(WIDTH/SQUARESIZE);
+        do{
+            passengerY =random(HEIGHT/SQUARESIZE);
+        }while(passengerY<1);
+    }while(!validPassenger());
     drawPassenger();
 }
 
