@@ -80,6 +80,7 @@ void command_modifyuser(){
         putChar('\n');
         printString("Bienvenido ", 11);
         printString(USER, USER_SIZE);
+        putChar('\n');
     }
 }
 
