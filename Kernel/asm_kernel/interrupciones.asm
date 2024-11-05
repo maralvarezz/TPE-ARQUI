@@ -65,7 +65,6 @@ SECTION .text
 
 %macro backupRegs 1
     pushState
-    ;guardamos los registros en el orden en el que quiero para luego mostrarlos en pantalla
     mov [exceptionRegs + 0], rax
     mov [exceptionRegs + 8], rbx
     mov [exceptionRegs + 16], rcx
@@ -100,7 +99,7 @@ SECTION .text
 	pushState
 	mov rdi, %1 ; pasaje de parametro
 	call irqDispatcher
-	;signal pic EOI (End of Interrupt)
+	;pic EOI (End of Interrupt)
 	mov al, 20h
 	out 20h, al
 	popState
@@ -162,19 +161,19 @@ guardar_registros:
 	ret
 
 _hlt:
-	sti ;permite que se reciban interrupciones mientras el procesador esta en hlt
-	hlt ;detiene la CPU hasta que se produzcauna interrupción
+	sti 
+	hlt 
 	ret
 
 _cli:
-	cli ;limpia la bandera de interrupciones
+	cli
 	ret
 
 _sti:
 	sti
 	ret
 
-;8254 Timer (Timer Tick)
+;Timer (Timer Tick)
 _irq00Handler:
 	irqHandlerMaster 0
 
@@ -192,11 +191,9 @@ syscallHandler:
 	popState
 	iretq
 
-;Zero Division Exception
 exception_zero_division:
     backupRegs 0	
 
-;Op Code Exception
 exception_op_code:
     backupRegs 6
 

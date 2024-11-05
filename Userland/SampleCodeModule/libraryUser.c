@@ -62,7 +62,7 @@ void printString(char * string, int length){
 }
 
 void printStringColor(char * string, int length, const ColorT* colorFte,const ColorT* colorFdo){
-    sys_write(1,string, length,colorFte,colorFdo); //mando 1 porque es la salida estandar
+    sys_write(1,string, length,colorFte,colorFdo);
 }
 
 void putChar(char c){
@@ -73,15 +73,14 @@ void putChar(char c){
 char getChar(){
     char c;
     printCursor();
-    sys_read(0,&c, 1); //mando 0 porque es la entrada estandar
+    sys_read(0,&c, 1);
     
     return c;
 }
 
-//es un getChar pero sin imprimir el cursor
 char peekChar(){
     char c;
-    sys_read(0,&c, 1); //mando 0 porque es la entrada estandar
+    sys_read(0,&c, 1);
     return c;
 }
 

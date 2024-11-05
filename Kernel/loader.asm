@@ -5,14 +5,14 @@ extern initializeKernelBinary
 extern getStackBase
 
 loader:
-	call initializeKernelBinary	; Set up the kernel binary, and get thet stack address
-	mov rsp, rax				; Set up the stack with the returned address
+	call initializeKernelBinary	; Configura el binario del kernel y obtiene la dirección del stack
+	mov rsp, rax				; Setea el stack con la dirección obtenida
 	call main
-load_main: ; This is the function that will be called after an exception
-	call getStackBase ; Get the stack base address
+load_main: ;Esta es la función que se llama después de llamar a una excepción
+	call getStackBase 
 	mov rsp,rax 
 	call main
 hang:
 	cli
-	hlt	; halt machine should kernel return
+	hlt	
 	jmp hang

@@ -1,33 +1,31 @@
 #include "./include/videoDriver.h"
 
-
 #define WIDTH 8
 #define HEIGHT 16
 
 uint64_t flagCursor=1;
-
 uint16_t cursorX = 0;
 uint16_t cursorY = 0;
 
 struct vbe_mode_info_structure {
-	uint16_t attributes;		// deprecated, only bit 7 should be of interest to you, and it indicates the mode supports a linear frame buffer.
-	uint8_t window_a;			// deprecated
-	uint8_t window_b;			// deprecated
-	uint16_t granularity;		// deprecated; used while calculating bank numbers
+	uint16_t attributes;		
+	uint8_t window_a;			
+	uint8_t window_b;			
+	uint16_t granularity;		
 	uint16_t window_size;
 	uint16_t segment_a;
 	uint16_t segment_b;
-	uint32_t win_func_ptr;		// deprecated; used to switch banks from protected mode without returning to real mode
-	uint16_t pitch;			// number of bytes per horizontal line
-	uint16_t width;			// width in pixels
-	uint16_t height;			// height in pixels
-	uint8_t w_char;			// unused...
-	uint8_t y_char;			// ...
+	uint32_t win_func_ptr;		
+	uint16_t pitch;			// numero de bits en orden horizontal
+	uint16_t width;			//bits de ancho
+	uint16_t height;			//bits de alto
+	uint8_t w_char;			
+	uint8_t y_char;			
 	uint8_t planes;
-	uint8_t bpp;			// bits per pixel in this mode
-	uint8_t banks;			// deprecated; total number of banks in this mode
+	uint8_t bpp;			//bits por pixel
+	uint8_t banks;			
 	uint8_t memory_model;
-	uint8_t bank_size;		// deprecated; size of a bank, almost always 64 KB but may be 16 KB...
+	uint8_t bank_size;		
 	uint8_t image_pages;
 	uint8_t reserved0;
  
@@ -41,9 +39,9 @@ struct vbe_mode_info_structure {
 	uint8_t reserved_position;
 	uint8_t direct_color_attributes;
  
-	uint32_t framebuffer;		// physical address of the linear frame buffer; write here to draw to the screen
+	uint32_t framebuffer;		//address físico del frame buffer lineal, escribir aquí para escribir en pantalla
 	uint32_t off_screen_mem_off;
-	uint16_t off_screen_mem_size;	// size of memory in the framebuffer but not being displayed on the screen
+	uint16_t off_screen_mem_size;	// tamaño de memoria en el buffer
 	uint8_t reserved1[206];
 } __attribute__ ((packed));
 
@@ -61,8 +59,9 @@ static void setPixel(uint16_t x, uint16_t y, ColorT clr);
 static uint32_t* getPixel(uint16_t y, uint16_t x);
 static void driver_print(char * buffer, uint64_t count);
 
+
 void driver_putCursor(){
-		//es una mascara para chequear si el color es 
+		//es una mascara para chequear el color 
 		int mask[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
 		ColorT caracterColor = flagCursor ? WHITE : BLACK;
 		ColorT fondoColor = flagCursor ? WHITE : BLACK;
@@ -75,7 +74,6 @@ void driver_putCursor(){
 			charBitMap = font_bitmap+16*(32-32); // 32 es el ASCII del espacio
 			flagCursor = 1;
 		}
-		//hacemos el chequeo para que no se pase de la pantalla
 		checkInsideScreen();
 		int cy,cx;
 		//iteramos sobre el mapa de bits del cursor
@@ -105,12 +103,9 @@ static void checkInsideScreen(){
 }
 
 void driver_clear(){
-    //limpia la pantalla
 	for(uint32_t i = 0; i <= (uint32_t)(screen -> width * screen->height); i++){
 		((uint32_t *)(uintptr_t)screen->framebuffer)[i] = 0;
 	}
-
-    //se va el cursor arriba
 	cursorX = 0;
 	cursorY = 0;
 }
@@ -156,6 +151,7 @@ static void scrolleo(){
 	}
 	}
 }
+
 void driver_lineBelow(){
 	if(flagCursor==0){
 		driver_putCursor();
@@ -184,7 +180,6 @@ void driver_setCursorY(uint64_t y){
 	cursorY = y;
 }
 
-// borra el caracter anterior
 void driver_backspace(){
 	if(cursorX == 0 && cursorY == 0){
 		return;
@@ -198,6 +193,7 @@ void driver_backspace(){
 		cursorX -= WIDTH*escalaPixel;
 	}
 }
+
 // uso el colorT como si fuera un pixel
 //te paso una coordenada de la pantalla en (x,y) y te devuelvo la direccion de la pantalla que representa ese pixel
 static uint32_t* getPixel(uint16_t y, uint16_t x) {
@@ -236,8 +232,6 @@ static void drawChar(char c, ColorT fuenteColor, ColorT fondoColor){
 	checkInsideScreen();
 }
 
-
-// x2 representa el ancho, y2 la altura
 void driver_drawRect(uint64_t x,uint64_t y ,uint64_t x2 , uint64_t y2 ,ColorT colorToPaint){
 	ColorT* pixel;
 	for(int i=0;i<y2;i++){

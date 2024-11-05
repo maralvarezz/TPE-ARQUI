@@ -45,7 +45,6 @@ void printScore(TPlayer p){
     printIntColor(p->points,&BLACK,&WHITE);
 }
 
-
 void printWinner(int n){
     clearAll();
     setScale(3);
@@ -77,7 +76,6 @@ void printEndGame1(){
     printIntColor(p1->points,&WHITE,&BLACK);
     sleep(30);
 }
-
 
 void startGame(char jug){
     player player1={0},player2={0};
@@ -144,8 +142,6 @@ void initializePlayers(TPlayer p1, TPlayer p2){
     p2->pColor= &BLUE;
 }
 
-
-
 void playGame1(){
     initializePlayer(p1);
     setPassenger();
@@ -177,7 +173,6 @@ void playGame1(){
     clearAll();
     printEndGame1();
 }
-
 
 void playGame2(){
     initializePlayers(p1, p2);
@@ -338,13 +333,11 @@ void setDirection(TPlayer p, int dir){
     p->dirY = direc[dir][1];
 }
 
-
 static int random(int n){ // n max numero 
     int ret = randFlag? (int)(((((gettingSeconds()*997)+257)%557)/556.0)*n): (int)(((((gettingSeconds()*929)+433)%653)/652.0)*n);
     randFlag = (randFlag+1)%2;
     return ret; 
 }
-
 
 void drawPassenger(){
     int tam = SQUARESIZE/8;
@@ -355,13 +348,9 @@ void drawPassenger(){
     drawRect((passengerX*SQUARESIZE)+3,(passengerY*SQUARESIZE)+5*tam,SQUARESIZE-6,tam,&ORANGE);
     drawRect((passengerX*SQUARESIZE)+6,(passengerY*SQUARESIZE)+6*tam,SQUARESIZE-12,tam,&ORANGE);
     drawRect((passengerX*SQUARESIZE)+11,(passengerY*SQUARESIZE)+7*tam,SQUARESIZE-22,tam,&ORANGE);
-    
-    
-    //drawRect(passengerX*SQUARESIZE,passengerY*SQUARESIZE,SQUARESIZE,SQUARESIZE,&ORANGE);
 }
 
 void setPassenger(){
-    
     passengerX =random(WIDTH/SQUARESIZE);
     do{
         passengerY =random(HEIGHT/SQUARESIZE);

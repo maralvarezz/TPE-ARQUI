@@ -16,6 +16,7 @@ void loadModules(void * payloadStart, void ** targetModuleAddress)
 		loadModule(&currentModule, targetModuleAddress[i]);
 }
 
+// Carga un modulo en memoria
 static void loadModule(uint8_t ** module, void * targetModuleAddress)
 {
 	uint32_t moduleSize = readUint32(module);
@@ -23,6 +24,7 @@ static void loadModule(uint8_t ** module, void * targetModuleAddress)
 	*module += moduleSize;
 }
 
+// Lee un entero de 32 bits de la direccion de memoria y avanza el puntero
 static uint32_t readUint32(uint8_t ** address)
 {
 	uint32_t result = *(uint32_t*)(*address);

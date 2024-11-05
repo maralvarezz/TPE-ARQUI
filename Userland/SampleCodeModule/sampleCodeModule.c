@@ -5,6 +5,5 @@
 int main() {
     entry();
     terminal();
-    
     return 0;
 }

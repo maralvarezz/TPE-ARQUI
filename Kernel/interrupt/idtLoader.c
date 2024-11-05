@@ -24,10 +24,10 @@ void load_idt() {
   _cli();
 
   setup_IDT_entry (0x20, (uint64_t) &_irq00Handler); 
-  setup_IDT_entry (0x21, (uint64_t) &interrupcion_teclado); //teclado
+  setup_IDT_entry (0x21, (uint64_t) &interrupcion_teclado);
   setup_IDT_entry (0x00, (uint64_t) &exception_zero_division);
   setup_IDT_entry (0x06, (uint64_t) &exception_op_code);
-  setup_IDT_entry (0x80, (uint64_t) &syscallHandler); //agrego para poder hacer el llamado a las syscalls
+  setup_IDT_entry (0x80, (uint64_t) &syscallHandler);
 
 
 	picMasterMask(0xFC); 

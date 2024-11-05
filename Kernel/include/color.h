@@ -8,7 +8,6 @@ typedef struct color{
     uint8_t blue;
 }ColorT;
 
-
 static const ColorT WHITE = {255,255,255};
 static const ColorT BLACK = {0,0,0};
 

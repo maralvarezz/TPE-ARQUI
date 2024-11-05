@@ -17,7 +17,6 @@ int USER_SIZE = 5;
 char USER[USER_MAX] = "guest";
 
 
-//Menu de comandos disponibles
 void command_help(){
     printString("\nLista de comandos disponibles:\n", 32);
     printString("-help: Muestra la lista de comandos disponibles\n", 50);
@@ -34,7 +33,6 @@ void command_help(){
     printString("-exit: Cierra la terminal", 26);
 }
 
-//Imprime el tiempo en pantalla
 void command_time(){
     putChar('\n');
     printString("Su hora actual es: ", 19);
@@ -48,7 +46,6 @@ void command_time(){
     printInt(seconds);
 }
 
-//Limpia la terminal
 void command_clear(){
     clearAll();
 }
@@ -86,17 +83,14 @@ void command_modifyuser(){
     }
 }
 
-//Imprimir el estado de todos los registros
 void command_registers(){
     printRegisters();
 }
 
-//Excepcion de dividir por cero
 void command_divzero(){
     invokeDivZero();
 }
 
-//Excepcion de codigo de operacion invalido
 void command_invalidopcode(){
     invokeOpCode();
 }
@@ -135,7 +129,6 @@ void command_increasesize(){
     increaseSize();
 }
 
-//Lo que se pone al inicial la terminal
 void entry(){
     if(first){
         first = 0;

@@ -3,8 +3,7 @@
 
 #include <stdint.h>
 
-
-
+//mapa de bits de todos los caracteres
 static const uint8_t font_bitmap[] = 
 {
   /*Unicode: U+0020 ( ) , Width: 5 */

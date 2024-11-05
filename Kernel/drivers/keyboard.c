@@ -35,10 +35,9 @@ static const char vecMin[] = {
 
 };
 
-
 static const char * mapLetras[] = {vecMin,vecMay};
+static int isLetter(char key);
 
-//nos entra la tecla que se oprimió
 void keyboard_handler(){
     teclaPressed = getKey();
     if(((teclaPressed) <= 0x79) || teclaPressed == 0xAA || teclaPressed == 0xB6 ){
@@ -70,7 +69,6 @@ void addBuffer(){
     BUFFER[w++] = getKeyboard();
 }
 
-//se usa para saber si se omprimió la tecla ctrl y guardar los registros
 uint64_t getCtrlFlag(){
     uint64_t resp=ctrl;
     ctrl=0;
@@ -94,8 +92,7 @@ char getKeyboard(){
     return mapLetras[shift][(int)teclaPressed];
 }
 
-//nos dice si la tecla es una letra
-int isLetter(char key){
+static int isLetter(char key){
     int flag = 0;
     if((key <= 0x19 && key >= 0x10) || (key <= 0x26 && key >= 0x1E) || (key <= 0x32 && key >= 0x2C)){
         flag=1;

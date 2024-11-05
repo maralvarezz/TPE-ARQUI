@@ -16,6 +16,7 @@ void ncPrint(const char * string)
 		ncPrintChar(string[i]);
 }
 
+//
 void ncPrintChar(char character)
 {
 	*currentVideo = character;
@@ -66,8 +67,6 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 	char *p = buffer;
 	char *p1, *p2;
 	uint32_t digits = 0;
-
-	//Calculate characters for each digit
 	do
 	{
 		uint32_t remainder = value % base;
@@ -75,11 +74,7 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 		digits++;
 	}
 	while (value /= base);
-
-	// Terminate string in buffer.
 	*p = 0;
-
-	//Reverse string in buffer.
 	p1 = buffer;
 	p2 = p - 1;
 	while (p1 < p2)
@@ -90,6 +85,5 @@ static uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 		p1++;
 		p2--;
 	}
-
 	return digits;
 }
