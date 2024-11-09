@@ -2,14 +2,14 @@
 
 #define ZERO_EXCEPTION_ID 0
 #define OPCODE_EXCEPTION_ID 6
-#define REGISTERS 18
+#define REGISTERS 19
 
 static void zero_division();
 static void opcode_exception();
 
 extern const uint64_t exceptionRegs[REGISTERS];
 static char * regs[REGISTERS] = {
-"RAX","RBX","RCX","RDX","RSI","RDI","RBP","R8","R9","R10","R11","R12","R13","R14","R15", "RSP","RIP", "RFLAGS"
+"RAX","RBX","RCX","RDX","RSI","RDI","RBP","R8","R9","R10","R11","R12","R13","R14","R15","RIP","CS", "RFLAGS", "RSP"
 };
 
 void exceptionDispatcher(int exception) {
@@ -20,7 +20,7 @@ void exceptionDispatcher(int exception) {
 }
 
 void print_registers() {
-	for (int i = 0; i < 18; i++) {
+	for (int i = 0; i < 19; i++) {
 		print(regs[i], strleng(regs[i]));
 		print(": ", 2);
 		print(numToStr(exceptionRegs[i], 18),18);

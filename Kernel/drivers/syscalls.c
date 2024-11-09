@@ -21,7 +21,7 @@
 
 extern void sound(int freq);
 extern void stop_sound();
-extern uint64_t registros[18];
+extern uint64_t registros[19];
 
 uint64_t sysCaller(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t rax) {
 	switch (rax) {
@@ -109,10 +109,10 @@ uint64_t sys_clear(){
     return 1;
 }
 
-uint64_t sys_registers(uint64_t vec[18],uint64_t * flag){
+uint64_t sys_registers(uint64_t vec[19],uint64_t * flag){
     *flag=getCtrlFlag();
     if(*flag){
-        for(int i = 0; i < 18; i++){
+        for(int i = 0; i < 19; i++){
             vec[i] = registros[i];
         }
     }

@@ -80,13 +80,24 @@ SECTION .text
     mov [exceptionRegs + 96], r13
     mov [exceptionRegs + 104], r14
     mov [exceptionRegs + 112], r15
-    mov rax, rsp 
-    add rax, 160 ;nos ponemos antes de que suceda el error 
-    mov [exceptionRegs + 120], rax
+    ;mov rax, rsp
+    ;add rax, 160 ;nos ponemos antes de que suceda el error 
+    ;mov [exceptionRegs + 120], rax
+    ;mov rax, [rsp+120] ;Obtenemos el valor de RIP en el momento en el que sucede la excepción tomando el valor de la interrupción que se encuentra en la pila.
+	;mov [exceptionRegs+128], rax
+	;mov rax, [rsp+128] ;Obtenemos el valor de CS también de esta manera, ya que son pusheadas cuando ocurre una interrupción
+	;mov [exceptionRegs+136], rax
+	;mov rax, [rsp+136] ;Obtenemos el valor de RFLAGS
+	;mov [exceptionRegs+144], rax
+    ;mov rdi, %1 ;pasaje de parametro
     mov rax, [rsp+120] ;Obtenemos el valor de RIP en el momento en el que sucede la excepción tomando el valor de la interrupción que se encuentra en la pila.
+	mov [exceptionRegs+120], rax
+	mov rax, [rsp+128] ;Obtenemos el valor de CS también de esta manera, ya que son pusheadas cuando ocurre una interrupción
 	mov [exceptionRegs+128], rax
-	mov rax, [rsp+128] ;Obtenemos el valor de RFLAGS también de esta manera, ya que son pusheadas cuando ocurre una interrupción
+	mov rax, [rsp+136] ;Obtenemos el valor de RFLAGS
 	mov [exceptionRegs+136], rax
+	mov rax, [rsp+144] ;Obtenemos el valor de RSP
+	mov [exceptionRegs+144], rax
     mov rdi, %1 ;pasaje de parametro
 	call exceptionDispatcher
 	popState
@@ -123,7 +134,32 @@ picSlaveMask:
     retn
 
 interrupcion_teclado: 
-    pushState
+	mov [backupRegistros + 0], rax
+	mov [backupRegistros + 8], rbx
+	mov [backupRegistros + 16], rcx
+	mov [backupRegistros + 24], rdx
+	mov [backupRegistros + 32], rsi
+	mov [backupRegistros + 40], rdi
+	mov [backupRegistros + 48], rbp
+	mov [backupRegistros + 56], r8
+	mov [backupRegistros + 64], r9
+	mov [backupRegistros + 72], r10
+	mov [backupRegistros + 80], r11
+	mov [backupRegistros + 88], r12
+	mov [backupRegistros + 96], r13
+	mov [backupRegistros + 104], r14
+	mov [backupRegistros + 112], r15
+	push rax
+	mov rax, [rsp+8] ;cargo el rip
+	mov [backupRegistros + 120], rax
+	mov rax, [rsp+16] ;cargo el cs
+	mov [backupRegistros + 128], rax
+	mov rax, [rsp+24] ;cargo el rflags
+	mov [backupRegistros + 136], rax
+	mov rax, [rsp+32] ;cargo el rsp
+	mov [backupRegistros + 144], rax
+	pop rax
+	pushState
 	xor rax, rax ; limpio rax
 .handle_keyboard:
 	call keyboard_handler
@@ -134,30 +170,47 @@ interrupcion_teclado:
 
 guardar_registros:
 	pushState
- 	mov [registros + 0], rax
-    mov [registros + 8], rbx
-    mov [registros + 16], rcx
-    mov [registros + 24], rdx
-    mov [registros + 32], rsi
-    mov [registros + 40], rdi
-    mov [registros + 48], rbp
-    mov [registros + 56], r8
-    mov [registros + 64], r9
-    mov [registros + 72], r10
-    mov [registros + 80], r11
-    mov [registros + 88], r12
-    mov [registros + 96], r13
-    mov [registros + 104], r14
-    mov [registros + 112], r15
-    mov rax, rsp
-    add rax, 160 ;nos ponemos antes de que suceda el error 
+	mov rax, [backupRegistros + 0] ;cargo el rax
+	mov [registros + 0], rax 
+	mov rax, [backupRegistros + 8] ;cargo el rbx
+    mov [registros + 8], rax
+	mov rax, [backupRegistros + 16] ;cargo el rcx
+    mov [registros + 16], rax
+	mov rax, [backupRegistros + 24] ;cargo el rdx
+    mov [registros + 24], rax
+	mov rax, [backupRegistros + 32] ;cargo el rsi
+    mov [registros + 32], rax
+	mov rax, [backupRegistros + 40] ;cargo el rdi
+    mov [registros + 40], rax
+	mov rax, [backupRegistros + 48] ;cargo el rbp
+    mov [registros + 48], rax
+	mov rax, [backupRegistros + 56] ;cargo el r8
+	mov [registros + 56], rax
+	mov rax, [backupRegistros + 64] ;cargo el r9
+    mov [registros + 64], rax
+	mov rax, [backupRegistros + 72] ;cargo el r10
+    mov [registros + 72], rax
+	mov rax, [backupRegistros + 80] ;cargo el r11
+    mov [registros + 80], rax
+	mov rax, [backupRegistros + 88] ;cargo el r12
+	mov [registros + 88], rax
+	mov rax, [backupRegistros + 96] ;cargo el r13
+    mov [registros + 96], rax
+	mov rax, [backupRegistros + 104] ;cargo el r14
+    mov [registros + 104], rax
+	mov rax, [backupRegistros + 112] ;cargo el r15
+    mov [registros + 112], rax
+	mov rax, [backupRegistros + 120] ;cargo el rip
     mov [registros + 120], rax
-    mov rax, [rsp+120] ;Obtenemos el valor de RIP en el momento en el que sucede la excepción tomando el valor de la interrupción que se encuentra en la pila.
-	mov [registros+128], rax
-	mov rax, [rsp+128] ;Obtenemos el valor de RFLAGS también de esta manera, ya que son pusheadas cuando ocurre una interrupción
-	mov [registros+136], rax
+	mov rax, [backupRegistros + 128] ;cargo el cs
+	mov [registros + 128], rax
+	mov rax, [backupRegistros + 136] ;cargo el rflags
+	mov [registros + 136], rax
+	mov rax, [backupRegistros + 144] ;cargo el rsp
+	mov [registros + 144], rax
 	popState
 	ret
+
 _hlt:
 	sti 
 	hlt 
@@ -201,5 +254,6 @@ haltcpu:
 	ret
 
 SECTION .bss
-    exceptionRegs resq 18
-	registros resq 18
+    exceptionRegs resq 19
+	registros resq 19
+	backupRegistros resq 19

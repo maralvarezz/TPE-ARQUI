@@ -10,7 +10,7 @@ static const ColorT DEFAULT_COLOR_FND=BLACK;
 static const ColorT DEFAULT_COLOR_FTE=WHITE;
 static void pasoHexa(uint64_t num1, char buffer[16]);
 
-static char *registros64[18] = {"RAX","RBX","RCX","RDX","RSI","RDI","RBP","R8","R9","R10","R11","R12","R13","R14","R15", "RSP","RIP", "RFLAGS"};
+static char *registros64[19] = {"RAX","RBX","RCX","RDX","RSI","RDI","RBP","R8","R9","R10","R11","R12","R13","R14","R15","RIP","CS","RFLAGS", "RSP"};
 
 
 void playNota(uint64_t freq, uint64_t time){
@@ -34,11 +34,11 @@ void printRegisters(){
 	hexbuf[0] = '0';
 	hexbuf[1] = 'x';
 	hexbuf[18] = '\0';
-	uint64_t infoRegistros[18];
+	uint64_t infoRegistros[19];
     uint64_t flag=0;
 	sys_registers(infoRegistros, &flag);
 	if (flag==1){
-		for (int i = 0; i < 18; i++)
+		for (int i = 0; i < 19; i++)
 		{
 			printString(registros64[i], strlen(registros64[i]));
 			printString(": ", 1);

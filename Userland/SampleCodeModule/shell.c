@@ -80,7 +80,6 @@ void command_modifyuser(){
         putChar('\n');
         printString("Bienvenido ", 11);
         printString(USER, USER_SIZE);
-        putChar('\n');
     }
 }
 
@@ -134,16 +133,14 @@ void entry(){
     if(first){
         first = 0;
         printString("Bienvenidos al SO del Grupo 2 :)", 32);
-        //scanf("Ingrese su nombre de usuario:\n");
         command_modifyuser();
-        printString("Para ver los comandos disponibles, escriba -help\n", 49);
+        printString("\nPara ver los comandos disponibles, escriba -help\n", 49);
     }
 }
 
 void terminal(){
-    printString("Ingrese un comando:\n", 21);
+    printString("\nIngrese un comando:\n", 21);
     while(1 && on){
-        //playNota(330,3);
         putLine();
         printCursor();
         readLine();
@@ -241,7 +238,7 @@ void putLine(){
 }
 
 
-void printUserDef(){ //cambiar nombre
+void printUserDef(){
     printStringColor(USER, USER_SIZE,&GREEN,&BLACK);
     printString(":~ $",3);
 }
