@@ -80,19 +80,9 @@ SECTION .text
     mov [exceptionRegs + 96], r13
     mov [exceptionRegs + 104], r14
     mov [exceptionRegs + 112], r15
-    ;mov rax, rsp
-    ;add rax, 160 ;nos ponemos antes de que suceda el error 
-    ;mov [exceptionRegs + 120], rax
-    ;mov rax, [rsp+120] ;Obtenemos el valor de RIP en el momento en el que sucede la excepción tomando el valor de la interrupción que se encuentra en la pila.
-	;mov [exceptionRegs+128], rax
-	;mov rax, [rsp+128] ;Obtenemos el valor de CS también de esta manera, ya que son pusheadas cuando ocurre una interrupción
-	;mov [exceptionRegs+136], rax
-	;mov rax, [rsp+136] ;Obtenemos el valor de RFLAGS
-	;mov [exceptionRegs+144], rax
-    ;mov rdi, %1 ;pasaje de parametro
-    mov rax, [rsp+120] ;Obtenemos el valor de RIP en el momento en el que sucede la excepción tomando el valor de la interrupción que se encuentra en la pila.
+    mov rax, [rsp+120] ;Obtenemos el valor de RIP
 	mov [exceptionRegs+120], rax
-	mov rax, [rsp+128] ;Obtenemos el valor de CS también de esta manera, ya que son pusheadas cuando ocurre una interrupción
+	mov rax, [rsp+128] ;Obtenemos el valor de CS
 	mov [exceptionRegs+128], rax
 	mov rax, [rsp+136] ;Obtenemos el valor de RFLAGS
 	mov [exceptionRegs+136], rax
