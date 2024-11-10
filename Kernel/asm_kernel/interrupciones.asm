@@ -64,8 +64,7 @@ SECTION .text
 %endmacro
 
 %macro backupRegs 1
-    pushState
-    mov [exceptionRegs + 0], rax
+	push rax
     mov [exceptionRegs + 8], rbx
     mov [exceptionRegs + 16], rcx
     mov [exceptionRegs + 24], rdx
@@ -80,14 +79,17 @@ SECTION .text
     mov [exceptionRegs + 96], r13
     mov [exceptionRegs + 104], r14
     mov [exceptionRegs + 112], r15
-    mov rax, [rsp+120] ;Obtenemos el valor de RIP
+    mov rax, [rsp+8] ;Obtenemos el valor de RIP
 	mov [exceptionRegs+120], rax
-	mov rax, [rsp+128] ;Obtenemos el valor de CS
+	mov rax, [rsp+16] ;Obtenemos el valor de CS
 	mov [exceptionRegs+128], rax
-	mov rax, [rsp+136] ;Obtenemos el valor de RFLAGS
+	mov rax, [rsp+24] ;Obtenemos el valor de RFLAGS
 	mov [exceptionRegs+136], rax
-	mov rax, [rsp+144] ;Obtenemos el valor de RSP
+	mov rax, [rsp+32] ;Obtenemos el valor de RSP
 	mov [exceptionRegs+144], rax
+	pop rax
+	mov [exceptionRegs], rax
+	pushState
     mov rdi, %1 ;pasaje de parametro
 	call exceptionDispatcher
 	popState
